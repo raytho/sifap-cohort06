@@ -16,7 +16,6 @@ app.use(bodyParser.json());
 // Routes
 app.use(require('./routes/index.js'));
 
-
 // 404 handler
 app.use((req, res) => {
   res.status(404).render('404');
