@@ -1,0 +1,72 @@
+@import '../utils/Mixin.scss';
+
+.Navbar {
+   grid-area: Navbar;
+   position: fixed;
+   top: 0;
+   font-family: var(--font-text);
+   @include size(250px, initial);
+}
+.Navbar__logo {
+   background-color: var(--detail-color);
+   border-radius: 0 100px 0 0;
+   @include size(250px, 300px);
+   div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include size(inherit, 150px);
+      h1 {
+         line-height: 0;
+      }
+      img {
+         width: 100px;
+         height: 100px;
+      }
+   }
+}
+.Navbar__nav {
+   display: flex;
+   justify-content: center;
+   position: absolute;
+   top: 153px;
+   background-color: var(--main-color);
+   border-radius: 0 100px 0 0;
+   @include size(250px, 100vh);
+}
+.Navbar ul {
+   margin-top: 70px;
+   @include size(230px, 400px);
+   li {
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      border-radius: 5px;
+      box-shadow: 0 0 10px 1px rgba(255, 255, 255, .1);
+      cursor: pointer;
+      @include size(100%, 50px);
+      img {
+         width: 30px;
+         height: 30px;
+      }
+      p {
+         width: 150px;
+         display: inline-block;
+         color: var(--white-color);
+      }
+      &::after {
+         content: '';
+         border: 9px solid transparent;
+         border-bottom-color: rgb(255, 255, 255);
+         transform: rotate(90deg);
+         @include size(0, 0);
+      }
+   }
+   li:hover {
+      background-color: var(--hover-color);
+   }
+   li:active {
+      transform: scale(.98);
+   }
+}
