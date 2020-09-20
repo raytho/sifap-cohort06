@@ -1,4 +1,5 @@
-$test: red;
-h1 {
-  color: $test;
-}
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Oswald&display=swap');
+@import './Utils/Vars.scss';
+@import './Utils/Placeholders.scss';
+@import './Utils/Mixins.scss';
+@import './Utils/Reset.scss';

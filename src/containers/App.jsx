@@ -2,8 +2,10 @@ import React from 'react';
 
 import '../assets/styles/App.scss';
 
+import Layout from '../components/Layout';
+
 const App = () => (
-  <h1>Breve!</h1>
+   <Layout />
 );
 
 export default App;
