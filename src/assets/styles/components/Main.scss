@@ -2,17 +2,3 @@
    margin: 50px 60px auto;
    grid-area: Main;
 }
-.Main__title {
-   margin-right: 10px;
-   display: flex;
-   align-items: center;
-   img {
-      width: 70px;
-      height: 70px;
-   }
-   h2 {
-      font-family: var(--font-title);
-      font-size: var(--font-big);
-      color: var(--secundary-color);
-   }
-}

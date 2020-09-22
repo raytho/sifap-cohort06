@@ -9,18 +9,14 @@ import Navbar from './Navbar';
 
 const Layout = (props) => {
 
-   const { children, icon, title, alt  } = props;
+   const { children } = props;
 
    return (
       <>
          <Header />
          <div className='Content'>
-               <Navbar />
+            <Navbar />
             <main className='Main'>
-               <div className='Main__title'>
-                  <img src={icon} alt={alt} />
-                  <h2>{title}</h2>
-               </div>
                {children}
             </main>
          </div>
