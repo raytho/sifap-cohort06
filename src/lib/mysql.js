@@ -9,7 +9,6 @@ const DB_NAME = config.dbName;
 const DB_PORT = config.dbPort;
 
 class MysqlLib {
-
   constructor() {
     this.client = mysql.createConnection({
       host: DB_HOST,
@@ -37,7 +36,6 @@ class MysqlLib {
     return MysqlLib.connection;
   }
 
-  
   getAll(id) {
     const _id = id;
     const client = this.client;
@@ -57,9 +55,81 @@ class MysqlLib {
       });
     });
   }
+
+  createRole(newRole, result) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise((resolve, reject) => {
+        client.query("INSERT INTO roles SET ?", newRole, (err, res) => {
+          if (err) {
+            console.error(err);
+            reject(new Error("Error to insert role"));
+          } else {
+            resolve(res);
+          }
+        });
+      });
+    });
+  }
+
+  getAllRoles() {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(`SELECT * FROM roles`, function (err, rows) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
+
+  getRoleById({ id }) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(`SELECT * FROM roles WHERE rolId = ?`, [id], function (
+          err,
+          rows
+        ) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
+
+  changeRoleById({ id }, values) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(
+          `UPDATE roles SET name = ? WHERE rolId = ?`,
+          [values, id],
+          function (err, result) {
+            if (err) {
+              reject(new Error("Error in role"));
+            } else {
+              console.log(`${result.affectedRows} rows affected`);
+              resolve(result);
+            }
+          }
+        );
+      });
+    });
+  }
 }
 
-
+module.exports = MysqlLib;
 
 async function getId(id) {
   const msqlLib2 = new MysqlLib();
@@ -67,9 +137,8 @@ async function getId(id) {
   return name;
 }
 
-async function test(){
+async function test() {
   const data = await getId(4);
   console.log(data[0]);
   return data;
 }
-test();

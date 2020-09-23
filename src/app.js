@@ -3,8 +3,9 @@
 const express = require("express");
 const helmet = require("helmet");
 const config = require("./config");
-const notFoundHandler =require("./utils/middleware/notFoundHandler");
+const notFoundHandler = require("./utils/middleware/notFoundHandler");
 const authApiRouter = require("./routes/api/auth");
+const rolesApiRouter = require("./routes/api/roles");
 const home = require("./routes/views/home");
 const userViewRouter = require("./routes/views/user");
 
@@ -19,6 +20,7 @@ app.use(helmet());
 app.use("/", home);
 authApiRouter(app);
 userViewRouter(app);
+rolesApiRouter(app);
 
 // 404 handler
 app.use(notFoundHandler);
