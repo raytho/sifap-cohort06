@@ -1,0 +1,20 @@
+{
+  "name": "sifap",
+  "version": "1.0.0",
+  "description": "sifapProject",
+  "main": "/src/app.js",
+  "scripts": {
+    "dev": "node main"
+  },
+  "keywords": [],
+  "author": "Jorge Carrion <jorge_28cs@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0"
+  }
+}
