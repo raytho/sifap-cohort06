@@ -1,25 +1,29 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
+/* eslint-disable no-unused-vars */
+// Modules
+const express = require("express");
+const helmet = require("helmet");
+const config = require("./config");
+const notFoundHandler =require("./utils/middleware/notFoundHandler");
+const authApiRouter = require("./routes/api/auth");
+const home = require("./routes/views/home");
+const userViewRouter = require("./routes/views/user");
 
-// Init modules
+// App
 const app = express();
 
-// Settings
-app.set('port', 3000);
-app.set('views', path.resolve(__dirname, 'views'));
-
 // Middlewares
-app.use(express.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(helmet());
 
 // Routes
-app.use(require('./routes/index.js'));
+app.use("/", home);
+authApiRouter(app);
+userViewRouter(app);
 
 // 404 handler
-app.use((req, res) => {
-  res.status(404).render('404');
-});
+app.use(notFoundHandler);
 
 // Init Server
-const server = app.listen(app.get('port'), () => console.log('Server on port', app.get('port')))
+const server = app.listen(config.port, () => {
+  console.log(`Server running on port: ${config.port}`);
+});

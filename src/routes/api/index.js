@@ -1,32 +1,40 @@
-const express = require('express');
-const { request, response } = require('express');
+const express = require("express");
+const { request, response } = require("express");
 const router = express.Router();
 
 let roles = [];
-const dummy = [];
 
 router.get("/", (request, response) => {
-  console.log("Usuario ingresó a Home")
+  console.log("Usuario ingresó a Home");
 });
 
 router.post("/", (request, response) => {
-  const userLoginData = request.body;
-  console.log(`Se han recibido los datos de logueo de usurio: ${userLoginData}`);
+  const { userName, password } = request.body;
+  if (!userName || !password) {
+    res.status(400).send("Por favor, completa todos los campos");
+  } else {
+  }
+
+  console.log(
+    `Se han recibido los datos de logueo de usuario: ${userLoginData}`
+  );
   const validateLogin = () => {
     // code
-  }
+  };
 });
 
 router.get("/register", (request, response) => {
-  console.log("Usuario ingresó a página de registro")
+  console.log("Usuario ingresó a página de registro");
 });
 
 router.post("/register", (request, response) => {
   const userRegisterData = request.body;
-  console.log(`Se han recibido los datos de registro de usurio: ${userRegisterData}`);
+  console.log(
+    `Se han recibido los datos de registro de usurio: ${userRegisterData}`
+  );
   const validateData = () => {
     // code
-  }
+  };
 });
 
 router.get("/reset-password", (request, response) => {

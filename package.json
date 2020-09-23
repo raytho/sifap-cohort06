@@ -2,19 +2,30 @@
   "name": "sifap",
   "version": "1.0.0",
   "description": "sifapProject",
-  "main": "/src/app.js",
+  "main": "app.js",
   "scripts": {
-    "dev": "node main"
+    "dev": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "Jorge Carrion <jorge_28cs@hotmail.com>",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "@hapi/boom": "^9.1.0",
+    "@hapi/joi": "^17.1.1",
+    "bcrypt": "^5.0.0",
+    "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "passport": "^0.4.1",
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^7.9.0"
+    "eslint": "^7.9.0",
+    "mongodb": "^3.6.2",
+    "nodemon": "^2.0.4"
   }
 }
