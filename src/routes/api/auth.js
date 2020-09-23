@@ -19,7 +19,7 @@ function authApi(app) {
 
   const apiKeyService = new ApiKeysService();
   const usersService = new UsersService();
-  router.get("/sign-in", res => res.send("Test"));
+  router.get("/sign-in", (res) => res.send("Test"));
   router.post("/sign-in", async (req, res, next) => {
     const { apiKeyToken } = req.body;
 
