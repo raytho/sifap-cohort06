@@ -119,7 +119,6 @@ class MysqlLib {
             if (err) {
               reject(new Error("Error in role"));
             } else {
-              console.log(`${result.affectedRows} rows affected`);
               resolve(result);
             }
           }
