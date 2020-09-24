@@ -2,10 +2,10 @@
   "name": "sifap",
   "version": "1.0.0",
   "description": "sifapProject",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "Jorge Carrion <jorge_28cs@hotmail.com>",
