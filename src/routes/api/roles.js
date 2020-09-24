@@ -26,7 +26,6 @@ function rolesApi(app) {
   router.get("/getAllRoles", async (req, res) => {
     try {
       const roles = await apiKeyService.getAllRoles();
-      console.log("Roles desde servicio ", roles);
       return res.send(roles);
     } catch (error) {
       console.log(error);
@@ -50,7 +49,16 @@ function rolesApi(app) {
       const { id } = req.params;
       const values = req.body.name;
       const roles = await apiKeyService.changeRoleById({ id }, values);
-      return res.status(200);
+      return res.status(200).send({ message: "Role edited" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500);
+    }
+  });
+
+  router.delete("/role/:id", async (req, res) => {
+    try {
+      return res.status(200).send({ message: "Role deleted" });
     } catch (error) {
       console.log(error);
       return res.status(500);
