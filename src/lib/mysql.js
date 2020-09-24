@@ -42,7 +42,7 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query(`SELECT * FROM test WHERE test = ${_id}`, function (
+        client.query(`SELECT * FROM users WHERE test = ${_id}`, function (
           err,
           rows
         ) {
@@ -123,6 +123,21 @@ class MysqlLib {
             }
           }
         );
+      });
+    });
+  }
+
+  testRole() {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise((resolve, reject) => {
+        client.query(`SELECT 1+1 AS solution`, function (err, result) {
+          if (err) {
+            reject(new Error("Error in role"));
+          } else {
+            resolve(result);
+          }
+        });
       });
     });
   }
