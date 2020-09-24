@@ -6,7 +6,7 @@ class roleService {
     this.name = role.name;
   }
 
-  async createRole(roleService, res) {
+  async createRole(roleService) {
     const mysqllib = new MysqlLib();
     const addedRole = await mysqllib.createRole(roleService);
     return addedRole;
