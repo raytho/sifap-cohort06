@@ -9,6 +9,7 @@ const UsersService = require("../../services/users");
 const validationHandler = require("../../utils/middleware/validationHandler");
 
 const { createUserSchema } = require("../../utils/schemas/users");
+const { use } = require("passport");
 
 // Basic Strategy
 require("../../utils/auth/strategies/basic");
@@ -74,6 +75,23 @@ function authApi(app) {
       }
     }
   );
+
+  router.post("/forgot", (req, res) => {
+    const userName = req.body.email;
+    if (userName) {
+      const id = usersService.getUser(userName);
+      const request = {
+        id,
+        email: userName.email,
+      };
+      const reset = usersService.sendResetLink(request.email, request.id);
+      if (reset) {
+        res.status(201).json({
+          message: "Link sent",
+        });
+      }
+    }
+  });
 }
 
 module.exports = authApi;
