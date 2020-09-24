@@ -22,11 +22,11 @@
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "mongodb": "^3.6.2"
   },
   "devDependencies": {
     "eslint": "^7.9.0",
-    "mongodb": "^3.6.2",
     "nodemon": "^2.0.4"
   }
 }
