@@ -1,6 +1,5 @@
 const express = require("express");
 const ApiKeysService = require("../../services/apiKeys");
-const roleService = require("../../services/roleService");
 const RoleService = require("../../services/roleService");
 
 function rolesApi(app) {
@@ -19,6 +18,16 @@ function rolesApi(app) {
         .json({ message: `Role ${roleService.rolId} inserted` });
     } catch (error) {
       console.log(error);
+      return res.status(500);
+    }
+  });
+
+  router.get("/test", async (req, res) => {
+    try {
+      const testResponse = await apiKeyService.testRole();
+      return res.send(testResponse);
+    } catch (error) {
+      console.error(error);
       return res.status(500);
     }
   });

@@ -1,3 +1,4 @@
+const { string } = require("@hapi/joi");
 const MongoLib = require("../lib/mongo");
 const MysqlLib = require("../lib/mysql");
 
@@ -26,6 +27,11 @@ class ApiKeysService {
   async changeRoleById({ id }, values) {
     const roles = await this.mysqlLib.changeRoleById({ id }, values);
     return roles;
+  }
+
+  async testRole() {
+    const testRole = await this.mysqlLib.testRole();
+    return testRole;
   }
 }
 
