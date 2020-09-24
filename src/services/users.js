@@ -61,6 +61,28 @@ class UsersService {
     await this.createUser({ user });
     return await this.getUser({ email: user.email });
   }
+
+  async sendResetLink(email, id) {
+    const params = {
+      Destination: {
+        ToAddresses: [email],
+      },
+      Message: {
+        Body: {
+          Text: {
+            Charset: "UTF-8",
+            Data: `To reset your password, please click on this link: http://localhost:3000/reset/${id}`,
+          },
+        },
+        Subject: {
+          Charset: "UTF-8",
+          Data: "Reset password instructions",
+        },
+      },
+      Source: "codingwithchaim@gmail.com",
+    };
+    return params;
+  }
 }
 
 module.exports = UsersService;
