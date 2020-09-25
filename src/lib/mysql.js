@@ -111,8 +111,8 @@ class MysqlLib {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
         client.query(
-          // eslint-disable-next-line quotes
           `UPDATE roles SET name = ? WHERE rolId = ?`,
           [values, id],
           function (err, result) {
@@ -141,18 +141,53 @@ class MysqlLib {
       });
     });
   }
+
+  addUserInvited(newUserInvited) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise((resolve, reject) => {
+        client.query("INSERT INTO users SET ?", newUserInvited, (err, res) => {
+          if (err) {
+            console.error(err);
+            reject(new Error("Error to insert role"));
+          } else {
+            resolve(res);
+          }
+        });
+      });
+    });
+  }
+
+  getSuperAdminUsers() {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(`SELECT * FROM users WHERE role <> "SA"`, function (
+          err,
+          rows
+        ) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
 }
 
 module.exports = MysqlLib;
 
-// async function getId(id) {
-//   const msqlLib2 = new MysqlLib();
-//   const name = await msqlLib2.getAll(id);
-//   return name;
-// }
+async function getId(id) {
+  const msqlLib2 = new MysqlLib();
+  const name = await msqlLib2.getAll(id);
+  return name;
+}
 
-// async function test() {
-//   const data = await getId(4);
-//   console.log(data[0]);
-//   return data;
-// }
+async function test() {
+  const data = await getId(4);
+  console.log(data[0]);
+  return data;
+}

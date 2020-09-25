@@ -9,13 +9,14 @@ const authApiRouter = require("./routes/api/auth");
 const rolesApiRouter = require("./routes/api/roles");
 const home = require("./routes/views/home");
 const userViewRouter = require("./routes/views/user");
+const superAdminRouter = require("./routes/views/superAdmin");
 require("dotenv").config();
 
 // App
 const app = express();
 
 // Config Port
-const _port=  process.env.PORT || 3000;
+const _port = process.env.PORT || 3000;
 
 // Middlewares
 app.use(express.json());
@@ -26,6 +27,7 @@ app.use("/", home);
 authApiRouter(app);
 userViewRouter(app);
 rolesApiRouter(app);
+superAdminRouter(app);
 
 // 404 handler
 app.use(notFoundHandler);
