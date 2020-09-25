@@ -25,7 +25,7 @@ app.use(helmet());
 // Routes
 app.use("/", home);
 authApiRouter(app);
-userViewRouter(app);
+// userViewRouter(app);
 rolesApiRouter(app);
 superAdminRouter(app);
 
