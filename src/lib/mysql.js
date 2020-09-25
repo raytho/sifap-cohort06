@@ -141,6 +141,41 @@ class MysqlLib {
       });
     });
   }
+
+  addUserInvited(newUserInvited) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise((resolve, reject) => {
+        client.query("INSERT INTO users SET ?", newUserInvited, (err, res) => {
+          if (err) {
+            console.error(err);
+            reject(new Error("Error to insert role"));
+          } else {
+            resolve(res);
+          }
+        });
+      });
+    });
+  }
+
+  getSuperAdminUsers() {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(`SELECT * FROM users WHERE role <> "SA"`, function (
+          err,
+          rows
+        ) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
 }
 
 module.exports = MysqlLib;
