@@ -21,7 +21,7 @@ const _port = process.env.PORT || 3000;
 // Middlewares
 app.use(express.json());
 app.use(helmet());
-app.user(cosr());
+app.user(cors());
 
 
 // Routes
