@@ -56,6 +56,7 @@
             border-bottom-color: rgb(255, 255, 255);
             transform: rotate(90deg);
             @include size(0, 0);
+            @include icon-arrow(static, unset, unset, 9px, var(--white-color), 90deg)
          }
       }
       img {

@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 
-import Title from './Title';
+import Title from '../Title';
 
-import iconCustomer from '../assets/static/icon/customer.png';
+import iconCustomer from '../../assets/static/icon/customer.png';
 
 const propsCustomer = {
    title: 'Clientes',
@@ -14,10 +14,12 @@ const propsCustomer = {
 const Customers = () => {
 
    return (
-      <div className='Role'>
-      <Title {...propsCustomer} />
-         Manejador de Clientes
-      </div>
+      <>
+         <Title {...propsCustomer} />
+         <div className='Role'>
+            Manejador de Clientes
+         </div>
+      </>
    );
 };
 

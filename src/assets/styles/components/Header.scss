@@ -6,7 +6,7 @@
    font-family: var(--font-text);
    font-size: var(--font-smaller);
    box-shadow: 10px 18px 20px -15px rgba(3, 36, 35, .25);
-   @include size(100%, 100px);
+   @include size(100%, 80px);
 }
 .Header__container {
    display: flex;
@@ -37,7 +37,7 @@
       border-radius: 50%;
       overflow: hidden;
       object-fit: cover;
-      @include size(70px, 70px);
+      @include size(60px, 60px);
    }
 }
 .Header__menu {
@@ -46,8 +46,8 @@
    flex-direction: column;
    justify-content: space-around;
    position: absolute;
-   top: 100px;
-   right: 30px;
+   top:80px;
+   right: 27px;
    font-size: var(--font-smallest);
    background-color: var(--white-color);
    box-shadow: 0 0px 10px 0 rgba(3, 36, 35, .25);
@@ -55,15 +55,10 @@
    cursor: auto;
    visibility: hidden;
    opacity: 0;
+   z-index: 100;
    @include size(220px, 170px);
    &::before {
-      content: '';
-      position: absolute;
-      top: -24px;
-      right: 47px;
-      border: 12px solid transparent;
-      border-bottom-color: rgb(255, 255, 255);
-      @include size(0, 0);
+      @include  icon-arrow(absolute, -20px, 49px, 10px, var(--white-color), 0);
   }
    li:nth-of-type(1) {
       @include size(initial, 70px);

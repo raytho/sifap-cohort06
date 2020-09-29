@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 
-import Title from './Title';
+import Title from '../Title';
 
-import iconManageCFiscales from '../assets/static/icon/manage-cf.png';
+import iconManageCFiscales from '../../assets/static/icon/manage-cf.png';
 
 const propsManageCFiscales = {
    title: 'Control de Comprobantes Fiscales',
@@ -14,10 +14,12 @@ const propsManageCFiscales = {
 const ManageCFiscales = () => {
 
    return (
-      <div className='Role'>
-      <Title {...propsManageCFiscales} />
-         Manejador de Control de comprobantes fiscales
-      </div>
+      <>
+         <Title {...propsManageCFiscales} />
+         <div className='Role'>
+            Manejador de Control de comprobantes fiscales
+         </div>
+      </>
    );
 };
 

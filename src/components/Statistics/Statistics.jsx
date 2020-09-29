@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 
-import Title from './Title';
+import Title from '../Title';
 
-import iconStatistics from '../assets/static/icon/stats.png';
+import iconStatistics from '../../assets/static/icon/stats.png';
 
 const propsStatistics = {
    title: 'Estadísticas',
@@ -14,10 +14,12 @@ const propsStatistics = {
 const Statistics = () => {
 
    return (
-      <div className='Statistics'>
+      <>
          <Title {...propsStatistics} />
-         Manejador de Statistics
-      </div>
+         <div className='Statistics'>
+            Manejador de Statistics
+         </div>
+      </>
    );
 };
 

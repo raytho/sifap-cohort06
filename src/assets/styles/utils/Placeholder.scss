@@ -1,0 +1,8 @@
+%reset-btn {
+   border: none;
+   cursor: pointer;
+   outline: none;
+   &:active {
+      transform: scale(.98);
+   }
+}

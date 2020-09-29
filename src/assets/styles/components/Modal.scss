@@ -1,0 +1,21 @@
+@import '../utils/Mixin.scss';
+@import '../utils/Placeholder.scss';
+@import '../components/RoleManage/AddRoleModal.scss';
+// @import '../utils/ConfirmateModal.scss';
+
+.Modal__overlay {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: fixed;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   background-color: rgba(3, 36, 35, .25);
+}
+.Modal {
+// Aquí vamos hacer un modal más generico para esos que son casí iguales
+// Por ahora hacemos el que estamos necesitanado
+}
+/* Validate Modals */

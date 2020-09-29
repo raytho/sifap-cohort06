@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 
-import Title from './Title';
+import Title from '../Title';
 
-import iconHistory from '../assets/static/icon/history.png';
+import iconHistory from '../../assets/static/icon/history.png';
 
 const propsHistory = {
    title: 'History',
@@ -14,10 +14,12 @@ const propsHistory = {
 const History = () => {
 
    return (
-      <div className='History'>
+      <>
          <Title {...propsHistory} />
-         Manejador de History
-      </div>
+         <div className='History'>
+            Manejador de History
+         </div>
+      </>
    );
 };
 

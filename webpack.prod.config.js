@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack');
 
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].js',
-    publicPath: '/'
+   //  publicPath: './'
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -31,7 +32,9 @@ module.exports = {
       {
         test: /\.(s*)css$/,
         use: [
-          'style-loader',
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
           'css-loader',
           'sass-loader',
         ],
@@ -42,7 +45,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: 'assets/[hash].[ext]',
+              name: 'assets/static/[hash].[ext]',
             },
           },
         ],
@@ -54,6 +57,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       filename: './index.html'
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'assets/styles/[name].css',
     }),
   ]
 };
