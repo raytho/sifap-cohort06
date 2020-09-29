@@ -56,7 +56,7 @@ class MysqlLib {
     });
   }
 
-  createRole(newRole, result) {
+  createRole(newRole) {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise((resolve, reject) => {
@@ -111,8 +111,8 @@ class MysqlLib {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
-        // eslint-disable-next-line quotes
         client.query(
+          // eslint-disable-next-line quotes
           `UPDATE roles SET name = ? WHERE rolId = ?`,
           [values, id],
           function (err, result) {
@@ -131,6 +131,7 @@ class MysqlLib {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise((resolve, reject) => {
+        // eslint-disable-next-line quotes
         client.query(`SELECT 1+1 AS solution`, function (err, result) {
           if (err) {
             reject(new Error("Error in role"));
@@ -180,14 +181,14 @@ class MysqlLib {
 
 module.exports = MysqlLib;
 
-async function getId(id) {
-  const msqlLib2 = new MysqlLib();
-  const name = await msqlLib2.getAll(id);
-  return name;
-}
+// async function getId(id) {
+//   const msqlLib2 = new MysqlLib();
+//   const name = await msqlLib2.getAll(id);
+//   return name;
+// }
 
-async function test() {
-  const data = await getId(4);
-  console.log(data[0]);
-  return data;
-}
+// async function test() {
+//   const data = await getId(4);
+//   console.log(data[0]);
+//   return data;
+// }

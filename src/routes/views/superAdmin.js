@@ -6,6 +6,7 @@ const inviteNewUser = (app) => {
   app.use("/api/superAdmin", router);
 
   router.post("/invite-user", async (req, res, next) => {
+    console.log(req.body);
     // Acá irian los 3 datos de nombre, email y rol
     const email = req.body.email;
     const firstName = req.body.firstName;
