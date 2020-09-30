@@ -9,6 +9,16 @@ class UsersService {
     this.mysqlLib = new MysqlLib();
   }
 
+  async addUserInvited(newInvitedUser) {
+    const response = await this.mysqlLib.addUserInvited(newInvitedUser);
+    return response;
+  }
+
+  async getAllInvitedUsers() {
+    const users = await this.mysqlLib.getInvitedUsers();
+    return users;
+  }
+
   async getUser({ email }) {
     const [user] = await this.mongoDB.getAll(this.collection, { email });
     return user;

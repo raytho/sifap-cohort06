@@ -148,13 +148,33 @@ class MysqlLib {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise((resolve, reject) => {
-        client.query("INSERT INTO users SET ?", newUserInvited, (err, res) => {
+        client.query("INSERT INTO users_invitation SET ?", newUserInvited, (err, res) => {
           if (err) {
             console.error(err);
             reject(new Error("Error to insert role"));
           } else {
             client.end();
             resolve(res);
+          }
+        });
+      });
+    });
+  }
+
+  getInvitedUsers() {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(`SELECT * FROM users_invitation`, function (
+          err,
+          rows
+        ) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            client.end();
+            resolve(rows);
           }
         });
       });
@@ -186,7 +206,7 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query(`SELECT * FROM users WHERE userId = ${id}`, function (
+        client.query(`SELECT * FROM users_invitation WHERE userId = ${id}`, function (
           err,
           rows
         ) {
@@ -206,7 +226,7 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query(`SELECT * FROM users WHERE userId = ${id}`, function (
+        client.query(`SELECT * FROM users_invitation WHERE userId = ${id}`, function (
           err,
           rows
         ) {
@@ -226,7 +246,7 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query(`DELETE FROM users WHERE userId = ${id}`, function (err, rows, fields) {
+        client.query(`DELETE FROM users_invitation WHERE userId = ${id}`, function (err) {
           if (err) {
             reject(new Error("Error on user delete"));
           } else {

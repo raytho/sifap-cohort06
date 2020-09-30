@@ -1,5 +1,4 @@
 const express = require("express");
-const ApiKeysService = require("../../services/apiKeys");
 const usersService = require("../../services/usersService");
 
 const inviteNewUser = (app) => {
@@ -19,14 +18,14 @@ const inviteNewUser = (app) => {
       role: role,
     };
 
-    const apiKeyService = new ApiKeysService();
+    const userService = new usersService();
     try {
       if (inviteUser.role === "administrador") {
         inviteUser.role = 2;
       } else {
         inviteUser.role = 3;
       }
-      const userInvited = await apiKeyService.addUserInvited(inviteUser);
+      const userInvited = await userService.addUserInvited(inviteUser);
 
       if (userInvited) {
         res.status(200).json({
@@ -41,10 +40,10 @@ const inviteNewUser = (app) => {
     }
   });
 
-  router.get("/getAllUsers", async (req, res) => {
-    const apiKeyService = new ApiKeysService();
+  router.get("/getInvitedUsers", async (req, res) => {
+    const userService = new usersService();
     try {
-      const getUsers = await apiKeyService.getSuperAdminUsers();
+      const getUsers = await userService.getAllInvitedUsers();
       if (getUsers) {
         res.status(200).send(getUsers);
       }
@@ -54,7 +53,7 @@ const inviteNewUser = (app) => {
     }
   });
 
-  router.get("/user/:id", async (req, res) => {
+  router.get("/users-invitation/:id", async (req, res) => {
     const id = req.params.id;
     const userService = new usersService();
     try {
@@ -68,7 +67,7 @@ const inviteNewUser = (app) => {
     }
   });
 
-  router.put("/user/:id", async (req, res) => {
+  router.put("/users-invitation/:id", async (req, res) => {
     const id = req.params.id;
     const userService = new usersService();
     try {
@@ -82,7 +81,7 @@ const inviteNewUser = (app) => {
     }
   });
 
-  router.delete("/user/:id", async (req, res) => {
+  router.delete("/users-invitation/:id", async (req, res) => {
     const id = req.params.id;
     const userService = new usersService();
     try {
