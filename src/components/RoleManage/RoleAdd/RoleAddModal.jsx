@@ -28,7 +28,7 @@ const RoleAddModal = (props) => {
             className='isModalAddRole__close'
             onClick={handleModalClose}
             >X</button>
-            <h2>Agregar Usuario</h2>
+            <h2>Invitar Usuario</h2>
             <form onSubmit={handleSubmit}>
                <label htmlFor='email'>
                   Correo: <i>*</i>
@@ -70,7 +70,7 @@ const RoleAddModal = (props) => {
                   className='btn'
                   onClick={handleModalClose}
                   >Cerrar</button>
-                  <button type='submit' className='btn'>Crear</button>
+                  <button type='submit' className='btn'>Invitar</button>
                </div>
             </form>
          </Modal>

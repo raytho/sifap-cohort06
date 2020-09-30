@@ -1,15 +1,22 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import RoleDetail from './RoleDetail';
+import GetData from '../../../containers/GetData';
 
-import mockRoles from '../../../../mockRoles';
+// import mockRoles from '../../../../mockRoles';
 
 // Aquí vamos a hacer las peticiones de los detalles de cada rol
 
 const RoleDetailContainer = (props) => {
 
+   const {
+      history,
+      match,
+   } = props;
    const [modal, setModal] = useState(false)
    const [form, setValues] = useState({});
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
+   const idUser = match.params.id;
 
    const handleChangeInput = (e) => {
 
@@ -27,6 +34,8 @@ const RoleDetailContainer = (props) => {
    }
    window.console.log(form);
 
+   window.console.log(match.params.id)
+
    const handleModalOpen = () => {
       setModal(true);
    }
@@ -36,20 +45,30 @@ const RoleDetailContainer = (props) => {
    }
 
    const goBack = () => {
-      props.history.goBack()
+      history.goBack()
    }
 
-   const { roles } = mockRoles;
+   // const { roles } = mockRoles;
    return (
-      <RoleDetail
-         role={roles[0]}
-         handleChangeInput={handleChangeInput}
-         handleModalOpen={handleModalOpen}
-         handleModalClose={handleModalClose}
-         modalIsOpen={modal}
-         form={form}
-         goBack={goBack}
-      />
+      <GetData api={`${API}superAdmin/users-invitation/${idUser}`}>
+         {
+            ({ loading, error, data}) => {
+               if(error) return <p>¡Error!</p>
+               return(
+                  <RoleDetail
+                  user={data[0]}
+                  loading={loading}
+                  handleChangeInput={handleChangeInput}
+                  handleModalOpen={handleModalOpen}
+                  handleModalClose={handleModalClose}
+                  modalIsOpen={modal}
+                  form={form}
+                  goBack={goBack}
+               />
+               )
+            }
+         }
+      </GetData>
    )
 };
 

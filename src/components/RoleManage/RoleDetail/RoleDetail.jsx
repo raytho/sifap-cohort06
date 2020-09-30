@@ -9,27 +9,30 @@ import '../../../assets/styles/components/RoleManage/RoleManage.scss';
 const RoleDetail = (props) =>  {
 
    const {
+      loading,
+      user,
       handleChangeInput,
       handleModalOpen,
       handleModalClose,
       modalIsOpen,
       form,
       goBack,
-      userId
-
-    } = props;
-    window.console.log(userId);
-
+   } = props;
+   window.console.log(user)
    return (
       <Roles>
-         <div className='Role__manage-panel-detail'>
+          <div className='Role__manage-panel-detail'>
+          {loading
+          ? <p>Cargando...</p>
+          :
+          <>
             <div className='Role__header Role__header--detail'>
                <span>
                   <button type='button' onClick={goBack}> </button>
-                  <p>Empleado</p>
-                  <p>10001</p>
-                  <p>Daniel Esteban Santos Méndez</p>
-                  <p>dsantos034@ejemplo.com</p>
+                  <p>{user.role}</p>
+                  <p>{user.userId}</p>
+                  <p>{user.firstName} {user.lastName}</p>
+                  <p>{user.email}</p>
                </span>
             </div>
             <div className='Role__main Role__main--detail'>
@@ -115,8 +118,10 @@ const RoleDetail = (props) =>  {
                <RoleDetailModal
                   handleModalClose={handleModalClose}
                   modalIsOpen={modalIsOpen}
-                />
+               />
             </div>
+         </>
+         }
          </div>
       </Roles>
    );

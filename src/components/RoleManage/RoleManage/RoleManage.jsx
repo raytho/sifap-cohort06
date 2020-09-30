@@ -2,7 +2,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
-import React,{ useEffect ,useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types'
 
 import Roles from '../Roles';
@@ -11,44 +11,23 @@ import RoleAddContainer from '../RoleAdd/RoleAddContainer';
 import RoleManageModal from './RoleManageModal';
 import '../../../assets/styles/components/RoleManage/RoleManage.scss';
 
-
-
-
 const RoleManage = (props) => {
 
    const {
+      loading,
+      data,
       handleModalOpen,
       handleModalClose,
       handleChangeInput,
       modalIsOpen,
    } = props;
-   const [data, setData] = useState([]);
-   const [newUser, setNewUser] = useState(false);
-   // Function called for the child component RoleAddContainer each time than add user
-   const handleNewUser = () => {
-      setNewUser(true)
-   }
-
-
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
-   useEffect(() => {
-      const getData = async () => {
-         try {
-            const response = await fetch(`${API}superAdmin/getAllUsers`);
-            const result = await response.json();
-            setData(result);
-            setNewUser(false)
-         } catch (error) {
-            window.console.log(error.message);
-         }
-      };
-      getData()
-
-   }, [newUser]);
    const handleFilter = () => {
       document.getElementById('form-filter').classList.toggle('isVisible');
    }
-
+   // Intentando filtrar
+   window.console.log(
+      data.map(item => item.firstName)
+   )
    return (
       <Roles >
          <section className='Role'>
@@ -91,13 +70,16 @@ const RoleManage = (props) => {
                </div>
                <div className='Role__main'>
                   <div className='Role__item-container'>
-                     {data.map(item => <RoleItem
+                  {loading
+                  ? <p>Cargando...</p>
+                  : data.map(item => <RoleItem
                         key={item.userId}
                         {...item}
-                     />)}
+                     />)
+                  }
                   </div>
                   <div className='Role__panel-ctrl'>
-                     <RoleAddContainer dataLength={data.length} handleNewUser={handleNewUser}/>
+                     <RoleAddContainer dataLength={data.length} />
                      <button type='button' onClick={handleModalOpen}>Guardar</button>
                      <RoleManageModal
                         handleModalClose={handleModalClose}
@@ -112,6 +94,9 @@ const RoleManage = (props) => {
 };
 
 RoleManage.propTypes = {
+   loading: PropTypes.bool,
+   data: PropTypes.arrayOf(PropTypes.shape()),
+   handleNewUser: PropTypes.func,
    handleModalOpen: PropTypes.func,
    handleModalClose: PropTypes.func,
    handleChangeInput: PropTypes.func,

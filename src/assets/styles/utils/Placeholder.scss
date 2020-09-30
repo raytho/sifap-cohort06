@@ -1,7 +1,7 @@
 %reset-btn {
    border: none;
    cursor: pointer;
-   outline: none;
+   outline-color: var(--main-color);
    &:active {
       transform: scale(.98);
    }

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types'
 import RoleAddCtrl from './RoleAddCtrl';
 
-const RoleAddContainer = ({ dataLength, handleNewUser }) => {
+const RoleAddContainer = ({ dataLength }) => {
 
    const [modal, setModal] = useState(false);
    const [form, setValues] = useState({
@@ -14,6 +14,7 @@ const RoleAddContainer = ({ dataLength, handleNewUser }) => {
    const [nameValidate, setNameValidate] = useState(false);
    const [emailValidate, setEmailValidate] = useState(false);
    const [roleValidate, setRoleValidate] = useState(false);
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
 
    // Manage input
    const handleChangeInput = e => {
@@ -36,7 +37,7 @@ const RoleAddContainer = ({ dataLength, handleNewUser }) => {
       let email;
       let role;
 
-      if (Object.keys(form.firstName).length > 0) {
+      if (Object.keys(form.firstName).length > 2) {
          name = true;
          setNameValidate(false);
       } else {
@@ -64,7 +65,6 @@ const RoleAddContainer = ({ dataLength, handleNewUser }) => {
    }
 
    // Super admin create new user admin/employee
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
    const handleSubmit = e => {
       e.preventDefault();
       if (validateForm()) {
@@ -79,7 +79,6 @@ const RoleAddContainer = ({ dataLength, handleNewUser }) => {
                   },
                   body: JSON.stringify(form)
                });
-               handleNewUser()
             } catch (error) {
                window.console.log(error.message);
             }
@@ -107,7 +106,7 @@ const RoleAddContainer = ({ dataLength, handleNewUser }) => {
 
 RoleAddContainer.propTypes = {
    dataLength: PropTypes.number,
-   handleNewUser: PropTypes.func,
+   handleNewUserGrandchild: PropTypes.func,
 }
 
 export default RoleAddContainer;

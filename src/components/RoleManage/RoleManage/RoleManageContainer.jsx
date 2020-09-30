@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
 import RoleManage from './RoleManage';
+import GetData from '../../../containers/GetData'
 
 const RoleManageContainer = () => {
-/* En los componentes container esta la lógica de peticiones (fetching de datos)
-   Por ahora no tenemos las peticiones, pero dejamos listo el componente para ello */
+
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
+   const [modal, setModal] = useState(false);
 
    // Save data in sessionStorage, after send all data with button save of section Roles
    const setSessionStorage = value => {
@@ -18,7 +20,6 @@ const RoleManageContainer = () => {
       setSessionStorage(e.target.checked)
    }
 
-   const [modal, setModal] = useState(false);
    // Manejo de modales
    const handleModalOpen = () => {
       setModal(true);
@@ -27,13 +28,25 @@ const RoleManageContainer = () => {
       setModal(false);
    }
 
+
    return (
-      <RoleManage
-         handleModalOpen={handleModalOpen}
-         handleModalClose={handleModalClose}
-         handleChangeInput={handleChangeInput}
-         modalIsOpen={modal}
-      />
+      <GetData api={`${API}superAdmin/getInvitedUsers`}>
+         {
+            ({ loading, error, data }) => {
+               if(error) return <p>¡Error!</p>
+               return (
+                  <RoleManage
+                     loading={loading}
+                     data={data}
+                     handleModalOpen={handleModalOpen}
+                     handleModalClose={handleModalClose}
+                     handleChangeInput={handleChangeInput}
+                     modalIsOpen={modal}
+                  />
+               )
+            }
+         }
+      </GetData>
    );
 }
 

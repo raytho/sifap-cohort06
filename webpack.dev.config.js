@@ -15,6 +15,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
+  devtool: 'eval-cheap-source-map',
   devServer: {
     port: 9000,
     historyApiFallback: true,
