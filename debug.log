@@ -1,3 +1,0 @@
-[0928/202827.497:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0
-[0928/204938.372:ERROR:registration_protocol_win.cc(103)] CreateFile: El sistema no puede encontrar el archivo especificado. (0x2)
-[0928/204940.622:ERROR:registration_protocol_win.cc(103)] CreateFile: El sistema no puede encontrar el archivo especificado. (0x2)
