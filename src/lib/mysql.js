@@ -26,7 +26,6 @@ class MysqlLib {
           if (error) {
             reject(error);
           } else {
-            this.client.end();
             console.log("Connected to database");
             resolve(this.client.config.database);
           }
@@ -43,11 +42,7 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query(`SELECT * FROM users WHERE test = ${_id}`, function (
-          err,
-          rows
-          
-        ) {
+        client.query(`SELECT * FROM users WHERE test = ${_id}`, function (err, rows) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
@@ -180,6 +175,63 @@ class MysqlLib {
           } else {
             client.end();
             resolve(rows);
+          }
+        });
+      });
+    });
+  }
+
+  getUserById( id ){
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(`SELECT * FROM users WHERE userId = ${id}`, function (
+          err,
+          rows
+        ) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            client.end();
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
+
+  updateUserByID( id ){
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(`SELECT * FROM users WHERE userId = ${id}`, function (
+          err,
+          rows
+        ) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            client.end();
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
+
+  removeUserByID( id ){
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(`DELETE FROM users WHERE userId = ${id}`, function (err, rows, fields) {
+          if (err) {
+            reject(new Error("Error on user delete"));
+          } else {
+            client.end();
+            resolve(id);
           }
         });
       });

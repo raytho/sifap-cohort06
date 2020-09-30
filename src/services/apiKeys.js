@@ -1,4 +1,3 @@
-const { string } = require("@hapi/joi");
 const MongoLib = require("../lib/mongo");
 const MysqlLib = require("../lib/mysql");
 
@@ -43,6 +42,7 @@ class ApiKeysService {
     const users = await this.mysqlLib.getSuperAdminUsers();
     return users;
   }
+
 }
 
 module.exports = ApiKeysService;

@@ -1,10 +1,12 @@
 const MongoLib = require("../lib/mongo");
+const MysqlLib = require("../lib/mysql");
 const bcrypt = require("bcrypt");
 
 class UsersService {
   constructor() {
     this.collection = "sifap_users";
     this.mongoDB = new MongoLib();
+    this.mysqlLib = new MysqlLib();
   }
 
   async getUser({ email }) {
@@ -83,6 +85,20 @@ class UsersService {
     };
     return params;
   }
+
+  // CRUD Users
+
+  async getUserById(id) {
+    const user = await this.mysqlLib.getUserById(id);
+    return user;
+  }
+
+  async deleteUserById(id) {
+    const user = await this.mysqlLib.removeUserByID(id);
+    return user;
+  }
+
+  
 }
 
 module.exports = UsersService;
