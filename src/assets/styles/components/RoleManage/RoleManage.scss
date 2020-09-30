@@ -1,0 +1,12 @@
+@import '../../utils/Mixin.scss';
+@import '../../utils/Placeholder.scss';
+@import './Autentication.scss';
+@import './Filter.scss';
+@import './RoleHeader.scss';
+@import './RoleMain.scss';
+@import './RoleDetail.scss';
+
+.Role {
+   font-family: var(--font-text);
+   font-size: var(--font-smallest);
+}
