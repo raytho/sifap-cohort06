@@ -10,7 +10,7 @@ const DB_PORT = config.dbPort;
 
 class MysqlLib {
   constructor() {
-    this.client = mysql.createConnection({
+    this.client = mysql.createPool({
       host: DB_HOST,
       user: DB_USER,
       password: DB_PASSWORD,
@@ -22,10 +22,11 @@ class MysqlLib {
   connect() {
     if (!MysqlLib.connection) {
       MysqlLib.connection = new Promise((resolve, reject) => {
-        this.client.connect((error) => {
+        this.client.getConnection((error) => {
           if (error) {
             reject(error);
           } else {
+            this.client.end();
             console.log("Connected to database");
             resolve(this.client.config.database);
           }
@@ -45,6 +46,7 @@ class MysqlLib {
         client.query(`SELECT * FROM users WHERE test = ${_id}`, function (
           err,
           rows
+          
         ) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
@@ -81,6 +83,7 @@ class MysqlLib {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
+            client.end();
             resolve(rows);
           }
         });
@@ -100,6 +103,7 @@ class MysqlLib {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
+            client.end();
             resolve(rows);
           }
         });
@@ -119,6 +123,7 @@ class MysqlLib {
             if (err) {
               reject(new Error("Error in role"));
             } else {
+              client.end();
               resolve(result);
             }
           }
@@ -136,6 +141,7 @@ class MysqlLib {
           if (err) {
             reject(new Error("Error in role"));
           } else {
+            client.end();
             resolve(result);
           }
         });
@@ -152,6 +158,7 @@ class MysqlLib {
             console.error(err);
             reject(new Error("Error to insert role"));
           } else {
+            client.end();
             resolve(res);
           }
         });
@@ -171,6 +178,7 @@ class MysqlLib {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
+            client.end();
             resolve(rows);
           }
         });
