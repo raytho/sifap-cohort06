@@ -42,7 +42,6 @@ class ApiKeysService {
     const users = await this.mysqlLib.getSuperAdminUsers();
     return users;
   }
-
 }
 
 module.exports = ApiKeysService;
