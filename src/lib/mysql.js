@@ -173,7 +173,7 @@ class MysqlLib {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         client.query(
-          `SELECT * FROM users_invitation WHERE userId = ${id}`,
+          "SELECT * FROM users_invitation WHERE userId = ?", id,
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));
