@@ -10,7 +10,7 @@ const userView = (app) => {
   app.use("/user", router);
 
   router.post(
-    "/sign-up", validationHandler(createUserSchema),
+    "/sign-in", validationHandler(createUserSchema),
     async (req, res, next) => {
       const { body: user } = req;
       try {

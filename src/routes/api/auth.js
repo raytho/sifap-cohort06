@@ -50,6 +50,7 @@ function authApi(app) {
   router.post(
     "/sign-up",
     validationHandler(createUserSchema),
+
     async (req, res, next) => {
       const { body: user } = req;
       try {

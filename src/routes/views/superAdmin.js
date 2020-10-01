@@ -11,9 +11,9 @@ const inviteNewUser = (app) => {
   const router = express.Router();
   app.use("/api/superAdmin", router);
 
+  // Invitations
   router.post("/invite-user", validationHandler(inviteUserSchema),
     async (req, res) => {
-
       const { body: user } = req;
       const role = user.role;
       const userService = new usersService();
@@ -39,12 +39,72 @@ const inviteNewUser = (app) => {
     }
   );
 
+  router.get("/getInvitedUsers", async (req, res) => {
+    const userService = new usersService();
+    try {
+      const getUser = await userService.getAllInvitedUsers();
+      if (getUser) {
+        res.status(200).send(getUser);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error to get user" });
+    }
+  });
+
+  router.get("/users-invitation/:id", async (req, res) => {
+    const id = req.params.id;
+    const userService = new usersService();
+    try {
+      const user = await userService.getInvitedUserById(id);
+      if (user) {
+        res.status(200).send(user);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error to get users" });
+    }
+  });
+
+  // Pendiente
+  router.put("/users-invitation/:id", async (req, res) => {
+    const id = req.params.id;
+    const userService = new usersService();
+    try {
+      const user = await userService.getUserById(id);
+      if (user) {
+        res.status(200).send(user);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error to get users" });
+    }
+  });
+
+  router.delete("/users-invitation/:id", async (req, res) => {
+    const id = req.params.id;
+    const userService = new usersService();
+    try {
+      const user = await userService.deleteInvitedUserById(id);
+      if (user) {
+        res.status(201).json({
+          user: id,
+          message: "User deleted",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error on delete user" });
+    }
+  });
+
+  // Users
+
   router.post(
     "/create-user",
     validationHandler(createUserSchema),
     async (req, res, next) => {
       const { body: user } = req;
-
       try {
         const userService = new usersService();
         const userCreated = await userService.addUser({ user });
@@ -102,63 +162,12 @@ const inviteNewUser = (app) => {
     }
   });
 
-  router.get("/getInvitedUsers", async (req, res) => {
-    const userService = new usersService();
-    try {
-      const getUser = await userService.getAllInvitedUsers();
-      if (getUser) {
-        res.status(200).send(getUser);
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Error to get user" });
-    }
+  //Pendiente
+  // eslint-disable-next-line no-unused-vars
+  router.put("/user/:id", async (req, res) => {
+
   });
 
-  router.get("/users-invitation/:id", async (req, res) => {
-    const id = req.params.id;
-    const userService = new usersService();
-    try {
-      const user = await userService.getInvitedUserById(id);
-      if (user) {
-        res.status(200).send(user);
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Error to get users" });
-    }
-  });
-
-  router.put("/users-invitation/:id", async (req, res) => {
-    const id = req.params.id;
-    const userService = new usersService();
-    try {
-      const user = await userService.getUserById(id);
-      if (user) {
-        res.status(200).send(user);
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Error to get users" });
-    }
-  });
-
-  router.delete("/users-invitation/:id", async (req, res) => {
-    const id = req.params.id;
-    const userService = new usersService();
-    try {
-      const user = await userService.deleteInvitedUserById(id);
-      if (user) {
-        res.status(201).json({
-          user: id,
-          message: "User deleted",
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Error on delete user" });
-    }
-  });
 };
 
 module.exports = inviteNewUser;
