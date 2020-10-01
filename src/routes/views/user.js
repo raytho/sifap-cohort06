@@ -9,11 +9,19 @@ const userView = (app) => {
 
   app.use("/user", router);
 
-  router.get(
-    "/",
-    passport.authenticate("jwt", { session: false }),
-    (req, res) => {
-      res.send("Hello User");
+  router.post(
+    "/sign-up", validationHandler(createUserSchema),
+    async (req, res, next) => {
+      const { body: user } = req;
+      try {
+        const createdUserId = await usersService.createUser({ user });
+        res.status(201).json({
+          data: createdUserId,
+          message: "User created",
+        });
+      } catch (error) {
+        next(error);
+      }
     }
   );
 };
