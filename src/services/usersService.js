@@ -1,5 +1,6 @@
 const MongoLib = require("../lib/mongo");
 const MysqlLib = require("../lib/mysql");
+const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 
 class UsersService {
@@ -9,22 +10,7 @@ class UsersService {
     this.mysqlLib = new MysqlLib();
   }
 
-  async addUserInvited(newInvitedUser) {
-    const response = await this.mysqlLib.addUserInvited(newInvitedUser);
-    return response;
-  }
-
-  async getAllInvitedUsers() {
-    const users = await this.mysqlLib.getInvitedUsers();
-    return users;
-  }
-
-  async getUser({ email }) {
-    const [user] = await this.mongoDB.getAll(this.collection, { email });
-    return user;
-  }
-
-  async createUser({ user }) {
+  async addUser({ user }) {
     const {
       email,
       password,
@@ -42,8 +28,10 @@ class UsersService {
       fiscalAct,
     } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
+    const userId = uuidv4();
 
-    const createUserId = await this.mongoDB.create(this.collection, {
+    const response = await this.mysqlLib.addUser({
+      userId,
       email,
       password: hashedPassword,
       phoneNumber,
@@ -59,19 +47,22 @@ class UsersService {
       role,
       fiscalAct,
     });
-
-    return createUserId;
+    return response;
   }
 
-  async getOrCreateUser({ user }) {
-    const queriedUser = await this.getUser({ email: user.email });
+  async getAllUsers() {
+    const users = await this.mysqlLib.getAllUsers();
+    return users;
+  }
 
-    if (queriedUser) {
-      return queriedUser;
-    }
+  async getUserById( id ) {
+    const user = await this.mysqlLib.getUserById(id);
+    return user;
+  }
 
-    await this.createUser({ user });
-    return await this.getUser({ email: user.email });
+  async deleteUserById(id) {
+    const user = await this.mysqlLib.removeUserByID(id);
+    return user;
   }
 
   async sendResetLink(email, id) {
@@ -96,19 +87,34 @@ class UsersService {
     return params;
   }
 
-  // CRUD Users
+  // CRUD Users Invitations
+  async addUserInvited({user}) {
+    const { email, firstName, role } = user;
+    const userId = uuidv4();
 
-  async getUserById(id) {
-    const user = await this.mysqlLib.getUserById(id);
+    const response = await this.mysqlLib.addUserInvited({
+      email,
+      firstName,
+      role,
+      userId
+    });
+    return response;
+  }
+
+  async getAllInvitedUsers() {
+    const users = await this.mysqlLib.getInvitedUsers();
+    return users;
+  }
+
+  async getInvitedUserById(id) {
+    const user = await this.mysqlLib.getInvitedUserById(id);
     return user;
   }
 
-  async deleteUserById(id) {
-    const user = await this.mysqlLib.removeUserByID(id);
+  async deleteInvitedUserById(id) {
+    const user = await this.mysqlLib.removeInvitedUserByID(id);
     return user;
   }
-
-  
 }
 
 module.exports = UsersService;

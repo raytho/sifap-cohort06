@@ -36,23 +36,6 @@ class MysqlLib {
     return MysqlLib.connection;
   }
 
-  getAll(id) {
-    const _id = id;
-    const client = this.client;
-    return this.connect().then(() => {
-      return new Promise(function (resolve, reject) {
-        // eslint-disable-next-line quotes
-        client.query(`SELECT * FROM users WHERE test = ${_id}`, function (err, rows) {
-          if (rows === undefined) {
-            reject(new Error("Error rows is undefined"));
-          } else {
-            resolve(rows);
-          }
-        });
-      });
-    });
-  }
-
   createRole(newRole) {
     const client = this.client;
     return this.connect().then(() => {
@@ -69,6 +52,7 @@ class MysqlLib {
     });
   }
 
+  // ROLES
   getAllRoles() {
     const client = this.client;
     return this.connect().then(() => {
@@ -144,19 +128,24 @@ class MysqlLib {
     });
   }
 
+  // INVITED USERS
   addUserInvited(newUserInvited) {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise((resolve, reject) => {
-        client.query("INSERT INTO users_invitation SET ?", newUserInvited, (err, res) => {
-          if (err) {
-            console.error(err);
-            reject(new Error("Error to insert role"));
-          } else {
-            client.end();
-            resolve(res);
+        client.query(
+          "INSERT INTO users_invitation SET ?",
+          newUserInvited,
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(new Error("Error to insert role"));
+            } else {
+              client.end();
+              resolve(res);
+            }
           }
-        });
+        );
       });
     });
   }
@@ -166,10 +155,7 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query(`SELECT * FROM users_invitation`, function (
-          err,
-          rows
-        ) {
+        client.query(`SELECT * FROM users_invitation`, function (err, rows) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
@@ -177,6 +163,116 @@ class MysqlLib {
             resolve(rows);
           }
         });
+      });
+    });
+  }
+
+  getInvitedUserById(id) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(
+          `SELECT * FROM users_invitation WHERE userId = ${id}`,
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              client.end();
+              resolve(rows);
+            }
+          }
+        );
+      });
+    });
+  }
+
+  removeInvitedUserByID(id) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query("DELETE FROM users_invitation WHERE userId = ?", id,
+          function (err) {
+            if (err) {
+              reject(new Error("Error on user delete"));
+            } else {
+              client.end();
+              resolve(id);
+            }
+          }
+        );
+      });
+    });
+  }
+
+  // USERS
+  addUser(newUser) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise((resolve, reject) => {
+        client.query("INSERT INTO users SET ?", newUser, (err, res) => {
+          if (err) {
+            console.error(err);
+            reject(new Error("Error to insert user"));
+          } else {
+            client.end();
+            resolve(res);
+          }
+        });
+      });
+    });
+  }
+
+  getAllUsers() {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query("SELECT * FROM users", function (err, rows) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            client.end();
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
+
+  getUserById(id) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query("SELECT * FROM users WHERE userId = ?", id, function (err, rows) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            client.end();
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
+
+  removeUserByID(id) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query("DELETE FROM users WHERE userId = ?", id,
+          function (err) {
+            if (err) {
+              reject(new Error("Error on user delete"));
+            } else {
+              client.end();
+              resolve(id);
+            }
+          }
+        );
       });
     });
   }
@@ -201,59 +297,22 @@ class MysqlLib {
     });
   }
 
-  getUserById( id ){
+  updateUserByID(id) {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query(`SELECT * FROM users_invitation WHERE userId = ${id}`, function (
-          err,
-          rows
-        ) {
-          if (rows === undefined) {
-            reject(new Error("Error rows is undefined"));
-          } else {
-            client.end();
-            resolve(rows);
+        client.query(
+          `SELECT * FROM users_invitation WHERE userId = ${id}`,
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              client.end();
+              resolve(rows);
+            }
           }
-        });
-      });
-    });
-  }
-
-  updateUserByID( id ){
-    const client = this.client;
-    return this.connect().then(() => {
-      return new Promise(function (resolve, reject) {
-        // eslint-disable-next-line quotes
-        client.query(`SELECT * FROM users_invitation WHERE userId = ${id}`, function (
-          err,
-          rows
-        ) {
-          if (rows === undefined) {
-            reject(new Error("Error rows is undefined"));
-          } else {
-            client.end();
-            resolve(rows);
-          }
-        });
-      });
-    });
-  }
-
-  removeUserByID( id ){
-    const client = this.client;
-    return this.connect().then(() => {
-      return new Promise(function (resolve, reject) {
-        // eslint-disable-next-line quotes
-        client.query(`DELETE FROM users_invitation WHERE userId = ${id}`, function (err) {
-          if (err) {
-            reject(new Error("Error on user delete"));
-          } else {
-            client.end();
-            resolve(id);
-          }
-        });
+        );
       });
     });
   }

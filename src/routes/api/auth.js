@@ -53,7 +53,7 @@ function authApi(app) {
     async (req, res, next) => {
       const { body: user } = req;
       try {
-        const createdUserId = await usersService.createUser({ user });
+        const createdUserId = await usersService.createSuperAdminUser({ user });
         res.status(201).json({
           data: createdUserId,
           message: "User created",
