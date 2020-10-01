@@ -1,6 +1,6 @@
 const MongoLib = require("../lib/mongo");
 const MysqlLib = require("../lib/mysql");
-const { v4: uuidv4 } = require("uuid");
+const { nanoid } = require("nanoid");
 const bcrypt = require("bcrypt");
 
 class UsersService {
@@ -28,7 +28,7 @@ class UsersService {
       fiscalAct,
     } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userId = uuidv4();
+    const userId = nanoid(4);
 
     const response = await this.mysqlLib.addUser({
       userId,
@@ -90,7 +90,7 @@ class UsersService {
   // CRUD Users Invitations
   async addUserInvited({user}) {
     const { email, firstName, role } = user;
-    const userId = uuidv4();
+    const userId = nanoid(4);
 
     const response = await this.mysqlLib.addUserInvited({
       email,
