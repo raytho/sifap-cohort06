@@ -32,6 +32,16 @@ class ApiKeysService {
     const testRole = await this.mysqlLib.testRole();
     return testRole;
   }
+
+  async addUserInvited(newInvitedUser) {
+    const response = await this.mysqlLib.addUserInvited(newInvitedUser);
+    return response;
+  }
+
+  async getSuperAdminUsers() {
+    const users = await this.mysqlLib.getSuperAdminUsers();
+    return users;
+  }
 }
 
 module.exports = ApiKeysService;
