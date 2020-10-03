@@ -9,13 +9,6 @@
    font-family: var(--font-title);
    background-color: white;
    border-radius: 5px 100px 5px 5px;
-   p {
-      width: 300px;
-      margin: 10px 0 0 0;
-      font-family: var(--font-text);
-      font-size: var(--font-smallest);
-      color: red;
-   }
    h2 {
       margin: 0 0 50px 0;
       font-size: var(--font-big);
@@ -35,20 +28,21 @@
          margin: 10px 0 0 0;
          padding: 0 0 0 10px;
          display: flex;
-         border-radius: 2px;
+         border-radius: 5px;
+
          border: 1px solid  rgba(3, 36, 35, .25);
          outline-color: var(--secundary-color);
       }
       input {
          width: 290px;
-         height: 30px;
+         height: 40px;
       }
       label:nth-of-type(3) {
          position: relative;
       }
       select {
          width: 302px;
-         height: 33px;
+         height: 40px;
          background-color: var(--white-color);
          cursor: pointer;
          -webkit-appearance: none;
@@ -62,7 +56,7 @@
       }
       // Dropdown aún no funciona dandole click a la flecha, pero si desplega normal
       .Arrow {
-         @include icon-arrow(absolute, 39px, 10px, 8px, var(--secundary-color), 180deg)
+         @include icon-arrow(absolute, 45px, 10px, 8px, var(--secundary-color), 180deg)
       }
       div {
          width: 300px;

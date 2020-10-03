@@ -11,6 +11,7 @@ const RoleDetailModal = (props) => {
       handleModalClose,
       modalIsOpen
    } = props;
+   
 
    // Send all data of roles except add role
    const sendAllDataRole = () => {

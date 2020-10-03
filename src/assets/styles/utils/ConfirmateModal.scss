@@ -8,10 +8,10 @@
    display: flex;
    flex-direction: column;
    justify-content: space-around;
-   position: relative;
    font-family: var(--font-text);
    background-color: var(--white-color);
    border-radius: 10px;
+   z-index: 1000;
    & > button {
       width: 30px;
       height: 30px;

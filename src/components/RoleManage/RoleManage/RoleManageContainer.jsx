@@ -20,6 +20,22 @@ const RoleManageContainer = () => {
       setSessionStorage(e.target.checked)
    }
 
+   const deleteUser = () => {
+      window.console.log('pglo')
+      const getData = async () => {
+
+         try {
+            await fetch('url',{
+               method: 'DELETE',
+            });
+
+         } catch (error) {
+            window.console.log(error.message);
+         }
+      };
+      getData()
+   }
+
    // Manejo de modales
    const handleModalOpen = () => {
       setModal(true);
@@ -30,7 +46,7 @@ const RoleManageContainer = () => {
 
 
    return (
-      <GetData api={`${API}superAdmin/getInvitedUsers`}>
+      <GetData api={`${API}superAdmin/get-users`}>
          {
             ({ loading, error, data }) => {
                if(error) return <p>¡Error!</p>
@@ -38,6 +54,7 @@ const RoleManageContainer = () => {
                   <RoleManage
                      loading={loading}
                      data={data}
+                     deleteUser={deleteUser}
                      handleModalOpen={handleModalOpen}
                      handleModalClose={handleModalClose}
                      handleChangeInput={handleChangeInput}

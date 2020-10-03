@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 
 
-import '../assets/styles/components/Modal.scss';
+import '../assets/styles/layout/Modal.scss';
 
 const Modal = (props) => {
 

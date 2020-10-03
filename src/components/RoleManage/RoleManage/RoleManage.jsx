@@ -2,32 +2,34 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types'
 
 import Roles from '../Roles';
-import RoleItem from '../RoleItem';
 import RoleAddContainer from '../RoleAdd/RoleAddContainer';
 import RoleManageModal from './RoleManageModal';
+import UserItem from './UserItem';
+import UserItemInvited from './UserItemInvited';
 import '../../../assets/styles/components/RoleManage/RoleManage.scss';
 
 const RoleManage = (props) => {
 
    const {
-      loading,
+      // loading,
       data,
       handleModalOpen,
       handleModalClose,
       handleChangeInput,
       modalIsOpen,
    } = props;
+   const [users, setUsers] = useState(true)
    const handleFilter = () => {
       document.getElementById('form-filter').classList.toggle('isVisible');
    }
    // Intentando filtrar
-   window.console.log(
-      data.map(item => item.firstName)
-   )
+   // window.console.log(
+   //    data.map(item => item.firstName)
+   // )
    return (
       <Roles >
          <section className='Role'>
@@ -69,13 +71,14 @@ const RoleManage = (props) => {
                   </span>
                </div>
                <div className='Role__main'>
+                  <button type='button' onClick={() => setUsers(true)}>Usuarios</button>
+                  <button type='button' onClick={() => setUsers(false)}>Usuarios invitados</button>
                   <div className='Role__item-container'>
-                  {loading
-                  ? <p>Cargando...</p>
-                  : data.map(item => <RoleItem
-                        key={item.userId}
-                        {...item}
-                     />)
+                  {users
+                  ? (
+                    <UserItem data={data}/>
+                  )
+                  : <UserItemInvited />
                   }
                   </div>
                   <div className='Role__panel-ctrl'>
@@ -94,9 +97,7 @@ const RoleManage = (props) => {
 };
 
 RoleManage.propTypes = {
-   loading: PropTypes.bool,
    data: PropTypes.arrayOf(PropTypes.shape()),
-   handleNewUser: PropTypes.func,
    handleModalOpen: PropTypes.func,
    handleModalClose: PropTypes.func,
    handleChangeInput: PropTypes.func,

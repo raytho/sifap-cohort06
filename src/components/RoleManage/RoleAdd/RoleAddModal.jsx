@@ -2,6 +2,7 @@
 import React from 'react';
 
 import Modal from '../../Modal';
+import '../../../assets/styles/utils/Alerts.scss';
 
 
 const RoleAddModal = (props) => {
@@ -30,9 +31,7 @@ const RoleAddModal = (props) => {
             >X</button>
             <h2>Invitar Usuario</h2>
             <form onSubmit={handleSubmit}>
-               <label htmlFor='email'>
-                  Correo: <i>*</i>
-                  {emailValidate && <p className='alert-form'>Formato de correo ejemplo@correo.com.</p>}
+               <label htmlFor='email'>Correo: <i>*</i>
                   <input
                      type='text'
                      name='email'
@@ -40,11 +39,9 @@ const RoleAddModal = (props) => {
                      placeholder='ejemplo@correo.com'
                      onChange={handleChangeInput}
                   />
+                  {emailValidate && <p className='alert-form'>Formato de correo ejemplo@correo.com.</p>}
                </label>
-               <label htmlFor='firstName'>
-                  Nombre: <i>*</i>
-                  {nameValidate &&
-                        <p className='alert-form'>Debe tener el primer nombre.</p>}
+               <label htmlFor='firstName'>Nombre: <i>*</i>
                   <input
                      type='text'
                      name='firstName'
@@ -52,6 +49,8 @@ const RoleAddModal = (props) => {
                      placeholder='Nombre'
                      onChange={handleChangeInput}
                   />
+                  {nameValidate &&
+                        <p className='alert-form'>Debe tener el primer nombre.</p>}
                </label>
                <label htmlFor='role'>
                   Rol: <i>*</i>
@@ -61,9 +60,9 @@ const RoleAddModal = (props) => {
                      <option value='administrador'>Administrador</option>
                   </select>
                   <i className='Arrow'> </i>
-               </label>
                {roleValidate &&
                         <p className='alert-form'>Seleccione el rol de la cuenta a crear.</p>}
+               </label>
                <div>
                   <button
                   type='button'

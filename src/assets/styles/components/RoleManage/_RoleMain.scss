@@ -14,6 +14,10 @@
    border-radius: 5px 50px 5px 5px;
    box-shadow: inset 0 0 5px 1px rgba(3, 36, 35, .10);
    overflow-y: scroll;
+   a {
+      display: flex;
+      text-decoration: none;
+   }
    &::-webkit-scrollbar {
       display: none;
    }

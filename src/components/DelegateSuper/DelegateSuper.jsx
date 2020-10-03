@@ -6,6 +6,7 @@ import Delegate from './Delegate';
 import DelegateModal from './DelegateModal';
 
 import '../../assets/styles/components/DelegateSuper/DelegateSuper.scss';
+import '../../assets/styles/utils/Alerts.scss';
 
 
 const DelegateSuper = (props) => {
@@ -30,8 +31,6 @@ const DelegateSuper = (props) => {
                <h3>Delegar Rol Super Administrador</h3>
                <form onSubmit={handleSubmit}>
                   <label htmlFor='name'> Nombre: <i>*</i>
-                     {nameValidate &&
-                        <p className='alert-form'>Nombre debe tener minimo primer nombre y primer apellido</p>}
                      <input
                         type='text'
                         name='name'
@@ -39,10 +38,10 @@ const DelegateSuper = (props) => {
                         placeholder='Nombre'
                         onChange={handleChangeInput}
                      />
+                     {nameValidate &&
+                        <p className='alert-form'>Nombre debe tener minimo primer nombre y primer apellido</p>}
                   </label>
                   <label htmlFor='email'> Correo: <i>*</i>
-                     {emailValidate && <p className='alert-form'>Formato de correo ejemplo@correo.com</p>}
-
                      <input
                         type='email'
                         name='email'
@@ -50,6 +49,7 @@ const DelegateSuper = (props) => {
                         placeholder='ejemplo@correo.com'
                         onChange={handleChangeInput}
                      />
+                     {emailValidate && <p className='alert-form'>Formato de correo ejemplo@correo.com</p>}
                   </label>
 
                   <div>
@@ -60,7 +60,7 @@ const DelegateSuper = (props) => {
                            name='account'
                            value='admin'
                            onChange={handleChangeInput}
-                           />
+                        />
                         <span className='radiomark'> </span>
                         Administrador
                      </label>
@@ -70,7 +70,7 @@ const DelegateSuper = (props) => {
                            name='account'
                            value='employee'
                            onChange={handleChangeInput}
-                           />
+                        />
                         <span className='radiomark'> </span>
                         Empleado
                      </label>

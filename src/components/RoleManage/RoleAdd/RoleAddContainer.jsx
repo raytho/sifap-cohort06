@@ -69,7 +69,7 @@ const RoleAddContainer = ({ dataLength }) => {
       e.preventDefault();
       if (validateForm()) {
          setModal(false);
-         const getData = async () => {
+         const postData = async () => {
             try {
                await fetch(`${API}superAdmin/invite-user`, {
                   method: 'POST',
@@ -83,7 +83,7 @@ const RoleAddContainer = ({ dataLength }) => {
                window.console.log(error.message);
             }
          };
-         getData();
+         postData();
       }
    }
 
@@ -106,7 +106,7 @@ const RoleAddContainer = ({ dataLength }) => {
 
 RoleAddContainer.propTypes = {
    dataLength: PropTypes.number,
-   handleNewUserGrandchild: PropTypes.func,
+   // handleNewUserGrandchild: PropTypes.func,
 }
 
 export default RoleAddContainer;
