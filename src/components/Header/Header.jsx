@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { useContext } from 'react';
+import { Context } from '../../Context';
 import HeaderUser from './HeaderUser';
 import '../../assets/styles/layout/Header.scss';
 
@@ -9,7 +9,7 @@ const DEFAULT_EMAIL = 'dsantos@tacos.com'
 const DEFAULT_ROL = 'Empleado'
 
 const Header = () => {
-   const [isAuth, setIsAuth] = useState(false)
+   const { isAuth } = useContext(Context);
    return (
    <header className='Header'>
 

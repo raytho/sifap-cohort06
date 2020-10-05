@@ -1,9 +1,11 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable consistent-return */
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { Context } from '../../Context';
 
-import SignUp from './SignUp'
+import FormRegister from './FormRegister'
 
-const SignUpContainer = () => {
+const SignUpContainer = ({ history }) => {
 
    const RegExEmail = /^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
    const RegExPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
@@ -12,6 +14,11 @@ const SignUpContainer = () => {
       password: '',
       country: '',
    });
+   const { activateAuth } = useContext(Context)
+   const [emailValidate, setEmailValidate] = useState(false);
+   const [passwordValidate, setPasswordValidate] = useState(false);
+   const [countryValidate, setCountryValidate] = useState(false);
+   const [typeEmailValidate, setTypeEmailValidate] = useState(false);
 
    const handleChangeInput = e => {
       setValues({
@@ -19,12 +26,6 @@ const SignUpContainer = () => {
          [e.target.name]: e.target.value
       })
    }
-   window.console.log(form)
-   const [emailValidate, setEmailValidate] = useState(false);
-   const [passwordValidate, setPasswordValidate] = useState(false);
-   const [countryValidate, setCountryValidate] = useState(false);
-   const [typeEmailValidate, setTypeEmailValidate] = useState(false);
-
    const validateForm = () => {
       let email;
       let typeEmail;
@@ -60,19 +61,22 @@ const SignUpContainer = () => {
          return true
       }
    }
-
    const handleSubmit = e => {
       e.preventDefault()
       if (validateForm()) {
          const postData = async () => {
             try {
-               await fetch(url, {
+               await fetch('https://ancient-fortress-28096.herokuapp.com/api/auth/sign-up ', {
                   method: 'POST',
                   headers: {
                      'Accept': 'application/json',
                      'Content-Type': 'application/json',
                   },
                   body: JSON.stringify(form)
+               }).then(response => {
+                  window.console.log(response)
+                  activateAuth()
+                  history.push('/')
                })
             } catch (error) {
                window.console.log(error)
@@ -83,7 +87,7 @@ const SignUpContainer = () => {
    }
 
    return (
-      <SignUp
+      <FormRegister
          handleSubmit={handleSubmit}
          handleChangeInput={handleChangeInput}
          form={form}

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import '../../assets/styles/components/SignUp/SignUpSlides.scss';
+import '../../assets/styles/components/Register/RegisterSlides.scss';
 
-const SignUpSlides = () => {
+const RegisterSlides = () => {
 
    return (
       <div className='SignUp__slide'>
@@ -21,4 +21,4 @@ const SignUpSlides = () => {
    )
 }
 
-export default SignUpSlides;
+export default RegisterSlides;

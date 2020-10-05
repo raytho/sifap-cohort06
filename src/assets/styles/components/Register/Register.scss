@@ -7,7 +7,7 @@
    grid-template-areas: "Aside Slide";
 }
 .SignUp__aside{
-   height: 650px;
+   height: 718px;
    position: relative;
    top: -80px;
    grid-area: Aside;
@@ -20,12 +20,12 @@
    top: -153px;
    background-color: var(--main-color);
    border-radius: 0 100px 0 0;
-   @include size(500px, 650px);
+   @include size(500px, 718px);
    form {
       padding: 30px 50px;
+      margin: 30px 0 30px 0;
       display: flex;
       flex-direction: column;
-      // align-items: center;
       background-color: var(--white-color);
       border-radius: 5px 100px 5px 5px;
       @include size(430px, auto);
