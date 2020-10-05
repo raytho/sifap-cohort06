@@ -50,7 +50,7 @@ const RoleDetailContainer = (props) => {
 
    // const { roles } = mockRoles;
    return (
-      <GetData api={`${API}superAdmin/users-invitation/${idUser}`}>
+      <GetData api={`${API}superAdmin/get-user/${idUser}`}>
          {
             ({ loading, error, data}) => {
                if(error) return <p>¡Error!</p>

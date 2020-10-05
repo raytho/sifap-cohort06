@@ -13,9 +13,11 @@
    bottom: 0;
    right: 0;
    background-color: rgba(3, 36, 35, .25);
+   z-index: 1000;
 }
 .Modal {
 // Aquí vamos hacer un modal más generico para esos que son casí iguales
 // Por ahora hacemos el que estamos necesitanado
+position: relative;
 }
 /* Validate Modals */

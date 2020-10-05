@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-import '../assets/styles/components/Content.scss';
-import '../assets/styles/components/Main.scss';
+import '../assets/styles/layout/Content.scss';
+import '../assets/styles/layout/Main.scss';
 
-import Header from './Header';
+import Header from './Header/Header';
 import Navbar from './Navbar';
 
 const Layout = (props) => {

@@ -1,0 +1,25 @@
+@import '../utils/Mixin.scss';
+
+.Aside__logo {
+   background-color: var(--detail-color);
+   border-radius: 0 100px 0 0;
+   div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include size(inherit, 150px);
+      h1 {
+         line-height: 0;
+      }
+      img {
+         width: 100px;
+         height: 100px;
+      }
+   }
+}
+.NavLogo {
+   @include size(250px, 300px);
+}
+.SignUpLogo {
+   @include size(500px, 300px);
+}

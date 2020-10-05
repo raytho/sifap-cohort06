@@ -7,24 +7,6 @@
    font-family: var(--font-text);
    @include size(250px, initial);
 }
-.Navbar__logo {
-   background-color: var(--detail-color);
-   border-radius: 0 100px 0 0;
-   @include size(250px, 300px);
-   div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      @include size(inherit, 150px);
-      h1 {
-         line-height: 0;
-      }
-      img {
-         width: 100px;
-         height: 100px;
-      }
-   }
-}
 .Navbar__nav {
    display: flex;
    justify-content: center;

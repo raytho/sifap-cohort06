@@ -20,12 +20,6 @@
    align-items: center;
    border-radius: 5px 100px 5px 5px;
    box-shadow: 0 0 30px 0  rgba(3, 36, 35, .25);
-   .alert-form {
-      font-family: var(--font-text);
-      font-size: var(--font-smallest);
-      font-weight: 400;
-      color: red;
-   }
    i {
       color: red;
    }
@@ -43,10 +37,12 @@
          font-size: var(--font-small);
          input {
             width: 100%;
-            height: 30px;
+            height: 40px;
             margin: 10px 0 0 0;
             padding: 0 0 0 5px;
             display: flex;
+            border: 1px solid  rgba(3, 36, 35, .25);
+            border-radius: 5px;
          }
       }
    }
@@ -56,7 +52,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-around;
-      p {
+      p:nth-of-type(1) {
          margin: 0 0 10px 0;
          font-size: var(--font-smaller);
          font-weight: 600;

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-import '../assets/styles/components/Title.scss';
+import '../assets/styles/layout/Title.scss';
 
 const Title = ({ title, icon, alt }) => (
    <div className='Title'>
