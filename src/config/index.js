@@ -14,8 +14,9 @@ const config = {
   mongoDbHost: process.env.MONGO_DB_HOST,
   mongoDbName: process.env.MONGO_DB_NAME,
   authJwtSecret: process.env.AUTH_JWT_SECRET,
-  publicApiKeyToken: process.env.PUBLIC_API_KEY_TOKEN,
-  adminApiKeyToken: process.env.ADMIN_API_KEY_TOKEN,
+  twoFactorSecret: process.env.TWO_FACTOR_SECRET,
+  otpAuthUrl: process.env.OTP_AUTH_URL,
+  authTwoFactorJwtSecret: process.env.AUTH_TWO_FACTOR_JWT_SECRET
 };
 
 module.exports = config;
