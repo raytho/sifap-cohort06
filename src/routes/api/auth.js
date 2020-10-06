@@ -12,6 +12,8 @@ const { createUserSchema } = require("../../utils/schemas/users");
 
 // Basic Strategy
 require("../../utils/auth/strategies/basic");
+require("../../utils/auth/strategies/jwtTwoFactor");
+const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
 
 function authApi(app) {
   const router = express.Router();
@@ -25,22 +27,13 @@ function authApi(app) {
         if (error || !user) {
           next(boom.unauthorized());
         }
-        req.login(user, { session: false }, async (error) => {
-          if (error) {
-            next(error);
-          } else {
-            const { _id: id, name, email } = user;
-            const payload = {
-              sub: id,
-              name,
-              email,
-            };
-            const token = jwt.sign(payload, config.authJwtSecret, {
-              expiresIn: "15m",
-            });
-            return res.status(200).json({ token, user: { id, name, email } });
-          }
-        });
+        console.log();
+
+        if (user.twoFactorActive) {
+          generateTempToken(req, res, next, user);
+        } else {
+          generateToken(req, res, next, user);
+        }
       } catch (error) {
         next(error);
       }
@@ -50,17 +43,40 @@ function authApi(app) {
   router.post(
     "/sign-up",
     validationHandler(createUserSchema),
-
     async (req, res, next) => {
       const { body: user } = req;
       try {
-        const createdUserId = await usersService.createSuperAdminUser({ user });
+        await usersService.createSuperAdminUser({ user });
         res.status(201).json({
-          data: createdUserId,
           message: "User created",
         });
       } catch (error) {
         next(error);
+      }
+    }
+  );
+
+  router.get(
+    "/two-factor",
+    passport.authenticate("jwtTwoFactor", { session: false }),
+    async (req, res) => {
+      res.status(200).send({
+        data: "test",
+      });
+    }
+  );
+
+  router.post(
+    "/two-factor",
+    passport.authenticate("jwtTwoFactor", { session: false }),
+    async (req, res, next) => {
+      const { token, userId, email } = req.body;
+      const secret = config.twoFactorSecret;
+      const authorizedUser = twoFactorAuth.verify(secret, token);
+      if (authorizedUser) {
+        generateToken(req, res, next, {userId, email});
+      } else {
+        next(boom.unauthorized());
       }
     }
   );
@@ -82,5 +98,42 @@ function authApi(app) {
     }
   });
 }
+
+const generateToken = (req, res, next, user) => {
+  req.login(user, { session: false }, async (error) => {
+    if (error) {
+      next(error);
+    } else {
+      const { userId, email } = user;
+      const payload = {
+        sub: userId,
+        email,
+      };
+      const token = jwt.sign(payload, config.authJwtSecret, {
+        expiresIn: "15m",
+      });
+      return res.status(200).json({ token, user: { userId, email } });
+    }
+  });
+};
+
+const generateTempToken = (req, res, next, user) => {
+  req.login(user, { session: false }, async (error) => {
+    if (error) {
+      next(error);
+    } else {
+      const { userId, email, twoFactorActive } = user;
+      console.log(user);
+      const payload = {
+        sub: userId,
+        email,
+      };
+      const token = jwt.sign(payload, config.authTwoFactorJwtSecret, {
+        expiresIn: "5m",
+      });
+      return res.status(200).json({ token, user: {userId, email, twoFactorActive } });
+    }
+  });
+};
 
 module.exports = authApi;

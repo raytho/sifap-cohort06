@@ -224,6 +224,22 @@ class MysqlLib {
     });
   }
 
+  createSuperAdminUser(user) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise((resolve, reject) => {
+        client.query("INSERT INTO users SET ?", user, (err, res) => {
+          if (err) {
+            console.error(err);
+            reject(new Error("Error to insert user"));
+          } else {
+            client.end();
+            resolve(res);
+          }
+        });
+      });
+    });
+  }
   getAllUsers() {
     const client = this.client;
     return this.connect().then(() => {
@@ -247,6 +263,23 @@ class MysqlLib {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         client.query("SELECT * FROM users WHERE userId = ?", id, function (err, rows) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            client.end();
+            resolve(rows);
+          }
+        });
+      });
+    });
+  }
+
+  getUserByMail(mail) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query("SELECT * FROM users WHERE email = ?", mail, function (err, rows) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {

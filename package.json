@@ -25,7 +25,9 @@
     "nanoid": "^3.1.12",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "qrcode": "^1.4.4",
+    "speakeasy": "^2.0.0"
   },
   "devDependencies": {
     "eslint": "^7.9.0",

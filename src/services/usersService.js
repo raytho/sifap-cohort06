@@ -10,6 +10,23 @@ class UsersService {
     this.mysqlLib = new MysqlLib();
   }
 
+  async createSuperAdminUser( { user }) {
+    const { email, password, country, typeEmail } = user;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const role = "SA";
+    const userId = nanoid(4);
+  
+    const response = await this.mysqlLib.createSuperAdminUser({
+      userId,
+      email,
+      password: hashedPassword,
+      typeEmail,
+      country,
+      role,
+    });
+    return response;
+  }
+
   async addUser({ user }) {
     const {
       email,
@@ -58,6 +75,11 @@ class UsersService {
   async getUserById( id ) {
     const user = await this.mysqlLib.getUserById(id);
     return user;
+  }
+
+  async getUserByMail( {email} ) {
+    const user = await this.mysqlLib.getUserByMail(email);
+    return user[0];
   }
 
   async deleteUserById(id) {
