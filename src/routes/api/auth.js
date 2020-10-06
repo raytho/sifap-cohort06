@@ -27,13 +27,29 @@ function authApi(app) {
         if (error || !user) {
           next(boom.unauthorized());
         }
-        console.log();
-
+        
         if (user.twoFactorActive) {
           generateTempToken(req, res, next, user);
         } else {
           generateToken(req, res, next, user);
         }
+        req.login(user, { session: false }, async (error) => {
+          if (error) {
+            next(error);
+          } else {
+            const { _id: id, name, email } = user;
+            const payload = {
+              sub: id,
+              name,
+              email,
+            };
+            const token = jwt.sign(payload, config.authJwtSecret, {
+              expiresIn: "15m",
+            });
+            return res.status(200).json({ token, user: { id, name, email } });
+          }
+
+        });
       } catch (error) {
         next(error);
       }
