@@ -29,7 +29,7 @@ function authApi(app) {
         if (error || !user) {
           next(boom.unauthorized());
         }
-
+        
         if (user.twoFactorActive) {
           generateTempToken(req, res, next, user);
         } else {
@@ -198,7 +198,6 @@ const generateTempToken = (req, res, next, user) => {
       next(error);
     } else {
       const { userId, email, twoFactorActive } = user;
-      console.log(user);
       const payload = {
         sub: userId,
         email,

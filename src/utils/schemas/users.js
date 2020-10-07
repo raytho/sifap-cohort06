@@ -5,7 +5,7 @@ const userIdSchema = joi.string().regex(/^[0-9a-fA-F]{24}$/);
 const userSchema = {
   email: joi.string().email().required(),
   password: joi.string().required().required(),
-  typeEmail: joi.string().valid("intitutional", "personal").required(),
+  typeEmail: joi.string().valid("institutional", "personal").required(),
   country: joi.string().max(255).required(),
 };
 
