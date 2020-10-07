@@ -26,11 +26,12 @@ function authApi(app) {
       try {
         if (error || !user) {
           next(boom.unauthorized());
-        }
-        if (user.twoFactorActive) {
-          generateTempToken(req, res, next, user);
         } else {
-          generateToken(req, res, next, user);
+          if (user.twoFactorActive) {
+            generateTempToken(req, res, next, user);
+          } else{
+            generateToken(req, res, next, user);
+          }
         }
       } catch (error) {
         next(error);
@@ -42,6 +43,7 @@ function authApi(app) {
     "/sign-up",
     validationHandler(createUserSchema),
     async (req, res, next) => {
+      // res.header("Access-Control-Allow-Origin", "*");
       const { body: user } = req;
       try {
         await usersService.createSuperAdminUser({ user });
@@ -72,7 +74,7 @@ function authApi(app) {
       const secret = config.twoFactorSecret;
       const authorizedUser = twoFactorAuth.verify(secret, token);
       if (authorizedUser) {
-        generateToken(req, res, next, {userId, email});
+        generateToken(req, res, next, { userId, email });
       } else {
         next(boom.unauthorized());
       }
@@ -103,14 +105,16 @@ const generateToken = (req, res, next, user) => {
       next(error);
     } else {
       const { userId, email } = user;
+      const isLogged = true;
       const payload = {
         sub: userId,
         email,
+        isLogged,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "15m",
       });
-      return res.status(200).json({ token, user: { userId, email } });
+      return res.status(200).json({ token, user: { userId, email, isLogged } });
     }
   });
 };
@@ -128,7 +132,9 @@ const generateTempToken = (req, res, next, user) => {
       const token = jwt.sign(payload, config.authTwoFactorJwtSecret, {
         expiresIn: "5m",
       });
-      return res.status(200).json({ token, user: {userId, email, twoFactorActive } });
+      return res
+        .status(200)
+        .json({ token, user: { userId, email, twoFactorActive } });
     }
   });
 };
