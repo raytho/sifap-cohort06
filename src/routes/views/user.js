@@ -1,5 +1,7 @@
 const express = require("express");
 const passport = require("passport");
+const { createUserSchema } = require("../../utils/schemas/users");
+const validationHandler = require("../../utils/middleware/validationHandler");
 
 // jwt stategy
 require("../../utils/auth/strategies/jwt");
@@ -10,7 +12,8 @@ const userView = (app) => {
   app.use("/user", router);
 
   router.post(
-    "/sign-in", validationHandler(createUserSchema),
+    "/sign-in",
+    validationHandler(createUserSchema),
     async (req, res, next) => {
       const { body: user } = req;
       try {
