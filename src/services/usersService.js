@@ -102,7 +102,7 @@ class UsersService {
     });
 
     var mailOptions = {
-      to: "luissol@hotmail.com",
+      to: request.email,
       from: "passwordreset@demo.com",
       subject: "Sifap Password Reset",
       text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.
@@ -121,6 +121,10 @@ class UsersService {
     });
   }
 
+  async createAccoutSetting(account) {
+    const response = await this.mysqlLib.addAccountSetting(account);
+    return response;
+  }
   // CRUD Users Invitations
   async addUserInvited({ user }) {
     const { email, firstName, role } = user;
@@ -148,6 +152,15 @@ class UsersService {
   async deleteInvitedUserById(id) {
     const user = await this.mysqlLib.removeInvitedUserByID(id);
     return user;
+  }
+
+  async updatePasswordUserByID(id, newPassword) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const response = await this.mysqlLib.updatePasswordUserByID(
+      id,
+      hashedPassword
+    );
+    return response;
   }
 }
 

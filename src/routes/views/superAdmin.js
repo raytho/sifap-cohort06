@@ -12,7 +12,9 @@ const inviteNewUser = (app) => {
   app.use("/api/superAdmin", router);
 
   // Invitations
-  router.post("/invite-user", validationHandler(inviteUserSchema),
+  router.post(
+    "/invite-user",
+    validationHandler(inviteUserSchema),
     async (req, res) => {
       const { body: user } = req;
       const role = user.role;
@@ -23,7 +25,7 @@ const inviteNewUser = (app) => {
         } else {
           user.role = 3;
         }
-        const userInvited = await userService.addUserInvited({user});
+        const userInvited = await userService.addUserInvited({ user });
 
         if (userInvited) {
           res.status(200).json({
@@ -165,9 +167,21 @@ const inviteNewUser = (app) => {
   //Pendiente
   // eslint-disable-next-line no-unused-vars
   router.put("/user/:id", async (req, res) => {
-
+    const id = req.params.id;
+    const userService = new usersService();
+    try {
+      const updatedUser = await userService.updateUserById(id);
+      if (updatedUser) {
+        res.status(200).send({
+          data: updatedUser,
+          message: "User updated",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error to get user" });
+    }
   });
-
 };
 
 module.exports = inviteNewUser;

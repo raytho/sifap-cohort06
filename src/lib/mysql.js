@@ -115,7 +115,6 @@ class MysqlLib {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise((resolve, reject) => {
-
         // eslint-disable-next-line quotes
         client.query(`SELECT 1+1 AS solution`, function (err, result) {
           if (err) {
@@ -174,7 +173,8 @@ class MysqlLib {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         client.query(
-          "SELECT * FROM users_invitation WHERE userId = ?", id,
+          "SELECT * FROM users_invitation WHERE userId = ?",
+          id,
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));
@@ -193,7 +193,9 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query("DELETE FROM users_invitation WHERE userId = ?", id,
+        client.query(
+          "DELETE FROM users_invitation WHERE userId = ?",
+          id,
           function (err) {
             if (err) {
               reject(new Error("Error on user delete"));
@@ -257,13 +259,16 @@ class MysqlLib {
       });
     });
   }
-  
-  getUserById( id ){
+
+  getUserById(id) {
     const client = this.client;
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query("SELECT * FROM users WHERE userId = ?", id, function (err, rows) {
+        client.query("SELECT * FROM users WHERE userId = ?", id, function (
+          err,
+          rows
+        ) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
@@ -280,7 +285,10 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query("SELECT * FROM users WHERE email = ?", mail, function (err, rows) {
+        client.query("SELECT * FROM users WHERE email = ?", mail, function (
+          err,
+          rows
+        ) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
@@ -297,16 +305,14 @@ class MysqlLib {
     return this.connect().then(() => {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        client.query("DELETE FROM users WHERE userId = ?", id,
-          function (err) {
-            if (err) {
-              reject(new Error("Error on user delete"));
-            } else {
-              client.end();
-              resolve(id);
-            }
+        client.query("DELETE FROM users WHERE userId = ?", id, function (err) {
+          if (err) {
+            reject(new Error("Error on user delete"));
+          } else {
+            client.end();
+            resolve(id);
           }
-        );
+        });
       });
     });
   }
@@ -350,18 +356,49 @@ class MysqlLib {
       });
     });
   }
+
+  updatePasswordUserByID(id, newPassword) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(
+          `UPDATE users SET password = ? WHERE userId = ?`,
+          [newPassword, id],
+          function (err, rows) {
+            if (rows === undefined) {
+              console.log(err);
+              reject(new Error("Error rows is undefined"));
+            } else {
+              client.end();
+              resolve(rows);
+            }
+          }
+        );
+      });
+    });
+  }
+
+  addAccountSetting(account) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise((resolve, reject) => {
+        client.query(
+          "INSERT INTO accountSettings SET ?",
+          account,
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(new Error("Error to insert user"));
+            } else {
+              client.end();
+              resolve(res);
+            }
+          }
+        );
+      });
+    });
+  }
 }
 
 module.exports = MysqlLib;
-
-async function getId(id) {
-  const msqlLib2 = new MysqlLib();
-  const name = await msqlLib2.getAll(id);
-  return name;
-}
-
-async function test() {
-  const data = await getId(4);
-  console.log(data[0]);
-  return data;
-}

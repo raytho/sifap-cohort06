@@ -112,15 +112,17 @@ function authApi(app) {
         const token = crypto.randomBytes(20).toString("hex");
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 1800000;
-        const request = {
+
+        const account = {
           email: user.email,
           token: user.resetPasswordToken,
           expires: user.resetPasswordExpires,
           host: req.headers.host,
         };
 
-        const reset = usersService.sendResetLink(request);
-        console.log(reset);
+        const reset = usersService.sendResetLink(account);
+        delete account.host;
+        //const accoutSetting = await usersService.createAccoutSetting(account);
         if (reset) {
           res.status(201).json({
             message: "Link sent",
@@ -129,6 +131,45 @@ function authApi(app) {
       }
     } else {
       response.status(200);
+    }
+  });
+
+  router.get("/forgot/:token", async (req, res, next) => {
+    const { token } = req.params;
+    if (!token) {
+      next(boom.unauthorized());
+    } else {
+      res.status(200).json({
+        message: "reset password",
+        error: null,
+      });
+    }
+  });
+
+  router.put("/password/:id", async (req, res) => {
+    const id = req.params.id;
+    const newPassword = req.body.password;
+    if (!newPassword) {
+      res.status(400).json({
+        message: "Bad request",
+        error: "Bad request",
+      });
+    } else {
+      try {
+        const updatedUser = await usersService.updatePasswordUserByID(
+          id,
+          newPassword
+        );
+        if (updatedUser) {
+          res.status(200).send({
+            data: updatedUser.message,
+            message: "User updated",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error to get user" });
+      }
     }
   });
 }
