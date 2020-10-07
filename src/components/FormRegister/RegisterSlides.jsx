@@ -2,19 +2,23 @@ import React from 'react';
 
 import '../../assets/styles/components/Register/RegisterSlides.scss';
 
+import RegisterUno from '../../assets/static/images/register-1.png';
+import RegisterDos from '../../assets/static/images/register-2.png';
+import RegisterTres from '../../assets/static/images/register-3.png';
+
 const RegisterSlides = () => {
 
    return (
       <div className='SignUp__slide'>
          <ul>
             <li>
-               <img src='https://i.imgur.com/MfDoL0J.jpg' alt='Slide'/>
+               <img src={RegisterUno} alt='Slide'/>
             </li>
             <li>
-               <img src='https://i.imgur.com/MfDoL0J.jpg' alt='Slide'/>
+               <img src={RegisterDos} alt='Slide'/>
             </li>
             <li>
-               <img src='https://i.imgur.com/MfDoL0J.jpg' alt='Slide'/>
+               <img src={RegisterTres} alt='Slide'/>
             </li>
          </ul>
       </div>

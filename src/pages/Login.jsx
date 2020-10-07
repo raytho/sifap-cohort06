@@ -17,7 +17,6 @@ const Login = () => {
                     <AsideLogo SignUpLogo/>
                     <FormLoginContainer/>
                 </div>
-                
                 <LoginSlides/>
             </div>
         </>

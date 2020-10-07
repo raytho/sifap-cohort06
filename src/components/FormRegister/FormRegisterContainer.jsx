@@ -12,8 +12,10 @@ const SignUpContainer = ({ history }) => {
    const [form, setValues] = useState({
       email: '',
       password: '',
+      typeEmail: '',
       country: '',
    });
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
    const { activateAuth } = useContext(Context)
    const [emailValidate, setEmailValidate] = useState(false);
    const [passwordValidate, setPasswordValidate] = useState(false);
@@ -66,7 +68,7 @@ const SignUpContainer = ({ history }) => {
       if (validateForm()) {
          const postData = async () => {
             try {
-               await fetch('https://ancient-fortress-28096.herokuapp.com/api/auth/sign-up ', {
+               await fetch(`${API}auth/sign-up`, {
                   method: 'POST',
                   headers: {
                      'Accept': 'application/json',
@@ -74,7 +76,7 @@ const SignUpContainer = ({ history }) => {
                   },
                   body: JSON.stringify(form)
                }).then(response => {
-                  window.console.log(response)
+                  window.console.log(response.message);
                   activateAuth()
                   history.push('/')
                })

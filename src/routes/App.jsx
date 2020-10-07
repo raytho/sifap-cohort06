@@ -13,7 +13,7 @@ import RoleManageContainer from '../components/RoleManage/RoleManage/RoleManageC
 import ManageCFiscales from '../components/ManageCFiscales/ManageCFiscales';
 import DelegateSuperContainer from '../components/DelegateSuper/DelegateSuperContainer';
 import RoleDetailContainer from '../components/RoleManage/RoleDetail/RoleDetailContainer';
-// import Register from '../pages/Register';
+import Register from '../pages/Register';
 import Login from '../pages/Login';
 
 
@@ -41,11 +41,12 @@ const App = () => {
                            <Route exact path='/c-fiscales' component={ManageCFiscales} />
                            <Route exact path='/delegate-super' component={DelegateSuperContainer} />
                         </Layout>
-                        <Redirect from='/login' to='/' />
+                        <Redirect from='/register' to='/' />
                      </>
                   ) : (
                      <>
-                        <Redirect from='/' to='/login' />
+                        <Redirect from='/' to='/register' />
+                        <Route exact path='/register' component={Register} />
                         <Route exact path='/login' component={Login} />
                      </>
                   )

@@ -96,7 +96,7 @@ const FormRegister = (props) => {
             <button type='button'>Registrarse con Google</button>
             <button type='submit'>Crear</button>
          </div>
-         <p className='SignUp__redirect'>¿Ya tienes una cuenta? <Link to='/logIn'>Ingresar</Link></p>
+         <p className='SignUp__redirect'>¿Ya tienes una cuenta? <Link to='/login'>Ingresar</Link></p>
       </form>
    </div>
    )
