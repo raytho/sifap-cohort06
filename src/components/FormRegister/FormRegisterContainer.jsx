@@ -19,7 +19,7 @@ const SignUpContainer = ({ history }) => {
    const [passwordValidate, setPasswordValidate] = useState(false);
    const [countryValidate, setCountryValidate] = useState(false);
    const [typeEmailValidate, setTypeEmailValidate] = useState(false);
-
+   window.console.log(form)
    const handleChangeInput = e => {
       setValues({
          ...form,
