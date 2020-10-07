@@ -157,6 +157,11 @@ function authApi(app) {
             error: "Internal error",
           });
         } else {
+          delete validateUser.id;
+          delete validateUser.token;
+          delete validateUser.expires;
+          delete validateUser.dateRegister;
+
           res.status(200).json({
             data: validateUser,
             error: null,
