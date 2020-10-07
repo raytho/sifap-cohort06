@@ -1,34 +1,40 @@
-const { request, response } = require("express");
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+// Modules
 const express = require("express");
-const bodyParser = require("body-parser");
+const helmet = require("helmet");
+// const config = require("./config");
+const notFoundHandler = require("./utils/middleware/notFoundHandler");
+const authApiRouter = require("./routes/api/auth");
+const rolesApiRouter = require("./routes/api/roles");
+const home = require("./routes/views/home");
+const userViewRouter = require("./routes/views/user");
+const superAdminRouter = require("./routes/views/superAdmin");
 const cors = require("cors");
+require("dotenv").config();
+
+// App
 const app = express();
-const port = 3000;
 
-let roles = [];
+// Config Port
+const _port = process.env.PORT || 3000;
 
+// Middlewares
+app.use(express.json());
+app.use(helmet());
 app.use(cors());
 
-//Configuring body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// Routes
+app.use("/", home);
+authApiRouter(app);
+userViewRouter(app);
+rolesApiRouter(app);
+superAdminRouter(app);
 
-app.post("/api/roles/add", (request, response) => {
-  const role = request.body;
+// 404 handler
+app.use(notFoundHandler);
 
-  console.log(role);
-  roles.push(role);
-  debugger;
-  response.send(`Rol is added to the database`);
+// Init Server
+const server = app.listen(_port, () => {
+  console.log(`Server running on port: ${_port}`);
 });
-
-app.get("/api/roles/get", (request, response) => {
-  debugger;
-  if (roles.length === 0) {
-    response.status(404).send(`Not found roles`);
-  } else {
-    response.json(roles);
-  }
-});
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
