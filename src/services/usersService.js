@@ -1,6 +1,6 @@
 const MongoLib = require("../lib/mongo");
 const MysqlLib = require("../lib/mysql");
-const { nanoid } = require("nanoid");
+const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 
 class UsersService {
@@ -8,23 +8,6 @@ class UsersService {
     this.collection = "sifap_users";
     this.mongoDB = new MongoLib();
     this.mysqlLib = new MysqlLib();
-  }
-
-  async createSuperAdminUser( { user }) {
-    const { email, password, country, typeEmail } = user;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const role = "SA";
-    const userId = nanoid(4);
-  
-    const response = await this.mysqlLib.createSuperAdminUser({
-      userId,
-      email,
-      password: hashedPassword,
-      typeEmail,
-      country,
-      role,
-    });
-    return response;
   }
 
   async addUser({ user }) {
@@ -45,7 +28,7 @@ class UsersService {
       fiscalAct,
     } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userId = nanoid(4);
+    const userId = uuidv4();
 
     const response = await this.mysqlLib.addUser({
       userId,
@@ -72,14 +55,9 @@ class UsersService {
     return users;
   }
 
-  async getUserById( id ) {
+  async getUserById(id) {
     const user = await this.mysqlLib.getUserById(id);
     return user;
-  }
-
-  async getUserByMail( {email} ) {
-    const user = await this.mysqlLib.getUserByMail(email);
-    return user[0];
   }
 
   async deleteUserById(id) {
@@ -87,6 +65,10 @@ class UsersService {
     return user;
   }
 
+  async updateUserById(id) {
+    const user = await this.mysqlLib.updateUserByID(id);
+    return user;
+  }
   async sendResetLink(email, id) {
     const params = {
       Destination: {
@@ -110,15 +92,15 @@ class UsersService {
   }
 
   // CRUD Users Invitations
-  async addUserInvited({user}) {
+  async addUserInvited({ user }) {
     const { email, firstName, role } = user;
-    const userId = nanoid(4);
+    const userId = uuidv4();
 
     const response = await this.mysqlLib.addUserInvited({
       email,
       firstName,
       role,
-      userId
+      userId,
     });
     return response;
   }
