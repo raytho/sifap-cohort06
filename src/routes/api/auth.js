@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const boom = require("@hapi/boom");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 // const ApiKeysService = require("../../services/apiKeys");
 const config = require("../../config");
@@ -14,6 +15,7 @@ const { createUserSchema } = require("../../utils/schemas/users");
 require("../../utils/auth/strategies/basic");
 require("../../utils/auth/strategies/jwtTwoFactor");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
+const { response } = require("express");
 
 function authApi(app) {
   const router = express.Router();
@@ -27,11 +29,28 @@ function authApi(app) {
         if (error || !user) {
           next(boom.unauthorized());
         }
+        
         if (user.twoFactorActive) {
           generateTempToken(req, res, next, user);
         } else {
           generateToken(req, res, next, user);
         }
+        req.login(user, { session: false }, async (error) => {
+          if (error) {
+            next(error);
+          } else {
+            const { _id: id, name, email } = user;
+            const payload = {
+              sub: id,
+              name,
+              email,
+            };
+            const token = jwt.sign(payload, config.authJwtSecret, {
+              expiresIn: "15m",
+            });
+            return res.status(200).json({ token, user: { id, name, email } });
+          }
+        });
       } catch (error) {
         next(error);
       }
@@ -72,26 +91,84 @@ function authApi(app) {
       const secret = config.twoFactorSecret;
       const authorizedUser = twoFactorAuth.verify(secret, token);
       if (authorizedUser) {
-        generateToken(req, res, next, {userId, email});
+        generateToken(req, res, next, { userId, email });
       } else {
         next(boom.unauthorized());
       }
     }
   );
 
-  router.post("/forgot", (req, res) => {
-    const userName = req.body.email;
-    if (userName) {
-      const id = usersService.getUser(userName);
-      const request = {
-        id,
-        email: userName.email,
-      };
-      const reset = usersService.sendResetLink(request.email, request.id);
-      if (reset) {
-        res.status(201).json({
-          message: "Link sent",
+  router.post("/forgot", async (req, res, next) => {
+    const email = req.body.email;
+    if (email) {
+      const user = await usersService.getUserByMail({ email });
+
+      if (!user) {
+        res.status(404).json({
+          error: "No account with that email address exists.",
+          data: null,
         });
+      } else {
+        const token = crypto.randomBytes(20).toString("hex");
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 1800000;
+
+        const account = {
+          email: user.email,
+          token: user.resetPasswordToken,
+          expires: user.resetPasswordExpires,
+          host: req.headers.host,
+        };
+
+        const reset = usersService.sendResetLink(account);
+        delete account.host;
+        //const accoutSetting = await usersService.createAccoutSetting(account);
+        if (reset) {
+          res.status(201).json({
+            message: "Link sent",
+          });
+        }
+      }
+    } else {
+      response.status(200);
+    }
+  });
+
+  router.get("/forgot/:token", async (req, res, next) => {
+    const { token } = req.params;
+    if (!token) {
+      next(boom.unauthorized());
+    } else {
+      res.status(200).json({
+        message: "reset password",
+        error: null,
+      });
+    }
+  });
+
+  router.put("/password/:id", async (req, res) => {
+    const id = req.params.id;
+    const newPassword = req.body.password;
+    if (!newPassword) {
+      res.status(400).json({
+        message: "Bad request",
+        error: "Bad request",
+      });
+    } else {
+      try {
+        const updatedUser = await usersService.updatePasswordUserByID(
+          id,
+          newPassword
+        );
+        if (updatedUser) {
+          res.status(200).send({
+            data: updatedUser.message,
+            message: "User updated",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error to get user" });
       }
     }
   });
@@ -128,7 +205,9 @@ const generateTempToken = (req, res, next, user) => {
       const token = jwt.sign(payload, config.authTwoFactorJwtSecret, {
         expiresIn: "5m",
       });
-      return res.status(200).json({ token, user: {userId, email, twoFactorActive } });
+      return res
+        .status(200)
+        .json({ token, user: { userId, email, twoFactorActive } });
     }
   });
 };

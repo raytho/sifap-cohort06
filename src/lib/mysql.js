@@ -306,5 +306,48 @@ function MysqlLib() {
   };
 }
 
-module.exports = MysqlLib;
+  updatePasswordUserByID(id, newPassword) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        client.query(
+          `UPDATE users SET password = ? WHERE userId = ?`,
+          [newPassword, id],
+          function (err, rows) {
+            if (rows === undefined) {
+              console.log(err);
+              reject(new Error("Error rows is undefined"));
+            } else {
+              client.end();
+              resolve(rows);
+            }
+          }
+        );
+      });
+    });
+  }
 
+  addAccountSetting(account) {
+    const client = this.client;
+    return this.connect().then(() => {
+      return new Promise((resolve, reject) => {
+        client.query(
+          "INSERT INTO accountSettings SET ?",
+          account,
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(new Error("Error to insert user"));
+            } else {
+              client.end();
+              resolve(res);
+            }
+          }
+        );
+      });
+    });
+  }
+}
+
+module.exports = MysqlLib;
