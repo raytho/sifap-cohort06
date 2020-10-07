@@ -27,8 +27,8 @@ const App = () => {
       <BrowserRouter>
          <Switch>
 
-               {
-                  isAuth
+            {
+               isAuth
                   ? (
                      <>
                         <Layout>
@@ -45,11 +45,11 @@ const App = () => {
                      </>
                   ) : (
                      <>
-                     <Redirect from='/' to='/login' />
-                     <Route exact path='/login' component={Login} />
+                        <Redirect from='/' to='/login' />
+                        <Route exact path='/login' component={Login} />
                      </>
                   )
-               }
+            }
          </Switch>
       </BrowserRouter>
    );

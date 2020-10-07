@@ -14,7 +14,16 @@ import cheque from '../../assets/static/icon/cheque.png';
 
 const FormLogin = (props) => {
 
-    const { form, handleChangeInput, handleSubmit, emailValidate, passwordValidate, isOpen, onCloseModal } = props;
+    const { form,
+        handleChangeInput,
+        handleSubmit,
+        emailValidate,
+        passwordValidate,
+        modalIsOpen,
+        handleCloseModal,
+        handleOpenModal
+    } = props;
+
     const [showPass, setShowPass] = useState(false)
 
     return (
@@ -62,14 +71,15 @@ const FormLogin = (props) => {
 
                 <div className='Login__buttons'>
                     <button type='button'>Iniciar con Google</button>
-                    <button type='submit'>Iniciar</button>
+                    <button type='submit' onClick={handleOpenModal} >Iniciar</button>
                 </div>
 
                 <div className='Login__forgot'>
                     <p className='Login__redirect'> <Link to='/'>¿Olvidaste tu contraseña? </Link></p>
                     <p className='Login__redirect'>¿Aún no Tienes cuenta? <span> <Link to='/Register'>CREAR CUENTA</Link> </span> </p>
                 </div>
-                <Modal className="Modal__container" isOpen={props.modalIsOpen} onClose={onCloseModal}>
+                <Modal className="Modal__container" isOpen={modalIsOpen}>
+                    <button onClick={handleCloseModal} className='Modal__close-button' type="submit">X</button>
                     <img src={cheque} alt="cheque" />
                     <h1>Autenticación en dos pasos </h1>
                     <p>¿Cómo quieres recibir el código?</p>

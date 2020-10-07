@@ -3,8 +3,7 @@ import { Context } from '../../Context';
 
 import FormLogin from './FormLogin';
 
-
-const LoginContainer = (props) => {
+const LoginContainer = ({ history }) => {
 
     const LogExEmail = /^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -12,12 +11,12 @@ const LoginContainer = (props) => {
     const [form, setValues] = useState({
         email: '',
         password: '',
-        modalIsOpen: true,
     });
 
     const { activateAuth } = useContext(Context)
     const [emailValidate, setEmailValidate] = useState(false);
     const [passwordValidate, setPasswordValidate] = useState(false);
+    const [modal, setModal] = useState(false);
 
     const handleChangeInput = e => {
         setValues({
@@ -62,7 +61,7 @@ const LoginContainer = (props) => {
                     }).then(response => {
                         window.console.log(response)
                         activateAuth()
-                        // history.push('/')
+                        history.push('/')
                     })
                 } catch (error) {
                     window.console.log(error)
@@ -73,18 +72,18 @@ const LoginContainer = (props) => {
     }
 
     const handleOpenModal = () => {
-        useState({ modalIsOpen: true })
+        setModal(true)
     }
 
     const handleCloseModal = () => {
-        useState({ modalIsOpen: false })
+        setModal(false)
     }
 
     return (
         <FormLogin
             handleOpenModal={handleOpenModal}
             onCloseModal={handleCloseModal}
-            modalIsOpen={useState.modalIsOpen}
+            modalIsOpen={modal}
             handleSubmit={handleSubmit}
             handleChangeInput={handleChangeInput}
             form={form}
