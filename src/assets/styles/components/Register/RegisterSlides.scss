@@ -3,14 +3,17 @@
    height: 785px;
    overflow: hidden;
    grid-area: Slide;
+
    ul {
       width: 100%;
       height: 100%;
       display: flex;
       animation: slide 15s infinite alternate ease-out;
+
       li {
          width: 100%;
          height: 100%;
+
          img {
             width: 850px;
             height: 100%;
@@ -23,18 +26,23 @@
    0% {
       transform: translateX(0);
    }
+
    30% {
       transform: translateX(0);
    }
+
    35% {
       transform: translateX(-99%);
    }
+
    65% {
       transform: translateX(-99%);
    }
+
    70% {
       transform: translateX(-198%);
    }
+
    100% {
       transform: translateX(-198%);
    }
