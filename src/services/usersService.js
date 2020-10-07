@@ -162,6 +162,11 @@ class UsersService {
     );
     return response;
   }
+
+  async getUserBytoken(token) {
+    const user = await this.mysqlLib.getUserByToken(token);
+    return user[0];
+  }
 }
 
 module.exports = UsersService;

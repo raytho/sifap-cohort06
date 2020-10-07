@@ -212,7 +212,7 @@ function MysqlLib() {
       });
     },
 
-    getAllUsers: function() {
+    getAllUsers: function () {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         connection.query("SELECT * FROM users", function (err, rows) {
@@ -303,12 +303,8 @@ function MysqlLib() {
         );
       });
     },
-  };
-}
 
-  updatePasswordUserByID(id, newPassword) {
-    const client = this.client;
-    return this.connect().then(() => {
+    updatePasswordUserByID(id, newPassword) {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         client.query(
@@ -319,20 +315,16 @@ function MysqlLib() {
               console.log(err);
               reject(new Error("Error rows is undefined"));
             } else {
-              client.end();
               resolve(rows);
             }
           }
         );
       });
-    });
-  }
+    },
 
-  addAccountSetting(account) {
-    const client = this.client;
-    return this.connect().then(() => {
+    addAccountSetting(account) {
       return new Promise((resolve, reject) => {
-        client.query(
+        connection.query(
           "INSERT INTO accountSettings SET ?",
           account,
           (err, res) => {
@@ -340,14 +332,29 @@ function MysqlLib() {
               console.error(err);
               reject(new Error("Error to insert user"));
             } else {
-              client.end();
               resolve(res);
             }
           }
         );
       });
-    });
-  }
+    },
+    getUserByToken(token) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT * FROM accountSettings WHERE token = ?",
+          [token],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(new Error("Error in accountSettings"));
+            } else {
+              resolve(res);
+            }
+          }
+        );
+      });
+    },
+  };
 }
 
 module.exports = MysqlLib;

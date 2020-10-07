@@ -29,7 +29,7 @@ function authApi(app) {
         if (error || !user) {
           next(boom.unauthorized());
         }
-        
+
         if (user.twoFactorActive) {
           generateTempToken(req, res, next, user);
         } else {
@@ -111,19 +111,20 @@ function authApi(app) {
       } else {
         const token = crypto.randomBytes(20).toString("hex");
         user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 1800000;
+        user.resetPasswordExpires = Date.now() + 900000;
 
         const account = {
           email: user.email,
           token: user.resetPasswordToken,
           expires: user.resetPasswordExpires,
+          dateRegister: new Date().toLocaleString(),
           host: req.headers.host,
         };
 
         const reset = usersService.sendResetLink(account);
         delete account.host;
-        //const accoutSetting = await usersService.createAccoutSetting(account);
-        if (reset) {
+        const accoutSetting = await usersService.createAccoutSetting(account);
+        if (accoutSetting) {
           res.status(201).json({
             message: "Link sent",
           });
@@ -139,10 +140,29 @@ function authApi(app) {
     if (!token) {
       next(boom.unauthorized());
     } else {
-      res.status(200).json({
-        message: "reset password",
-        error: null,
-      });
+      const minutes = 1000 * 60;
+      const validateUser = await usersService.getUserBytoken(token);
+      const fechaToken = validateUser.expires / minutes;
+      const diferencia = Math.round(fechaToken - Date.now() / minutes);
+
+      if (diferencia <= 0) {
+        res.status(200).json({
+          data: null,
+          error: "Expired token",
+        });
+      } else {
+        if (!validateUser) {
+          res.status(500).json({
+            data: null,
+            error: "Internal error",
+          });
+        } else {
+          res.status(200).json({
+            data: validateUser,
+            error: null,
+          });
+        }
+      }
     }
   });
 
