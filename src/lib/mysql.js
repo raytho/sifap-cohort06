@@ -212,7 +212,7 @@ function MysqlLib() {
       });
     },
 
-    getAllUsers: function() {
+    getAllUsers: function () {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         connection.query("SELECT * FROM users", function (err, rows) {
@@ -303,8 +303,57 @@ function MysqlLib() {
         );
       });
     },
+
+    updatePasswordUserByID(id, newPassword) {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        connection.query(
+          "UPDATE users SET password = ? WHERE userId = ?",
+          [newPassword, id],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    addAccountSetting(account) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "INSERT INTO accountSettings SET ?",
+          account,
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(new Error("Error to insert user"));
+            } else {
+              resolve(res);
+            }
+          }
+        );
+      });
+    },
+    getUserByToken(token) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT * FROM accountSettings WHERE token = ?",
+          [token],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(new Error("Error in accountSettings"));
+            } else {
+              resolve(res);
+            }
+          }
+        );
+      });
+    },
   };
 }
 
 module.exports = MysqlLib;
-

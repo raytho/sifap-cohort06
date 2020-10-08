@@ -2,6 +2,7 @@ const MongoLib = require("../lib/mongo");
 const MysqlLib = require("../lib/mysql");
 const { nanoid } = require("nanoid");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 
 class UsersService {
   constructor() {
@@ -10,12 +11,12 @@ class UsersService {
     this.mysqlLib = new MysqlLib();
   }
 
-  async createSuperAdminUser( { user }) {
+  async createSuperAdminUser({ user }) {
     const { email, password, country, typeEmail } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
     const role = "SA";
     const userId = nanoid(4);
-  
+
     const response = await this.mysqlLib.createSuperAdminUser({
       userId,
       email,
@@ -72,14 +73,18 @@ class UsersService {
     return users;
   }
 
-  async getUserById( id ) {
+  async getUserById(id) {
     const user = await this.mysqlLib.getUserById(id);
     return user;
   }
 
-  async getUserByMail( {email} ) {
-    const user = await this.mysqlLib.getUserByMail(email);
-    return user[0];
+  async getUserByMail({ email }) {
+    try {
+      const user = await this.mysqlLib.getUserByMail(email);
+      return user[0];
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async deleteUserById(id) {
@@ -87,30 +92,41 @@ class UsersService {
     return user;
   }
 
-  async sendResetLink(email, id) {
-    const params = {
-      Destination: {
-        ToAddresses: [email],
+  async sendResetLink(request) {
+    var smtpTransport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "sifapcohot06@gmail.com",
+        pass: "Platzinuncaparesdeaprender$",
       },
-      Message: {
-        Body: {
-          Text: {
-            Charset: "UTF-8",
-            Data: `To reset your password, please click on this link: http://localhost:3000/reset/${id}`,
-          },
-        },
-        Subject: {
-          Charset: "UTF-8",
-          Data: "Reset password instructions",
-        },
-      },
-      Source: "codingwithchaim@gmail.com",
+    });
+
+    var mailOptions = {
+      to: request.email,
+      from: "passwordreset@demo.com",
+      subject: "Sifap Password Reset",
+      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.
+        Please click on the following link, or paste this into your browser to complete the process:
+        http://${request.host}/reset/${request.token} 
+        If you did not request this, please ignore this email and your password will remain unchanged.`,
     };
-    return params;
+
+    smtpTransport.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+        return info.response;
+      }
+    });
   }
 
+  async createAccoutSetting(account) {
+    const response = await this.mysqlLib.addAccountSetting(account);
+    return response;
+  }
   // CRUD Users Invitations
-  async addUserInvited({user}) {
+  async addUserInvited({ user }) {
     const { email, firstName, role } = user;
     const userId = nanoid(4);
 
@@ -118,7 +134,7 @@ class UsersService {
       email,
       firstName,
       role,
-      userId
+      userId,
     });
     return response;
   }
@@ -136,6 +152,20 @@ class UsersService {
   async deleteInvitedUserById(id) {
     const user = await this.mysqlLib.removeInvitedUserByID(id);
     return user;
+  }
+
+  async updatePasswordUserByID(id, newPassword) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const response = await this.mysqlLib.updatePasswordUserByID(
+      id,
+      hashedPassword
+    );
+    return response;
+  }
+
+  async getUserBytoken(token) {
+    const user = await this.mysqlLib.getUserByToken(token);
+    return user[0];
   }
 }
 

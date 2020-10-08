@@ -23,6 +23,7 @@
     "mongodb": "^3.6.2",
     "mysql": "^2.18.1",
     "nanoid": "^3.1.12",
+    "nodemailer": "^6.4.13",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "eslint": "^7.9.0",
+    "mongodb": "^3.6.2",
     "nodemon": "^2.0.4"
   }
 }
