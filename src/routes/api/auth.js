@@ -34,7 +34,7 @@ function authApi(app) {
         } else {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
-          } else{
+          } else {
             generateToken(req, res, next, user);
           }
         }
@@ -128,7 +128,7 @@ function authApi(app) {
         const reset = usersService.sendResetLink(account);
         delete account.host;
         const accoutSetting = await usersService.createAccoutSetting(account);
-        if (accoutSetting) {
+        if (reset && accoutSetting) {
           res.status(201).json({
             message: "Link sent",
           });
