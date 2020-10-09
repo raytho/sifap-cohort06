@@ -21,6 +21,7 @@ const RoleDetailModal = (props) => {
    return (
       <Modal
          isOpen={modalIsOpen}
+         handleModalClose={handleModalClose}
          isConfirmation
       >
          <button type='button' onClick={handleModalClose}>X</button>

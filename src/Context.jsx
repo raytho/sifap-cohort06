@@ -4,12 +4,21 @@ import React, { createContext, useState } from 'react'
 export const Context = createContext();
 
 const Provider = ({ children }) => {
-   const [isAuth, setIsAuth] = useState(false);
+   const [isAuth, setIsAuth] = useState(() => {
+      return window.sessionStorage.getItem('token');
+
+   });
+   const [user, setUser] = useState({})
    // Value va a ser le objeto que vamos a poder acceder en toda la app
    const value = {
       isAuth,
-      activateAuth: () => {
+      activateAuth: token => {
          setIsAuth(true)
+         window.sessionStorage.setItem('token', token)
+      },
+      user,
+      getUser: userData => {
+         setUser(userData)
       }
    }
 

@@ -4,7 +4,6 @@ import iconStats from './src/assets/static/icon/stats-white.png';
 import iconCustomer from './src/assets/static/icon/customer-white.png';
 import iconRole from './src/assets/static/icon/manage-rol-white.png';
 import iconCf from './src/assets/static/icon/manage-cf-white.png';
-import iconDelegar from './src/assets/static/icon/delegate-white.png';
 
 const funcMock = {
    functionalitys: [
@@ -50,14 +49,6 @@ const funcMock = {
          path: '/c-fiscales',
 
       },
-      {
-         id: 7,
-         type: 'Delegar S. Admin',
-         icon: iconDelegar,
-         path: '/delegate-super',
-
-      },
-
    ],
 };
 

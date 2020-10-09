@@ -11,9 +11,10 @@ import Statistics from '../components/Statistics/Statistics';
 import Customers from '../components/Customers/Customers';
 import RoleManageContainer from '../components/RoleManage/RoleManage/RoleManageContainer';
 import ManageCFiscales from '../components/ManageCFiscales/ManageCFiscales';
-import DelegateSuperContainer from '../components/DelegateSuper/DelegateSuperContainer';
+// import DelegateSuperContainer from '../components/DelegateSuper/DelegateSuperContainer';
 import RoleDetailContainer from '../components/RoleManage/RoleDetail/RoleDetailContainer';
-// import Register from '../pages/Register';
+import Profile from '../components/Profile/Profile';
+import Register from '../pages/Register';
 import Login from '../pages/Login';
 
 
@@ -28,7 +29,7 @@ const App = () => {
          <Switch>
 
             {
-               isAuth
+               isAuth 
                   ? (
                      <>
                         <Layout>
@@ -39,13 +40,16 @@ const App = () => {
                            <Route exact path='/role-manage' component={RoleManageContainer} />
                            <Route exact path='/role-detail/:id' component={RoleDetailContainer} />
                            <Route exact path='/c-fiscales' component={ManageCFiscales} />
-                           <Route exact path='/delegate-super' component={DelegateSuperContainer} />
+                           {/* <Route exact path='/delegate-super' component={DelegateSuperContainer} /> */}
                         </Layout>
-                        <Redirect from='/login' to='/' />
+                        <Route exact path='/profile' component={Profile} />
+                        {/* Problema con este redirect, lo hace desde cualquiera ruta */}
+                        {/* <Redirect from='/register' to='/' push/> */}
                      </>
                   ) : (
                      <>
-                        <Redirect from='/' to='/login' />
+                        <Redirect from='/' to='/register' />
+                        <Route exact path='/register' component={Register} />
                         <Route exact path='/login' component={Login} />
                      </>
                   )
