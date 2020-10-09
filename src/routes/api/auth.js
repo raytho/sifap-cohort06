@@ -112,7 +112,7 @@ function authApi(app) {
         const reset = usersService.sendResetLink(account);
         delete account.host;
         const accoutSetting = await usersService.createAccoutSetting(account);
-        if (accoutSetting) {
+        if (reset && accoutSetting) {
           res.status(201).json({
             message: "Link sent",
           });
