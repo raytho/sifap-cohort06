@@ -16,6 +16,7 @@ import RoleDetailContainer from '../components/RoleManage/RoleDetail/RoleDetailC
 import Profile from '../components/Profile/Profile';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
+import TFAutenthication from '../components/TFAutenthication/TFAutenthication';
 
 
 
@@ -29,7 +30,7 @@ const App = () => {
          <Switch>
 
             {
-               isAuth 
+               isAuth
                   ? (
                      <>
                         <Layout>
@@ -48,9 +49,10 @@ const App = () => {
                      </>
                   ) : (
                      <>
-                        <Redirect from='/' to='/register' />
+                        <Redirect from='/' to='/login' />
                         <Route exact path='/register' component={Register} />
                         <Route exact path='/login' component={Login} />
+                        <Route exact path='/tfautenthication' component={TFAutenthication} />
                      </>
                   )
             }

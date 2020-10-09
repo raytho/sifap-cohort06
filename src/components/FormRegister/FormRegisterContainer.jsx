@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable consistent-return */
-import React, { useState, useContext, useCallback } from 'react'
+import React, { useState, useContext } from 'react'
 import { Context } from '../../Context';
 
 import FormRegister from './FormRegister'

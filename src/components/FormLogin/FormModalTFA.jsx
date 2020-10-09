@@ -1,6 +1,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Modal from '../Modal';
@@ -13,17 +14,32 @@ const FormModalTFA = (props) => {
       modalTFA,
       handleModalClose
    } = props;
-   const [form, setValues] = useState({
-      auth: '',
-   })
-
+   const [form, setValues] = useState(null)
+   const [choise, setChoise] = useState(false)
+   const history = useHistory()
    const handleChangeInput = e => {
-      setValues({
-         [e.target.name]: e.target.value,
-      })
+      setValues(
+         e.target.value,
+      )
    }
+   window.console.log(form)
+
    const handleAccepted = () => {
       window.console.log(form)
+      if (form === null) {
+         window.console.log('Escoja un método de autenticación');
+         setChoise(true)
+      }
+      if (form === 'email') {
+         window.console.log('Estamos en construcción');
+         setChoise(false)
+
+      }
+      if (form === 'qr') {
+         window.console.log('QR')
+         history.push('/tfautenthication');
+         setChoise(false)
+      }
    }
 
    return (
@@ -36,6 +52,7 @@ const FormModalTFA = (props) => {
             <button onClick={handleModalClose} className='LoginModal__close-button' type="submit">X</button>
             <img src={cheque} alt="cheque" />
             <h2>Elige el método de autenticación</h2>
+            {choise && <p className='alert-form'>Escribe el país con el que iniciarás</p>}
             <form>
                <div className='LoginModal__radio'>
                   <label className='radio font-small'>
