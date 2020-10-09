@@ -52,10 +52,6 @@ const Navbar = () => {
             document.getElementById(`item-functionality-${6}`).classList.add('isSelect');
             setElement(6);
             break;
-         case '/delegate-super':
-            document.getElementById(`item-functionality-${7}`).classList.add('isSelect');
-            setElement(7);
-            break;
          default:
             document.getElementById(`item-functionality-${1}`).classList.add('isSelect');
             break;

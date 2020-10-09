@@ -5,19 +5,20 @@ export const Context = createContext();
 
 const Provider = ({ children }) => {
    const [isAuth, setIsAuth] = useState(() => {
-    //  Estado inicila el token si lo hay
-     return true
+      return window.sessionStorage.getItem('token');
+
    });
+   const [user, setUser] = useState({})
    // Value va a ser le objeto que vamos a poder acceder en toda la app
    const value = {
       isAuth,
       activateAuth: token => {
          setIsAuth(true)
-        window.sessionStorage.setItem('token', token)
+         window.sessionStorage.setItem('token', token)
       },
-      removeAuth: () => {
-        setIsAuth(false)
-        window.sessionStorage.removeItem('token')
+      user,
+      getUser: userData => {
+         setUser(userData)
       }
    }
 

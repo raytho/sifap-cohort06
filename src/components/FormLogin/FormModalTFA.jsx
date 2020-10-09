@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 
 import Modal from '../Modal';
 import cheque from '../../assets/static/icon/cheque.png';
+import '../../assets/styles/components/Login/LoginModal.scss';
 
 const FormModalTFA = (props) => {
 
    const {
       modalTFA,
-      handleCloseModal
+      handleModalClose
    } = props;
    const [form, setValues] = useState({
       auth: '',
@@ -20,51 +21,53 @@ const FormModalTFA = (props) => {
       setValues({
          [e.target.name]: e.target.value,
       })
-     window.console.log(e.target.value)
+   }
+   const handleAccepted = () => {
+      window.console.log(form)
    }
 
-   const handleSubmit = e => {
-      e.preventDefault();
-
-   }
-   window.console.log(form)
    return (
-      <Modal className="Modal__container" isOpen={modalTFA}>
-         <button onClick={handleCloseModal} className='Modal__close-button' type="submit">X</button>
-         <img src={cheque} alt="cheque" />
-         <h1>Autenticación en dos pasos </h1>
-         <p>¿Cómo quieres recibir el código?</p>
-         <form onSubmit={handleSubmit}>
-            <div className='Modal__radio'>
-               <label className='radio font-small'>
-                  <input
-                     type='radio'
-                     name='auth'
-                     value='qr'
-                     onChange={handleChangeInput}
-                  />
-                  <span className='radiomark'> </span>
-                  QR - Google authenticator
-               </label>
-               <label className='radio font-small'>
-                  <input
-                     type='radio'
-                     name='auth'
-                     value='email'
-                     onChange={handleChangeInput}
-                  />
-                  <span className='radiomark'> </span>
-                  Correo electronico
-               </label>
-            </div>
-            <button className="Modal__buttons" type="submit">Enviar</button>
-         </form>
+      <Modal
+         LoginModal
+         isOpen={modalTFA}
+         handleModalClose={handleModalClose}
+      >
+         <div className='LoginModal__container'>
+            <button onClick={handleModalClose} className='LoginModal__close-button' type="submit">X</button>
+            <img src={cheque} alt="cheque" />
+            <h2>Elige el método de autenticación</h2>
+            <form>
+               <div className='LoginModal__radio'>
+                  <label className='radio font-small'>
+                     <input
+                        type='radio'
+                        name='auth'
+                        value='qr'
+                        onChange={handleChangeInput}
+                     />
+                     <span className='radiomark'> </span>
+                     Google authenticator
+                  </label>
+                  <label className='radio font-small'>
+                     <input
+                        type='radio'
+                        name='auth'
+                        value='email'
+                        onChange={handleChangeInput}
+                     />
+                     <span className='radiomark'> </span>
+                     Correo electronico
+                  </label>
+               </div>
+               <button className='LoginModal__buttons' type='button' onClick={handleAccepted} >Aceptar</button>
+            </form>
+         </div>
       </Modal>
    );
 }
 
 FormModalTFA.propTypes = {
-   handleCloseModal: PropTypes.func,
+   handleModalClose: PropTypes.func,
    modalTFA: PropTypes.bool
 }
 

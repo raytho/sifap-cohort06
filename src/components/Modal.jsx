@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
@@ -9,25 +10,32 @@ const Modal = (props) => {
    const { children,
       isOpen,
       isModalAddRole,
-      isConfirmation
+      isConfirmation,
+      LoginModal,
+      handleModalClose
    } = props;
 
-   const modalClass = classNames('Modal__container', {
+   const modalClass = classNames('Modal', {
       isModalAddRole,
-      isConfirmation
-   })
+      isConfirmation,
+      LoginModal
+   });
+
 
    if (!isOpen) {
-      return null
+      return null;
    }
 
    return (
       ReactDOM.createPortal(
-         <div className='Modal'>
+         <>
+         <div  className='Modal__overlay' >
+            <div role='button' tabIndex='0' className='close' onClick={handleModalClose}> </div>
             <div className={modalClass} id='modal'>
-               {children}
+                  {children}
             </div>
-         </div>,
+         </div>
+         </>,
          document.getElementById('modal')
       )
    );

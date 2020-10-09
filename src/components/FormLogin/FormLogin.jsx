@@ -22,8 +22,9 @@ const FormLogin = (props) => {
       emailValidate,
       passwordValidate,
       modalTFA,
-      handleCloseModal,
-      handleOpenModal
+      handleModalClose,
+      loader,
+      // handleModalOpen
    } = props;
 
    const [showPass, setShowPass] = useState(false)
@@ -39,6 +40,7 @@ const FormLogin = (props) => {
                   name='email'
                   placeholder='ejemplo@dominio.com'
                   onChange={handleChangeInput}
+                  disabled={!loader}
                />
                {emailValidate && <p className='alert-form'>Formato de correo ejemplo@dominio.com</p>}
             </label>
@@ -50,6 +52,8 @@ const FormLogin = (props) => {
                      name='password'
                      placeholder='Contraseña'
                      onChange={handleChangeInput}
+                     disabled={!loader}
+
                   />
                   <button
                      type='button'
@@ -68,18 +72,18 @@ const FormLogin = (props) => {
             </label>
 
             <div className='Login__buttons'>
-               <button type='button'>Iniciar con Google</button>
-               <button type='submit' onClick={handleOpenModal} >Iniciar</button>
+               <button type='button' disabled={!loader}>Iniciar con Google</button>
+               <button type='submit' disabled={!loader}>Iniciar</button>
             </div>
 
             <div className='Login__forgot'>
                <p className='Login__redirect'> <Link to='/'>¿Olvidaste tu contraseña? </Link></p>
-               <p className='Login__redirect'>¿Aún no Tienes cuenta? <span> <Link to='/Register'>CREAR CUENTA</Link> </span> </p>
+            <p className='Login__redirect'>¿Aún no tienes cuenta? <span> <Link to='/Register'>Crear cuenta</Link> </span> </p>
             </div>
          </form>
          <FormModalTFA
             modalTFA={modalTFA}
-            handleCloseModal={handleCloseModal}
+            handleModalClose={handleModalClose}
          />
       </div>
    )
@@ -87,12 +91,13 @@ const FormLogin = (props) => {
 
 FormLogin.propTypes = {
    modalTFA: PropTypes.bool,
-   handleCloseModal: PropTypes.func,
-   handleOpenModal: PropTypes.func,
+   handleModalClose: PropTypes.func,
+   // handleModalOpen: PropTypes.func,
    handleChangeInput: PropTypes.func,
    handleSubmit: PropTypes.func,
    emailValidate: PropTypes.bool,
    passwordValidate: PropTypes.bool,
+   loader: PropTypes.bool,
    form: PropTypes.object
 }
 

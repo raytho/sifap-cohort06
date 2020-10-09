@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import ShowPass from '../../assets/static/images/ShowPass.png';
+
 const FormRegister = (props) => {
    const {
       form,
@@ -13,7 +15,9 @@ const FormRegister = (props) => {
       emailValidate,
       passwordValidate,
       countryValidate,
-      typeEmailValidate,
+      nameValidate,
+      identifierValidate,
+      passwordVerify
    } = props;
    const [showPass, setShowPass] = useState(false)
 
@@ -21,6 +25,26 @@ const FormRegister = (props) => {
       <div className='SignUp__form'>
       <form onSubmit={handleSubmit}>
          <h2>Crear Cuenta</h2>
+         <label htmlFor='email'> Nombre personal o empresarial: <i>*</i>
+            <input
+               type='text'
+               value={form.name}
+               name='name'
+               placeholder='Memo Charol / Memo SA'
+               onChange={handleChangeInput}
+            />
+            {nameValidate && <p className='alert-form'>Debe tener más de 3 caracteres</p>}
+         </label>
+         <label htmlFor='email'> Identificador personal o empresarial: <i>*</i>
+            <input
+               type='text'
+               value={form.identifier}
+               name='identifier'
+               placeholder='101234132 / HASM0231-1'
+               onChange={handleChangeInput}
+            />
+            {identifierValidate && <p className='alert-form'>Debe tener más de 6 caracteres</p>}
+         </label>
          <label htmlFor='email'> Correo: <i>*</i>
             <input
                type='email'
@@ -31,32 +55,6 @@ const FormRegister = (props) => {
             />
             {emailValidate && <p className='alert-form'>Formato de correo ejemplo@correo.com</p>}
          </label>
-         <div>
-            <p className='SignUp__type-email'>¿Qué tipo de correo es? <i>*</i></p>
-            <div className='SigUp__radio-email'>
-               <label className='radio font-small'>
-                  <input
-                     type='radio'
-                     name='typeEmail'
-                     value='institutional'
-                     onChange={handleChangeInput}
-                  />
-                  <span className='radiomark'> </span>
-                  Correo institucional
-               </label>
-               <label className='radio font-small'>
-                  <input
-                     type='radio'
-                     name='typeEmail'
-                     value='personal'
-                     onChange={handleChangeInput}
-                  />
-                  <span className='radiomark'> </span>
-                  Correo personal
-               </label>
-            </div>
-            {typeEmailValidate && <p className='alert-form'>¿Qué email tienes?</p>}
-         </div>
          <label htmlFor='password'>Contraseña: <i>*</i>
             <div className='SignUp__password'>
                <input
@@ -72,7 +70,7 @@ const FormRegister = (props) => {
                   onClick={() => showPass ? setShowPass(false) : setShowPass(true)}
                >
                   <img
-                     src='https://img.icons8.com/ios-glyphs/60/000000/visible.png'
+                     src={ShowPass}
                      alt='Mostrar contraseña'
                   />
                </button>
@@ -80,6 +78,31 @@ const FormRegister = (props) => {
             {passwordValidate &&
             <p className='alert-form'>
                Incluya uno $@$!%*?&, un número, una letra mayúscula, una minúscula y de 8 a 15 caracteres
+            </p>}
+         </label>
+         <label htmlFor='password'>Verifica la contraseña: <i>*</i>
+            <div className='SignUp__password'>
+               <input
+                     type={!showPass ? 'password' : 'text'}
+                     value={form.passwordVerify}
+                     name='passwordVerify'
+                     placeholder='Contraseña'
+                     onChange={handleChangeInput}
+                  />
+               <button
+                  type='button'
+                  className='SignUp__show-pass'
+                  onClick={() => showPass ? setShowPass(false) : setShowPass(true)}
+               >
+                  <img
+                     src={ShowPass}
+                     alt='Mostrar contraseña'
+                  />
+               </button>
+            </div>
+            {passwordVerify &&
+            <p className='alert-form'>
+               No coinciden las contraseñas
             </p>}
          </label>
          <label htmlFor='country'>País: <i>*</i>
@@ -108,8 +131,10 @@ FormRegister.propTypes = {
    emailValidate: PropTypes.bool,
    passwordValidate: PropTypes.bool,
    countryValidate: PropTypes.bool,
-   typeEmailValidate: PropTypes.bool,
-   form: PropTypes.object
+   form: PropTypes.object,
+   nameValidate: PropTypes.bool,
+   identifierValidate: PropTypes.bool,
+   passwordVerify: PropTypes.bool
 }
 
 export default FormRegister;

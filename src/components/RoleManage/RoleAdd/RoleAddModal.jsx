@@ -64,11 +64,6 @@ const RoleAddModal = (props) => {
                         <p className='alert-form'>Seleccione el rol de la cuenta a crear.</p>}
                </label>
                <div>
-                  <button
-                  type='button'
-                  className='btn'
-                  onClick={handleModalClose}
-                  >Cerrar</button>
                   <button type='submit' className='btn'>Invitar</button>
                </div>
             </form>

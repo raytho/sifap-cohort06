@@ -1,10 +1,15 @@
 /* eslint-disable react/require-default-props */
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+
+import { Context } from '../../Context';
 
 import '../../assets/styles/layout/Header.scss';
 
 const HeaderUser = ({ name, img, email, rol}) => {
+
+   const { user } = useContext(Context)
+   window.console.log(user, 'user header');
 
    return (
       <>
@@ -20,7 +25,7 @@ const HeaderUser = ({ name, img, email, rol}) => {
                   <p>{rol}</p>
                </li>
                <li>
-                  <a href='/'>Perfil</a>
+                  <a href='/profile'>Perfil</a>
                </li>
                <li>
                   <a href='/'>Salir</a>
