@@ -34,26 +34,10 @@ function authApi(app) {
         } else {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
-          } else{
+          } else {
             generateToken(req, res, next, user);
           }
         }
-        req.login(user, { session: false }, async (error) => {
-          if (error) {
-            next(error);
-          } else {
-            const { _id: id, name, email } = user;
-            const payload = {
-              sub: id,
-              name,
-              email,
-            };
-            const token = jwt.sign(payload, config.authJwtSecret, {
-              expiresIn: "15m",
-            });
-            return res.status(200).json({ token, user: { id, name, email } });
-          }
-        });
       } catch (error) {
         next(error);
       }
@@ -208,17 +192,17 @@ const generateToken = (req, res, next, user) => {
     if (error) {
       next(error);
     } else {
-      const { userId, email } = user;
-      const isLogged = true;
+      const { userId, email, twoFactorActive } = user;
       const payload = {
         sub: userId,
         email,
-        isLogged,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "15m",
       });
-      return res.status(200).json({ token, user: { userId, email, isLogged } });
+      return res
+        .status(200)
+        .json({ token, user: { userId, email, twoFactorActive } });
     }
   });
 };
