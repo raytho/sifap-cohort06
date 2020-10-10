@@ -87,7 +87,7 @@ const LoginContainer = () => {
                         history.push('/bill')
                      }
                   }
-               })
+               }).catch(error => console.error(error))
             } catch (error) {
                window.console.log(error)
             }

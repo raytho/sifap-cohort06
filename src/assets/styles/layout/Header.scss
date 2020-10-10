@@ -65,7 +65,7 @@
    @include size(220px, 170px);
    &::before {
       @include  icon-arrow(absolute, -20px, 49px, 10px, var(--white-color), 0);
-  }
+   }
    li:nth-of-type(1) {
       @include size(initial, 70px);
       display: flex;

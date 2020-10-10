@@ -18,6 +18,8 @@ import Register from '../pages/Register';
 import Login from '../pages/Login';
 import TFAutenthication from '../components/TFAutenthication/TFAutenthication';
 
+import Chatbot from '../components/Chatbot/Chatbot';
+
 
 
 
@@ -25,7 +27,8 @@ const App = () => {
    const { isAuth } = useContext(Context);
 
    return (
-
+      <>
+      <Chatbot />
       <BrowserRouter>
          <Switch>
 
@@ -58,6 +61,7 @@ const App = () => {
             }
          </Switch>
       </BrowserRouter>
+      </>
    );
 }
 
