@@ -36,6 +36,17 @@ function authApi(app) {
             generateTempToken(req, res, next, user);
           } else {
             generateToken(req, res, next, user);
+            const { _id: id, name, email, role } = user;
+            const payload = {
+              sub: id,
+              name,
+              email,
+              role,
+            };
+            const token = jwt.sign(payload, config.authJwtSecret, {
+              expiresIn: "15m",
+            });
+            return res.status(200).json({ token, user: { id, name, email } });
           }
         }
       } catch (error) {

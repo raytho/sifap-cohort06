@@ -307,8 +307,8 @@ function MysqlLib() {
     updatePasswordUserByID(id, newPassword) {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        connection.query(
-          "UPDATE users SET password = ? WHERE userId = ?",
+        client.query(
+          `UPDATE users SET password = ? WHERE email = ?`,
           [newPassword, id],
           function (err, rows) {
             if (rows === undefined) {
@@ -351,6 +351,20 @@ function MysqlLib() {
             }
           }
         );
+      });
+    },
+
+    //GET COUNTRIES
+    getCountries() {
+      return new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM countries", (err, res) => {
+          if (err) {
+            console.error(err);
+            reject(new Error("Error in accountSettings"));
+          } else {
+            resolve(res);
+          }
+        });
       });
     },
   };
