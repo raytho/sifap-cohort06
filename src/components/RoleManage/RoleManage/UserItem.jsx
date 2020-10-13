@@ -4,25 +4,27 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import UserGestionModal from './UserGestionModal';
+import UserDeleteModal from './UserDeleteModal';
 
 import '../../../assets/styles/components/RoleManage/ItemUser.scss';
 
 const UserItem = (props) => {
 
    const {
-      data
-
+      data,
    } = props;
 
    const [modal, setModal] = useState(false);
-   const handleModalOpen = () => {
-      setModal(true)
+   const [userId, setUserId] = useState('');
+
+   const handleModalOpen = id => {
+      setModal(true);
+      setUserId(id);
+      window.console.log(id);
    }
    const handleModalClose = () => {
       setModal(false)
    }
-   window.console.log();
    return (
     <ul>
       {
@@ -39,14 +41,14 @@ const UserItem = (props) => {
                      </div>
                   </Link>
                </div>
-               <button type='button' onClick={handleModalOpen}>X</button>
+               <button type='button' onClick={() => handleModalOpen(item.userId)}>X</button>
             </li>
          )
       }
-      <UserGestionModal
+      <UserDeleteModal
          handleModalClose={handleModalClose}
          modalIsOpen={modal}
-         endpoint={`superAdmin/user/${data.map(item => item.userId)}`}
+         endpoint={`superAdmin/user/${userId}`}
       />
     </ul>
    );

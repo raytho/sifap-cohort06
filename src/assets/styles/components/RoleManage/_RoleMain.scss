@@ -7,6 +7,15 @@
    border-radius: 5px 100px 5px 5px;
    box-shadow: 0 0 50px 0 rgba(3, 36, 35, .25);
 }
+.Role__btn-users {
+   width: 220px;
+   margin: 0 0 10px 0;
+   display: flex;
+   justify-content: space-between;
+   button {
+      @include btn(100px, 35px, --font-smallest);
+   }
+}
 .Role__item-container {
    height:  400px;
    margin: 0 0 50px 0;

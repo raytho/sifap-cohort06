@@ -19,18 +19,11 @@
          border: 1px solid  rgba(3, 36, 35, .25);
          outline-color: var(--secundary-color);
          cursor: pointer;
-         -webkit-appearance: none;
-         -moz-appearance: none;
-         &::-ms-expand {
-            display: none;
-         }
-      }
-      .Arrow {
-         @include icon-arrow(absolute, 10px, 6px, 8px, var(--secundary-color), 180deg)
       }
       input {
-         height: 20px;
+         height: 26px;
          padding: 0 0 0 10px;
+         border-radius: 2px;
          border: 1px solid  rgba(3, 36, 35, .25);
       }
       input:nth-of-type(1) {

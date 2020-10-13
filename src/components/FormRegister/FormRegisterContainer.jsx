@@ -69,7 +69,7 @@ const SignUpContainer = ({ history }) => {
       } else {
          setPasswordVerifyValidate(true);
       }
-      if (Object.keys(form.country).length > 4) {
+      if (Object.keys(form.country).length > 2) {
          country = true;
          setCountryValidate(false);
       } else {

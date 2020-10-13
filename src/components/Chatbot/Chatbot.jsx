@@ -14,7 +14,6 @@ const Chatbot = () => {
          setOpenMessage(true);
       }
    }
-
    useEffect(() => {
       idSetTimeOut = setTimeout(() => handleMessage(), 2000);
       window.console.log(idSetTimeOut);
@@ -40,8 +39,9 @@ const Chatbot = () => {
                   ? <div className='Chatbot__message'>
                      <button type='button' onClick={handleMessage}>X</button>
                      <p>
-                        <span role='img' aria-label='Hola'>👋🏽👋🏽</span>¡Hola! Soy Vinzea 👩🏽‍💼 y estoy aquí para resolver tus dudas.
-                        ¡Escribeme!
+                        <span role='img' aria-label='Hola'>👋🏽👋🏽</span>
+                        ¡Hola! Soy Vinzea 👩🏽‍💼 y estoy aquí para resolver tus dudas.
+                        ¡Escríbeme!
                      </p>
                   </div>
                   : null
@@ -53,16 +53,16 @@ const Chatbot = () => {
                <img  src='https://i.imgur.com/FjzAcjI.png' alt='Logo'/>
                <p>Vinzea</p>
             </button>
-
             {
-               openBot ? <div className='Chatbot__container'>
-                  <button className='Chatbot__close' type='button' onClick={handleChatbot}>X</button>
-                  <iframe
-                  className='Chatbot__chat'
-                  title='Chatbot'
-                  src='https://webchat.snatchbot.me/38f3a464d75e2dc56ad85845275d6345c5a505572b114b39096a943ba3bcdb2f'
-                  />
-               </div>
+               openBot
+                  ? <div className='Chatbot__container'>
+                     <button className='Chatbot__close' type='button' onClick={handleChatbot}>X</button>
+                     <iframe
+                     className='Chatbot__chat'
+                     title='Chatbot'
+                     src='https://webchat.snatchbot.me/38f3a464d75e2dc56ad85845275d6345c5a505572b114b39096a943ba3bcdb2f'
+                     />
+                  </div>
                : null
             }
          </>

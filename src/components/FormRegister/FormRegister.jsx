@@ -106,13 +106,11 @@ const FormRegister = (props) => {
             </p>}
          </label>
          <label htmlFor='country'>País: <i>*</i>
-            <input
-               type='text'
-               value={form.country}
-               name='country'
-               placeholder='País'
-               onChange={handleChangeInput}
-            />
+            <select name='country' onChange={handleChangeInput}>
+               <option value=''>País</option>
+               <option value='colombia'>Colombia</option>
+               <option value='mexico'>México</option>
+            </select>
             {countryValidate && <p className='alert-form'>Escribe el país con el que iniciarás</p>}
          </label>
          <div className='SignUp__buttons'>

@@ -4,8 +4,8 @@ import React from 'react';
 import Modal from '../../Modal';
 import '../../../assets/styles/utils/ConfirmateModal.scss'
 
-const UserGestionModal = (props) => {
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
+const UserDeleteModal = (props) => {
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
 
    const {
       handleModalClose,
@@ -20,14 +20,14 @@ const UserGestionModal = (props) => {
             const response = await fetch(`${API}${endpoint}`,{
                method: 'DELETE',
             });
-            const result = await response.json()
-               window.console.log(result)
+            const result = await response.json();
+               window.console.log(result);
          } catch (error) {
             window.console.log(error.message);
          }
-         handleModalClose()
+         handleModalClose();
       };
-      getData()
+      getData();
    }
 
 
@@ -49,4 +49,4 @@ const UserGestionModal = (props) => {
    )
 };
 
-export default UserGestionModal;
+export default UserDeleteModal;

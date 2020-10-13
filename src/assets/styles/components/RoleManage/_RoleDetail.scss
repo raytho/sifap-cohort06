@@ -77,16 +77,6 @@
       border-radius: 2px;
       border: 1px solid  rgba(3, 36, 35, .25);
       outline-color: var(--secundary-color);
-      cursor: pointer;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      &::-ms-expand {
-         display: none;
-      }
-   }
-   // Dropdown aún no funciona dandole click a la flecha, pero si desplega normal
-   .Arrow {
-      @include icon-arrow(absolute, 67px, -140px, 8px, var(--secundary-color), 180deg)
    }
    & > p {
       margin: 20px 0 10px 0;

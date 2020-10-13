@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 
 import GetData from '../../../containers/GetData';
-import RoleDeleteModal from './UserGestionModal';
+import UserDeleteModal from './UserDeleteModal';
 import '../../../assets/styles/components/RoleManage/ItemUser.scss';
 
 
@@ -10,8 +10,11 @@ const UserItemInvited = () =>{
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/superAdmin/'
 
    const [modal, setModal] = useState(false);
-   const handleModalOpen = () => {
+   const [userId, setUserId] = useState('');
+
+   const handleModalOpen = id => {
       setModal(true)
+      setUserId(id)
    }
    const handleModalClose = () => {
       setModal(false)
@@ -19,11 +22,9 @@ const UserItemInvited = () =>{
    return (
       <GetData api={`${API}getInvitedUsers`} >
          {
-            ({ loading, error, data}) => {
+            ({ loading, error, data }) => {
                if (loading) return <p>Cargando...</p>
                if (error) return <p>¡Error!</p>
-               window.console.log(data[0].userId)
-
                return (
                 <ul>
                   {
@@ -37,14 +38,14 @@ const UserItemInvited = () =>{
                                  <span>Invitado</span>
                               </span>
                            </div>
-                           <button type='button' onClick={handleModalOpen}>X</button>
+                           <button type='button' onClick={() => handleModalOpen(item.userId)}>X</button>
                         </li>
                      )
                   }
-                  <RoleDeleteModal
+                  <UserDeleteModal
                      handleModalClose={handleModalClose}
                      modalIsOpen={modal}
-                     endpoint={`superAdmin/users-invitation/${data[0].userId}`}
+                     endpoint={`superAdmin/users-invitation/${userId}`}
                   />
                 </ul>
                )

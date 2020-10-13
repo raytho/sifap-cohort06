@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-const GetData = ({ api, children }) => {
+const GetData = ({ api, children, change }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [data, setData] = useState([]);
@@ -23,10 +23,9 @@ const GetData = ({ api, children }) => {
     }
     getData()
 
-    return () => {
-      controller.abort();
-    }
-  }, [])
+    return () => controller.abort();
+
+  }, [change])
   return(
      <>
          {children({loading, error, data})}
