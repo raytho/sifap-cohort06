@@ -7,6 +7,7 @@ const helmet = require("helmet");
 const notFoundHandler = require("./utils/middleware/notFoundHandler");
 const authApiRouter = require("./routes/api/auth");
 const rolesApiRouter = require("./routes/api/roles");
+const countriesApi = require("./routes/api/countries");
 const home = require("./routes/views/home");
 const userViewRouter = require("./routes/views/user");
 const superAdminRouter = require("./routes/views/superAdmin");
@@ -24,13 +25,13 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 
-
 // Routes
 app.use("/", home);
 authApiRouter(app);
 userViewRouter(app);
 rolesApiRouter(app);
 superAdminRouter(app);
+countriesApi(app);
 
 // 404 handler
 app.use(notFoundHandler);

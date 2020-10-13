@@ -39,11 +39,12 @@ function authApi(app) {
           if (error) {
             next(error);
           } else {
-            const { _id: id, name, email } = user;
+            const { _id: id, name, email, role } = user;
             const payload = {
               sub: id,
               name,
               email,
+              role,
             };
             const token = jwt.sign(payload, config.authJwtSecret, {
               expiresIn: "15m",
@@ -124,7 +125,7 @@ function authApi(app) {
         const reset = usersService.sendResetLink(account);
         delete account.host;
         const accoutSetting = await usersService.createAccoutSetting(account);
-        if (accoutSetting) {
+        if (reset && accoutSetting) {
           res.status(201).json({
             message: "Link sent",
           });
