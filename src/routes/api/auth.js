@@ -29,16 +29,13 @@ function authApi(app) {
         if (error || !user) {
           next(boom.unauthorized());
         }
-
         if (user.twoFactorActive) {
           generateTempToken(req, res, next, user);
         } else {
-          generateToken(req, res, next, user);
-        }
-        req.login(user, { session: false }, async (error) => {
-          if (error) {
-            next(error);
+          if (user.twoFactorActive) {
+            generateTempToken(req, res, next, user);
           } else {
+            generateToken(req, res, next, user);
             const { _id: id, name, email, role } = user;
             const payload = {
               sub: id,
@@ -51,7 +48,7 @@ function authApi(app) {
             });
             return res.status(200).json({ token, user: { id, name, email } });
           }
-        });
+        }
       } catch (error) {
         next(error);
       }
@@ -62,6 +59,7 @@ function authApi(app) {
     "/sign-up",
     validationHandler(createUserSchema),
     async (req, res, next) => {
+      // res.header("Access-Control-Allow-Origin", "*");
       const { body: user } = req;
       try {
         await usersService.createSuperAdminUser({ user });
@@ -205,7 +203,7 @@ const generateToken = (req, res, next, user) => {
     if (error) {
       next(error);
     } else {
-      const { userId, email } = user;
+      const { userId, email, twoFactorActive } = user;
       const payload = {
         sub: userId,
         email,
@@ -213,7 +211,9 @@ const generateToken = (req, res, next, user) => {
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "15m",
       });
-      return res.status(200).json({ token, user: { userId, email } });
+      return res
+        .status(200)
+        .json({ token, user: { userId, email, twoFactorActive } });
     }
   });
 };

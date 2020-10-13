@@ -312,7 +312,6 @@ function MysqlLib() {
           [newPassword, id],
           function (err, rows) {
             if (rows === undefined) {
-              console.log(err);
               reject(new Error("Error rows is undefined"));
             } else {
               resolve(rows);

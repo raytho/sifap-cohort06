@@ -1,4 +1,3 @@
-const MongoLib = require("../lib/mongo");
 const MysqlLib = require("../lib/mysql");
 const { nanoid } = require("nanoid");
 const bcrypt = require("bcrypt");
@@ -6,8 +5,6 @@ const nodemailer = require("nodemailer");
 
 class UsersService {
   constructor() {
-    this.collection = "sifap_users";
-    this.mongoDB = new MongoLib();
     this.mysqlLib = new MysqlLib();
   }
 
