@@ -3,6 +3,7 @@ const qrcode = require("qrcode");
 const config = require("../../../config");
 
 const otpauth_url = config.otpAuthUrl;
+
 const generateQr = () => {
   return new Promise((resolve, reject) => {
     qrcode.toDataURL(otpauth_url, (error, data) => {
@@ -12,6 +13,13 @@ const generateQr = () => {
         resolve(data);
       }
     });
+  });
+};
+
+const generateTotpToken = (secret) => {
+  return speakeasy.totp({
+    secret: secret,
+    window: 10 // specified in seconds
   });
 };
 
@@ -25,5 +33,6 @@ const verify = (secret, token) => {
 
 module.exports = {
   generateQr,
+  generateTotpToken,
   verify,
 };

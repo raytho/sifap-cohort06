@@ -15,7 +15,6 @@ const { createUserSchema } = require("../../utils/schemas/users");
 require("../../utils/auth/strategies/basic");
 require("../../utils/auth/strategies/jwtTwoFactor");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
-const { response } = require("express");
 
 function authApi(app) {
   const router = express.Router();
@@ -28,8 +27,7 @@ function authApi(app) {
       try {
         if (error || !user) {
           next(boom.unauthorized());
-        }
-        else {
+        } else {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
           } else {
@@ -58,16 +56,6 @@ function authApi(app) {
     }
   );
 
-  router.get(
-    "/two-factor",
-    passport.authenticate("jwtTwoFactor", { session: false }),
-    async (req, res) => {
-      res.status(200).send({
-        data: "test",
-      });
-    }
-  );
-
   router.post(
     "/two-factor",
     passport.authenticate("jwtTwoFactor", { session: false }),
@@ -83,12 +71,66 @@ function authApi(app) {
     }
   );
 
-  router.post("/forgot", async (req, res) => {
+  router.post("/send-mail-code", async (req, res, next) => {
+    passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
+      try {
+        if (error || !user) {
+          next(boom.unauthorized());
+        } else {
+          const secret = config.twoFactorSecret;
+          const token = twoFactorAuth.generateTotpToken(secret);
+          usersService.sendTokenToMail(user.email, token);
+          return res.status(200).json({
+            error: null,
+            message: "Código enviado al correo",
+          });
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.post("/two-factor-mail", async (req, res, next) => {
+    passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
+      try {
+        if (error || !user) {
+          next(boom.unauthorized());
+        } else {
+          const { token } = req.body;
+          const secret = config.twoFactorSecret;
+          const authorizedUser = twoFactorAuth.verify(secret, token);
+          if (authorizedUser) {
+            generateToken(req, res, next, user);
+          } 
+          else {
+            next(boom.unauthorized());
+          }
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.get(
+    "/token",
+    async (req, res) => {
+      const secret = config.twoFactorSecret;
+      const token = twoFactorAuth.generateTotpToken(secret);
+      res.status(200).json({
+        message: token,
+      });
+    }
+  );
+
+  router.post("/forgot", async (req, res, next) => {
     const email = req.body.email;
     if (email) {
       const user = await usersService.getUserByMail({ email });
 
       if (!user) {
+        // Mejor sería next(boom.unauthorized()); para no enviar indicios del mail
         res.status(404).json({
           error: "No account with that email address exists.",
           data: null,
@@ -116,7 +158,7 @@ function authApi(app) {
         }
       }
     } else {
-      response.status(200);
+      next(boom.unauthorized());
     }
   });
 

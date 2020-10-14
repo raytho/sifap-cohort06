@@ -12,7 +12,10 @@ const config = {
   authJwtSecret: process.env.AUTH_JWT_SECRET,
   twoFactorSecret: process.env.TWO_FACTOR_SECRET,
   otpAuthUrl: process.env.OTP_AUTH_URL,
-  authTwoFactorJwtSecret: process.env.AUTH_TWO_FACTOR_JWT_SECRET
+  authTwoFactorJwtSecret: process.env.AUTH_TWO_FACTOR_JWT_SECRET,
+  mailProvider: process.env.MAIL_PROVIDER,
+  mailAccount: process.env.MAIL_ACCOUNT,
+  mailPassword: process.env.MAIL_PASSWORD,
 };
 
 module.exports = config;
