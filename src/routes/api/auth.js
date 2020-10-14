@@ -39,7 +39,6 @@ function authApi(app) {
             generateTempToken(req, res, next, user);
           } else {
             const permissions = await permissesService.getPermissesByRol(user);
-            generateToken(req, res, next, user);
             const { _id: id, name, email, role } = user;
             const payload = {
               sub: id,
@@ -48,6 +47,7 @@ function authApi(app) {
               role,
               permissions,
             };
+
             const token = jwt.sign(payload, config.authJwtSecret, {
               expiresIn: "15m",
             });
