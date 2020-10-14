@@ -31,7 +31,7 @@ class PermissesService {
           break;
       }
       const permissions = await this.mysqlLib.getPermissesByRol(rolId);
-      return permissions[0];
+      return permissions;
     } catch (error) {
       console.log(error);
     }
