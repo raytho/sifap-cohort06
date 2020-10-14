@@ -7,6 +7,7 @@ const userSchema = {
   fiscalId: joi.string().required().required(),
   email: joi.string().email().required(),
   password: joi.string().required().required(),
+  passwordVerify: joi.string(),
   country: joi.string().max(255).required(),
 };
 
