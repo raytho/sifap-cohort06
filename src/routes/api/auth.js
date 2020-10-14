@@ -4,9 +4,9 @@ const boom = require("@hapi/boom");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-// const ApiKeysService = require("../../services/apiKeys");
 const config = require("../../config");
 const UsersService = require("../../services/usersService");
+// const PermissesService = require("../../services/permissesService");
 const validationHandler = require("../../utils/middleware/validationHandler");
 
 const { createUserSchema } = require("../../utils/schemas/users");
@@ -14,16 +14,19 @@ const { createUserSchema } = require("../../utils/schemas/users");
 // Basic Strategy
 require("../../utils/auth/strategies/basic");
 require("../../utils/auth/strategies/jwtTwoFactor");
+require("../../utils/auth/strategies/jwtLogout");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
+
 
 function authApi(app) {
   const router = express.Router();
   app.use("/api/auth", router);
 
   const usersService = new UsersService();
+  // const permissesService = new PermissesService();
 
   router.post("/sign-in", async (req, res, next) => {
-    passport.authenticate("basic", (error, user) => {
+    passport.authenticate("basic", async (error, user) => {
       try {
         if (error || !user) {
           next(boom.unauthorized());
@@ -56,20 +59,26 @@ function authApi(app) {
     }
   );
 
-  router.post(
-    "/two-factor",
-    passport.authenticate("jwtTwoFactor", { session: false }),
-    async (req, res, next) => {
-      const { token, userId, email } = req.body;
-      const secret = config.twoFactorSecret;
-      const authorizedUser = twoFactorAuth.verify(secret, token);
-      if (authorizedUser) {
-        generateToken(req, res, next, { userId, email });
-      } else {
-        next(boom.unauthorized());
+  router.post("/two-factor", async (req, res, next) => {
+    passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
+      try {
+        if (error || !user) {
+          next(boom.unauthorized());
+        } else {
+          const secret = config.twoFactorSecret;
+          const { token } = req.body;
+          const authorizedUser = twoFactorAuth.verify(secret, token);
+          if (authorizedUser) {
+            generateToken(req, res, next, user);
+          } else {
+            next(boom.unauthorized());
+          }
+        }
+      } catch (error) {
+        next(error);
       }
-    }
-  );
+    })(req, res, next);
+  });
 
   router.post("/send-mail-code", async (req, res, next) => {
     passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
@@ -224,6 +233,15 @@ function authApi(app) {
       }
     }
   });
+
+  router.get(
+    "/logout",
+    passport.authenticate("jwtLogout", { session: false }),
+    function (req, res) {
+      req.logOut();
+      return res.redirect("/");
+    }
+  );
 }
 
 const generateToken = (req, res, next, user) => {

@@ -364,6 +364,36 @@ function MysqlLib() {
         });
       });
     },
+
+    //GET PERMISSES
+    getPermisses() {
+      return new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM permises", (err, res) => {
+          if (err) {
+            console.error(err);
+            reject(new Error("Error in accountSettings"));
+          } else {
+            resolve(res);
+          }
+        });
+      });
+    },
+    getPermissesByRol(rolId) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT iduserPermissions, description FROM userPermissions WHERE rolId = ?",
+          [rolId],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(new Error("Error in accountSettings"));
+            } else {
+              resolve(res);
+            }
+          }
+        );
+      });
+    },
   };
 }
 
