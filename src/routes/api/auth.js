@@ -7,6 +7,7 @@ const crypto = require("crypto");
 // const ApiKeysService = require("../../services/apiKeys");
 const config = require("../../config");
 const UsersService = require("../../services/usersService");
+const PermissesService = require("../../services/permissesService");
 const validationHandler = require("../../utils/middleware/validationHandler");
 
 const { createUserSchema } = require("../../utils/schemas/users");
@@ -15,6 +16,7 @@ const { createUserSchema } = require("../../utils/schemas/users");
 require("../../utils/auth/strategies/basic");
 require("../../utils/auth/strategies/jwtTwoFactor");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
+const jwtLogout = require("../../utils/auth/strategies/jwtLogout");
 const { response } = require("express");
 
 function authApi(app) {
@@ -22,9 +24,10 @@ function authApi(app) {
   app.use("/api/auth", router);
 
   const usersService = new UsersService();
+  const permissesService = new PermissesService();
 
   router.post("/sign-in", async (req, res, next) => {
-    passport.authenticate("basic", (error, user) => {
+    passport.authenticate("basic", async (error, user) => {
       try {
         if (error || !user) {
           next(boom.unauthorized());
@@ -35,6 +38,7 @@ function authApi(app) {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
           } else {
+            const permissions = await permissesService.getPermissesByRol(user);
             generateToken(req, res, next, user);
             const { _id: id, name, email, role } = user;
             const payload = {
@@ -42,6 +46,7 @@ function authApi(app) {
               name,
               email,
               role,
+              permissions,
             };
             const token = jwt.sign(payload, config.authJwtSecret, {
               expiresIn: "15m",
@@ -196,6 +201,15 @@ function authApi(app) {
       }
     }
   });
+
+  router.get(
+    "/logout",
+    passport.authenticate("jwtLogout", { session: false }),
+    function (req, res, next) {
+      req.logOut();
+      return res.redirect("/");
+    }
+  );
 }
 
 const generateToken = (req, res, next, user) => {
