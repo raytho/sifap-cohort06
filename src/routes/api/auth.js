@@ -17,7 +17,6 @@ require("../../utils/auth/strategies/jwtTwoFactor");
 require("../../utils/auth/strategies/jwtLogout");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
 
-
 function authApi(app) {
   const router = express.Router();
   app.use("/api/auth", router);
@@ -49,10 +48,17 @@ function authApi(app) {
     async (req, res, next) => {
       const { body: user } = req;
       try {
-        await usersService.createSuperAdminUser({ user });
-        res.status(201).json({
-          message: "User created",
-        });
+        const existingUser = await usersService.getUserByMail(user);
+        if (existingUser) {
+          res.status(201).json({
+            message: "Este correo ya está en uso, por favor intente con otro o reestableza su contraseña",
+          });
+        } else {
+          await usersService.createSuperAdminUser({ user });
+          res.status(200).json({
+            message: "User created",
+          });
+        }
       } catch (error) {
         next(error);
       }
@@ -111,8 +117,7 @@ function authApi(app) {
           const authorizedUser = twoFactorAuth.verify(secret, token);
           if (authorizedUser) {
             generateToken(req, res, next, user);
-          } 
-          else {
+          } else {
             next(boom.unauthorized());
           }
         }
@@ -122,16 +127,13 @@ function authApi(app) {
     })(req, res, next);
   });
 
-  router.get(
-    "/token",
-    async (req, res) => {
-      const secret = config.twoFactorSecret;
-      const token = twoFactorAuth.generateTotpToken(secret);
-      res.status(200).json({
-        message: token,
-      });
-    }
-  );
+  router.get("/token", async (req, res) => {
+    const secret = config.twoFactorSecret;
+    const token = twoFactorAuth.generateTotpToken(secret);
+    res.status(200).json({
+      message: token,
+    });
+  });
 
   router.post("/forgot", async (req, res, next) => {
     const email = req.body.email;
