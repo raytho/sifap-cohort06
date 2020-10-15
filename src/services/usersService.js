@@ -206,6 +206,11 @@ class UsersService {
     const user = await this.mysqlLib.getUserByToken(token);
     return user[0];
   }
+
+  async activeTwoFactorUserByID(isActive, user) {
+    const active = await this.mysqlLib.updateTwoFactorByUser(isActive, user);
+    return active.affectedRows;
+  }
 }
 
 module.exports = UsersService;
