@@ -16,6 +16,8 @@ const config = {
   mailProvider: process.env.MAIL_PROVIDER,
   mailAccount: process.env.MAIL_ACCOUNT,
   mailPassword: process.env.MAIL_PASSWORD,
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
 };
 
 module.exports = config;

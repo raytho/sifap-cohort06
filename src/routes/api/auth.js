@@ -236,7 +236,7 @@ function authApi(app) {
     }
   });
 
-  router.get(
+  router.post(
     "/logout",
     passport.authenticate("jwtLogout", { session: false }),
     function (req, res) {
@@ -257,7 +257,7 @@ const generateToken = (req, res, next, user) => {
         email,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
-        expiresIn: "24h",
+        expiresIn: "1m",
       });
       return res
         .status(200)
