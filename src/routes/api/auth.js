@@ -6,13 +6,14 @@ const crypto = require("crypto");
 
 const config = require("../../config");
 const UsersService = require("../../services/usersService");
-// const PermissesService = require("../../services/permissesService");
+const PermissesService = require("../../services/permissesService");
 const validationHandler = require("../../utils/middleware/validationHandler");
 
 const { createUserSchema } = require("../../utils/schemas/users");
 
 // Basic Strategy
 require("../../utils/auth/strategies/basic");
+require("../../utils/auth/strategies/jwt");
 require("../../utils/auth/strategies/jwtTwoFactor");
 require("../../utils/auth/strategies/jwtLogout");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
@@ -22,11 +23,11 @@ function authApi(app) {
   app.use("/api/auth", router);
 
   const usersService = new UsersService();
-  // const permissesService = new PermissesService();
 
   router.post("/sign-in", async (req, res, next) => {
     passport.authenticate("basic", async (error, user) => {
       try {
+        console.log(user);
         if (error || !user) {
           next(boom.unauthorized());
         } else {
@@ -51,7 +52,8 @@ function authApi(app) {
         const existingUser = await usersService.getUserByMail(user);
         if (existingUser) {
           res.status(200).json({
-            message: "Este correo ya está en uso, por favor intente con otro o reestableza su contraseña",
+            message:
+              "Este correo ya está en uso, por favor intente con otro o reestableza su contraseña",
           });
         } else {
           await usersService.createSuperAdminUser({ user });
@@ -123,6 +125,31 @@ function authApi(app) {
         }
       } catch (error) {
         next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.post("/two-factor-activate", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      const { isActive } = req.body;
+      if (error || !user) {
+        next(boom.unauthorized());
+      } else {
+        try {
+          const active = await usersService.activeTwoFactorUserByID(
+            isActive,
+            user
+          );
+          if (active) {
+            res
+              .status(200)
+              .json({ data: { message: "2FA is Activate" }, error: null });
+          } else {
+            res.status(500).json({ data: null, error: "Internal error" });
+          }
+        } catch (error) {
+          next(error);
+        }
       }
     })(req, res, next);
   });
@@ -251,10 +278,14 @@ const generateToken = (req, res, next, user) => {
     if (error) {
       next(error);
     } else {
-      const { userId, email, twoFactorActive } = user;
+      const permissesService = new PermissesService();
+      const permissions = await permissesService.getPermissesByRol(user);
+      const { userId, email, twoFactorActive, role } = user;
       const payload = {
         sub: userId,
         email,
+        role,
+        permissions,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "24h",
