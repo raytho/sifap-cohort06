@@ -394,11 +394,11 @@ function MysqlLib() {
         );
       });
     },
-    updateTwoFactorByUser(isActive, userEmail) {
+    updateTwoFactorByUser(isActive, user) {
       return new Promise(function (resolve, reject) {
         connection.query(
-          "UPDATE users SET twoFactorActive = ? WHERE email = ?",
-          [isActive, userEmail],
+          "UPDATE users SET twoFactorActive = ? WHERE userId = ?",
+          [isActive, user.userId],
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));

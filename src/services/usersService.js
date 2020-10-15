@@ -197,11 +197,8 @@ class UsersService {
     return user[0];
   }
 
-  async activeTwoFactorUserByID(isActive, userEmail) {
-    const active = await this.mysqlLib.updateTwoFactorByUser(
-      isActive,
-      userEmail
-    );
+  async activeTwoFactorUserByID(isActive, user) {
+    const active = await this.mysqlLib.updateTwoFactorByUser(isActive, user);
     return active.affectedRows;
   }
 }
