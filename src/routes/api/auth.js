@@ -27,7 +27,6 @@ function authApi(app) {
   router.post("/sign-in", async (req, res, next) => {
     passport.authenticate("basic", async (error, user) => {
       try {
-        console.log(user);
         if (error || !user) {
           next(boom.unauthorized());
         } else {
@@ -285,14 +284,13 @@ const generateToken = (req, res, next, user) => {
         sub: userId,
         email,
         role,
-        permissions,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "24h",
       });
       return res
         .status(200)
-        .json({ token, user: { userId, email, twoFactorActive } });
+        .json({ token, user: { userId, email, twoFactorActive, permissions } });
     }
   });
 };
