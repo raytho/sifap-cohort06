@@ -13,6 +13,7 @@ const { createUserSchema } = require("../../utils/schemas/users");
 
 // Basic Strategy
 require("../../utils/auth/strategies/basic");
+require("../../utils/auth/strategies/jwt");
 require("../../utils/auth/strategies/jwtTwoFactor");
 require("../../utils/auth/strategies/jwtLogout");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
@@ -26,6 +27,7 @@ function authApi(app) {
   router.post("/sign-in", async (req, res, next) => {
     passport.authenticate("basic", async (error, user) => {
       try {
+        console.log(user);
         if (error || !user) {
           next(boom.unauthorized());
         } else {
@@ -140,7 +142,9 @@ function authApi(app) {
           );
           console.log(active);
           if (active) {
-            res.status(200).json({ data: active, error: null });
+            res
+              .status(200)
+              .json({ data: { message: "2FA is Activate" }, error: null });
           } else {
             res.status(500).json({ data: null, error: "Internal error" });
           }

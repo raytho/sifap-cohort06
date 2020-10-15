@@ -394,6 +394,21 @@ function MysqlLib() {
         );
       });
     },
+    updateTwoFactorByUser(isActive, userEmail) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "UPDATE users SET twoFactorActive = ? WHERE email = ?",
+          [isActive, userEmail],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
   };
 }
 
