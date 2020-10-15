@@ -114,7 +114,7 @@ function authApi(app) {
         } else {
           const { token } = req.body;
           const secret = config.twoFactorSecret;
-          const authorizedUser = twoFactorAuth.verify(secret, token);
+          const authorizedUser = twoFactorAuth.verifyMailToken(secret, token);
           if (authorizedUser) {
             generateToken(req, res, next, user);
           } else {
@@ -257,7 +257,7 @@ const generateToken = (req, res, next, user) => {
         email,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
-        expiresIn: "15m",
+        expiresIn: "24h",
       });
       return res
         .status(200)
@@ -277,7 +277,7 @@ const generateTempToken = (req, res, next, user) => {
         email,
       };
       const token = jwt.sign(payload, config.authTwoFactorJwtSecret, {
-        expiresIn: "5m",
+        expiresIn: "12m",
       });
       return res
         .status(200)

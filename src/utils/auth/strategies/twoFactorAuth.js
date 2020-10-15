@@ -31,8 +31,18 @@ const verify = (secret, token) => {
   });
 };
 
+const verifyMailToken = (secret, token) => {
+  return speakeasy.totp.verify({
+    secret: secret,
+    encoding: "ascii",
+    token: token,
+    window: 10,
+  });
+};
+
 module.exports = {
   generateQr,
   generateTotpToken,
   verify,
+  verifyMailToken,
 };
