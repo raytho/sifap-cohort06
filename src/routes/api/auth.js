@@ -257,7 +257,7 @@ const generateToken = (req, res, next, user) => {
         email,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
-        expiresIn: "1m",
+        expiresIn: "24h",
       });
       return res
         .status(200)
