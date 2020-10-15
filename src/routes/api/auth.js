@@ -50,12 +50,12 @@ function authApi(app) {
       try {
         const existingUser = await usersService.getUserByMail(user);
         if (existingUser) {
-          res.status(201).json({
+          res.status(200).json({
             message: "Este correo ya está en uso, por favor intente con otro o reestableza su contraseña",
           });
         } else {
           await usersService.createSuperAdminUser({ user });
-          res.status(200).json({
+          res.status(201).json({
             message: "User created",
           });
         }
