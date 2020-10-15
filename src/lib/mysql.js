@@ -271,6 +271,7 @@ function MysqlLib() {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         connection.query("SELECT * FROM users WHERE email = ?", mail, function (
+          err,
           rows
         ) {
           if (rows === undefined) {
