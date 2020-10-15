@@ -166,9 +166,24 @@ function MysqlLib() {
       });
     },
 
+    getInvitedUserByMail(email) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT * FROM users_invitation WHERE email = ?",
+          email,
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
     removeInvitedUserByID(id) {
       return new Promise(function (resolve, reject) {
-        // eslint-disable-next-line quotes
         connection.query(
           "DELETE FROM users_invitation WHERE userId = ?",
           id,
@@ -210,10 +225,23 @@ function MysqlLib() {
       });
     },
 
-    getAllUsers: function () {
+    getAllUsers() {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         connection.query("SELECT * FROM users", function (err, rows) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    },
+
+    getFirstUser() {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        connection.query("SELECT * FROM test_table LIMIT 1", function (err, rows) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
@@ -243,7 +271,6 @@ function MysqlLib() {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         connection.query("SELECT * FROM users WHERE email = ?", mail, function (
-          err,
           rows
         ) {
           if (rows === undefined) {

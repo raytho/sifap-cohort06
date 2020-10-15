@@ -73,6 +73,11 @@ class UsersService {
     return users;
   }
 
+  async getFirstUser() {
+    const users = await this.mysqlLib.getFirstUser();
+    return users.length;
+  }
+
   async getUserById(id) {
     const user = await this.mysqlLib.getUserById(id);
     return user;
@@ -175,6 +180,11 @@ class UsersService {
 
   async getInvitedUserById(id) {
     const user = await this.mysqlLib.getInvitedUserById(id);
+    return user;
+  }
+
+  async getInvitedUserByMail( { email } ) {
+    const user = await this.mysqlLib.getInvitedUserByMail(email);
     return user;
   }
 
