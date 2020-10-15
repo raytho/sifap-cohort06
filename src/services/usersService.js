@@ -2,6 +2,7 @@ const MysqlLib = require("../lib/mysql");
 const { nanoid } = require("nanoid");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const config = require("../config");
 
 class UsersService {
   constructor() {
@@ -9,12 +10,14 @@ class UsersService {
   }
 
   async createSuperAdminUser({ user }) {
-    const { email, password, country, typeEmail } = user;
+    const { firstName, fiscalId, email, password, country, typeEmail } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const role = "SA";
+    const role = "Administrador";
     const userId = nanoid(4);
 
     const response = await this.mysqlLib.createSuperAdminUser({
+      firstName,
+      fiscalId,
       userId,
       email,
       password: hashedPassword,
@@ -90,15 +93,15 @@ class UsersService {
   }
 
   async sendResetLink(request) {
-    var smtpTransport = nodemailer.createTransport({
-      service: "gmail",
+    const smtpTransport = nodemailer.createTransport({
+      service: config.mailProvider,
       auth: {
-        user: "sifapcohot06@gmail.com",
-        pass: "Platzinuncaparesdeaprender$",
+        user: config.mailAccount,
+        pass: config.mailPassword,
       },
     });
 
-    var mailOptions = {
+    const mailOptions = {
       to: request.email,
       from: "passwordreset@demo.com",
       subject: "Sifap Password Reset",
@@ -113,6 +116,35 @@ class UsersService {
         console.log(error);
       } else {
         console.log("Email sent: " + info.response);
+        return info.response;
+      }
+    });
+  }
+
+  async sendTokenToMail(email, token) {
+    const smtpTransport = nodemailer.createTransport({
+      service: config.mailProvider,
+      auth: {
+        user: config.mailAccount,
+        pass: config.mailPassword,
+      },
+    });
+
+    const mailOptions = {
+      to: email,
+      from: "passwordreset@demo.com",
+      subject: "Sifap verification code",
+      text: `Hello,
+      For security purposes, you must enter the code below to verify your account. The code will only work for 5 minutes and if you request a new code, this code will stop working.
+      Account verification code:
+      ${token}
+      `,
+    };
+
+    smtpTransport.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.error(error);
+      } else {
         return info.response;
       }
     });

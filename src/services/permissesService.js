@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 const MysqlLib = require("../lib/mysql");
 
 class PermissesService {

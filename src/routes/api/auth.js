@@ -4,10 +4,9 @@ const boom = require("@hapi/boom");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-// const ApiKeysService = require("../../services/apiKeys");
 const config = require("../../config");
 const UsersService = require("../../services/usersService");
-const PermissesService = require("../../services/permissesService");
+// const PermissesService = require("../../services/permissesService");
 const validationHandler = require("../../utils/middleware/validationHandler");
 
 const { createUserSchema } = require("../../utils/schemas/users");
@@ -15,43 +14,26 @@ const { createUserSchema } = require("../../utils/schemas/users");
 // Basic Strategy
 require("../../utils/auth/strategies/basic");
 require("../../utils/auth/strategies/jwtTwoFactor");
+require("../../utils/auth/strategies/jwtLogout");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
-const jwtLogout = require("../../utils/auth/strategies/jwtLogout");
-const { response } = require("express");
 
 function authApi(app) {
   const router = express.Router();
   app.use("/api/auth", router);
 
   const usersService = new UsersService();
-  const permissesService = new PermissesService();
+  // const permissesService = new PermissesService();
 
   router.post("/sign-in", async (req, res, next) => {
     passport.authenticate("basic", async (error, user) => {
       try {
         if (error || !user) {
           next(boom.unauthorized());
-        }
-        if (user.twoFactorActive) {
-          generateTempToken(req, res, next, user);
         } else {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
           } else {
-            const permissions = await permissesService.getPermissesByRol(user);
-            const { _id: id, name, email, role } = user;
-            const payload = {
-              sub: id,
-              name,
-              email,
-              role,
-              permissions,
-            };
-
-            const token = jwt.sign(payload, config.authJwtSecret, {
-              expiresIn: "15m",
-            });
-            return res.status(200).json({ token, user: { id, name, email } });
+            generateToken(req, res, next, user);
           }
         }
       } catch (error) {
@@ -64,43 +46,94 @@ function authApi(app) {
     "/sign-up",
     validationHandler(createUserSchema),
     async (req, res, next) => {
-      // res.header("Access-Control-Allow-Origin", "*");
       const { body: user } = req;
       try {
-        await usersService.createSuperAdminUser({ user });
-        res.status(201).json({
-          message: "User created",
-        });
+        const existingUser = await usersService.getUserByMail(user);
+        if (existingUser) {
+          res.status(200).json({
+            message: "Este correo ya está en uso, por favor intente con otro o reestableza su contraseña",
+          });
+        } else {
+          await usersService.createSuperAdminUser({ user });
+          res.status(201).json({
+            message: "User created",
+          });
+        }
       } catch (error) {
         next(error);
       }
     }
   );
 
-  router.get(
-    "/two-factor",
-    passport.authenticate("jwtTwoFactor", { session: false }),
-    async (req, res) => {
-      res.status(200).send({
-        data: "test",
-      });
-    }
-  );
-
-  router.post(
-    "/two-factor",
-    passport.authenticate("jwtTwoFactor", { session: false }),
-    async (req, res, next) => {
-      const { token, userId, email } = req.body;
-      const secret = config.twoFactorSecret;
-      const authorizedUser = twoFactorAuth.verify(secret, token);
-      if (authorizedUser) {
-        generateToken(req, res, next, { userId, email });
-      } else {
-        next(boom.unauthorized());
+  router.post("/two-factor", async (req, res, next) => {
+    passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
+      try {
+        if (error || !user) {
+          next(boom.unauthorized());
+        } else {
+          const secret = config.twoFactorSecret;
+          const { token } = req.body;
+          const authorizedUser = twoFactorAuth.verify(secret, token);
+          if (authorizedUser) {
+            generateToken(req, res, next, user);
+          } else {
+            next(boom.unauthorized());
+          }
+        }
+      } catch (error) {
+        next(error);
       }
-    }
-  );
+    })(req, res, next);
+  });
+
+  router.post("/send-mail-code", async (req, res, next) => {
+    passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
+      try {
+        if (error || !user) {
+          next(boom.unauthorized());
+        } else {
+          const secret = config.twoFactorSecret;
+          const token = twoFactorAuth.generateTotpToken(secret);
+          usersService.sendTokenToMail(user.email, token);
+          return res.status(200).json({
+            error: null,
+            message: "Código enviado al correo",
+          });
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.post("/two-factor-mail", async (req, res, next) => {
+    passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
+      try {
+        if (error || !user) {
+          next(boom.unauthorized());
+        } else {
+          const { token } = req.body;
+          const secret = config.twoFactorSecret;
+          const authorizedUser = twoFactorAuth.verifyMailToken(secret, token);
+          if (authorizedUser) {
+            generateToken(req, res, next, user);
+          } else {
+            next(boom.unauthorized());
+          }
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.get("/token", async (req, res) => {
+    const secret = config.twoFactorSecret;
+    const token = twoFactorAuth.generateTotpToken(secret);
+    res.status(200).json({
+      message: token,
+    });
+  });
 
   router.post("/forgot", async (req, res, next) => {
     const email = req.body.email;
@@ -108,6 +141,7 @@ function authApi(app) {
       const user = await usersService.getUserByMail({ email });
 
       if (!user) {
+        // Mejor sería next(boom.unauthorized()); para no enviar indicios del mail
         res.status(404).json({
           error: "No account with that email address exists.",
           data: null,
@@ -135,7 +169,7 @@ function authApi(app) {
         }
       }
     } else {
-      response.status(200);
+      next(boom.unauthorized());
     }
   });
 
@@ -202,10 +236,10 @@ function authApi(app) {
     }
   });
 
-  router.get(
+  router.post(
     "/logout",
     passport.authenticate("jwtLogout", { session: false }),
-    function (req, res, next) {
+    function (req, res) {
       req.logOut();
       return res.redirect("/");
     }
@@ -223,7 +257,7 @@ const generateToken = (req, res, next, user) => {
         email,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
-        expiresIn: "15m",
+        expiresIn: "24h",
       });
       return res
         .status(200)
@@ -243,7 +277,7 @@ const generateTempToken = (req, res, next, user) => {
         email,
       };
       const token = jwt.sign(payload, config.authTwoFactorJwtSecret, {
-        expiresIn: "5m",
+        expiresIn: "12m",
       });
       return res
         .status(200)

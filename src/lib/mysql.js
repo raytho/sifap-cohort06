@@ -1,6 +1,5 @@
 const mysql = require("mysql");
 const config = require("../config");
-// const { connect } = require("../routes/api");
 
 const DB_HOST = config.dbHost;
 const DB_USER = config.dbUser;
@@ -8,41 +7,41 @@ const DB_PASSWORD = config.dbPassword;
 const DB_NAME = config.dbName;
 const DB_PORT = config.dbPort;
 
-function MysqlLib() {
-  const dbconfig = {
-    host: DB_HOST,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
-    port: DB_PORT,
-  };
+const dbconfig = {
+  host: DB_HOST,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_NAME,
+  port: DB_PORT,
+};
 
-  let connection;
+let connection;
 
-  function handleCon() {
-    connection = mysql.createConnection(dbconfig);
+function handleCon() {
+  connection = mysql.createConnection(dbconfig);
 
-    connection.connect((err) => {
-      if (err) {
-        console.error("[db err]", err);
-        setTimeout(handleCon, 2000);
-      } else {
-        console.log("DB Connected!");
-      }
-    });
-
-    connection.on("error", (err) => {
+  connection.connect((err) => {
+    if (err) {
       console.error("[db err]", err);
-      if (err.code === "PROTOCOL_CONNECTION_LOST") {
-        this.handleCon();
-      } else {
-        throw err;
-      }
-    });
-  }
+      setTimeout(handleCon, 2000);
+    } else {
+      console.log("DB Connected!");
+    }
+  });
 
-  handleCon();
+  connection.on("error", (err) => {
+    console.error("[db err]", err);
+    if (err.code === "PROTOCOL_CONNECTION_LOST") {
+      this.handleCon();
+    } else {
+      throw err;
+    }
+  });
+}
 
+handleCon();
+
+function MysqlLib() {
   return {
     createRole(newRole) {
       return new Promise((resolve, reject) => {
@@ -305,9 +304,8 @@ function MysqlLib() {
 
     updatePasswordUserByID(id, newPassword) {
       return new Promise(function (resolve, reject) {
-        // eslint-disable-next-line quotes
-        client.query(
-          `UPDATE users SET password = ? WHERE email = ?`,
+        connection.query(
+          "UPDATE users SET password = ? WHERE email = ?",
           [newPassword, id],
           function (err, rows) {
             if (rows === undefined) {
