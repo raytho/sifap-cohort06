@@ -3,6 +3,8 @@
 // Modules
 const express = require("express");
 const helmet = require("helmet");
+const cors = require("cors");
+require("dotenv").config();
 // const config = require("./config");
 const notFoundHandler = require("./utils/middleware/notFoundHandler");
 const authApiRouter = require("./routes/api/auth");
@@ -11,8 +13,6 @@ const countriesApi = require("./routes/api/countries");
 const home = require("./routes/views/home");
 const userViewRouter = require("./routes/views/user");
 const superAdminRouter = require("./routes/views/superAdmin");
-const cors = require("cors");
-require("dotenv").config();
 
 // App
 const app = express();
