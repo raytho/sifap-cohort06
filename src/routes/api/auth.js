@@ -51,7 +51,7 @@ function authApi(app) {
       // const checkInvitedUser = await usersService.getInvitedUserByMail(user);
       // if (!checkFirstUser && !checkInvitedUser) {
       //   console.log("llegué acá");
-      // } 
+      // }
       try {
         const existingUser = await usersService.getUserByMail(user);
         if (existingUser) {
@@ -267,14 +267,12 @@ function authApi(app) {
     }
   });
 
-  router.get(
-    "/logout",
-    passport.authenticate("jwtLogout", { session: false }),
-    function (req, res) {
+  router.get("/logout", function (req, res, next) {
+    passport.authenticate("jwt", { session: false }, (error, user) => {
       req.logOut();
       return res.redirect("/");
-    }
-  );
+    })(req, res, next);
+  });
 }
 
 const generateToken = (req, res, next, user) => {
