@@ -270,6 +270,7 @@ function authApi(app) {
   });
 
   router.get("/logout", function (req, res, next) {
+    // eslint-disable-next-line no-unused-vars
     passport.authenticate("jwt", { session: false }, (error, user) => {
       req.logOut();
       return res.redirect("/");
