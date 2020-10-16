@@ -28,7 +28,9 @@ function authApi(app) {
     passport.authenticate("basic", async (error, user) => {
       try {
         if (error || !user) {
-          next(boom.unauthorized());
+          res.status(500).json({
+            message: "No autorizado",
+          });
         } else {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
@@ -47,6 +49,11 @@ function authApi(app) {
     validationHandler(createUserSchema),
     async (req, res, next) => {
       const { body: user } = req;
+      // const checkFirstUser = await usersService.getFirstUser();
+      // const checkInvitedUser = await usersService.getInvitedUserByMail(user);
+      // if (!checkFirstUser && !checkInvitedUser) {
+      //   console.log("llegué acá");
+      // } 
       try {
         const existingUser = await usersService.getUserByMail(user);
         if (existingUser) {
@@ -262,7 +269,7 @@ function authApi(app) {
     }
   });
 
-  router.post(
+  router.get(
     "/logout",
     passport.authenticate("jwtLogout", { session: false }),
     function (req, res) {
