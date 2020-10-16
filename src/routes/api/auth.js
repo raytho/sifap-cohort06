@@ -144,16 +144,19 @@ function authApi(app) {
         next(boom.unauthorized());
       } else {
         try {
-          if (!(isActive === null || isActive === "")) {
+          if (
+            !(isActive === null || isActive === "" || isActive === undefined)
+          ) {
             const active = await usersService.activeTwoFactorUserByID(
               isActive,
               user
             );
 
             if (active) {
-              res
-                .status(200)
-                .json({ data: { message: "2FA is Activate" }, error: null });
+              res.status(200).json({
+                data: { message: "2FA value has change" },
+                error: null,
+              });
             } else {
               res.status(500).json({
                 message: "No autorizado",
