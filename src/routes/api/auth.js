@@ -137,9 +137,7 @@ function authApi(app) {
 
   router.post("/two-factor-activate", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
-      console.log("two-factor-activate ====>", req.body);
       const { isActive } = req.body;
-      console.log("two-factor-activate ====>", isActive);
       if (error || !user) {
         next(boom.unauthorized());
       } else {
@@ -298,6 +296,7 @@ const generateToken = (req, res, next, user) => {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
       const { userId, email, twoFactorActive, role } = user;
+      const twoFactorToNumber = twoFactorActive == 1 ? true : false;
       const payload = {
         sub: userId,
         email,
@@ -308,7 +307,7 @@ const generateToken = (req, res, next, user) => {
       });
       return res
         .status(200)
-        .json({ token, user: { userId, email, twoFactorActive, permissions } });
+        .json({ token, user: { userId, email, twoFactorActive: twoFactorToNumber, permissions } });
     }
   });
 };
@@ -319,6 +318,7 @@ const generateTempToken = (req, res, next, user) => {
       next(error);
     } else {
       const { userId, email, twoFactorActive } = user;
+      const twoFactorToNumber = twoFactorActive == 1 ? true : false;
       const payload = {
         sub: userId,
         email,
@@ -328,7 +328,7 @@ const generateTempToken = (req, res, next, user) => {
       });
       return res
         .status(200)
-        .json({ token, user: { userId, email, twoFactorActive } });
+        .json({ token, user: { userId, email, twoFactorActive: twoFactorToNumber } });
     }
   });
 };
