@@ -142,16 +142,23 @@ function authApi(app) {
         next(boom.unauthorized());
       } else {
         try {
-          const active = await usersService.activeTwoFactorUserByID(
-            isActive,
-            user
-          );
-          if (active) {
-            res
-              .status(200)
-              .json({ data: { message: "2FA is Activate" }, error: null });
+          if (isActive) {
+            const active = await usersService.activeTwoFactorUserByID(
+              isActive,
+              user
+            );
+
+            if (active) {
+              res
+                .status(200)
+                .json({ data: { message: "2FA is Activate" }, error: null });
+            } else {
+              res.status(500).json({
+                message: "No autorizado",
+              });
+            }
           } else {
-            res.status(500).json({ data: null, error: "Internal error" });
+            res.status(200).json({ data: null, error: "Needed value" });
           }
         } catch (error) {
           next(error);
