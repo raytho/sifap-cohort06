@@ -291,14 +291,13 @@ const generateToken = (req, res, next, user) => {
         sub: userId,
         email,
         role,
-        permissions,
       };
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "24h",
       });
       return res
         .status(200)
-        .json({ token, user: { userId, email, twoFactorActive } });
+        .json({ token, user: { userId, email, twoFactorActive, permissions } });
     }
   });
 };
