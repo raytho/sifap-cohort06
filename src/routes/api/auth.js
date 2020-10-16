@@ -137,7 +137,9 @@ function authApi(app) {
 
   router.post("/two-factor-activate", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
+      console.log("two-factor-activate ====>", req.body);
       const { isActive } = req.body;
+      console.log("two-factor-activate ====>", isActive);
       if (error || !user) {
         next(boom.unauthorized());
       } else {
