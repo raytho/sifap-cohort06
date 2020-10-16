@@ -144,7 +144,7 @@ function authApi(app) {
         next(boom.unauthorized());
       } else {
         try {
-          if (isActive) {
+          if (!(isActive === null || isActive === "")) {
             const active = await usersService.activeTwoFactorUserByID(
               isActive,
               user
