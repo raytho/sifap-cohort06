@@ -28,7 +28,9 @@ function authApi(app) {
     passport.authenticate("basic", async (error, user) => {
       try {
         if (error || !user) {
-          next(boom.unauthorized());
+          res.status(500).json({
+            message: "No autorizado",
+          });
         } else {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
