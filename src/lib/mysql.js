@@ -241,7 +241,10 @@ function MysqlLib() {
     getFirstUser() {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
-        connection.query("SELECT * FROM test_table LIMIT 1", function (err, rows) {
+        connection.query("SELECT * FROM test_table LIMIT 1", function (
+          err,
+          rows
+        ) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
@@ -409,7 +412,7 @@ function MysqlLib() {
     getPermissesByRol(rolId) {
       return new Promise((resolve, reject) => {
         connection.query(
-          "SELECT iduserPermissions, description FROM userPermissions WHERE rolId = ?",
+          "SELECT iduserPermissions, name FROM userPermissions WHERE rolId = ?",
           [rolId],
           (err, res) => {
             if (err) {
