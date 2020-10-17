@@ -24,15 +24,16 @@ const FormLogin = (props) => {
       modalTFA,
       handleModalClose,
       loader,
+      credentials
       // handleModalOpen
    } = props;
 
    const [showPass, setShowPass] = useState(false)
-
    return (
       <div className='Login__form'>
          <form onSubmit={handleSubmit}>
             <h2>Inicio de sesión</h2>
+            {credentials && <p className='alert-form'>Correo o contraseña incorrectos</p>}
             <label htmlFor='email' > Correo: <i>*</i>
                <input
                   type='email'
@@ -42,7 +43,7 @@ const FormLogin = (props) => {
                   onChange={handleChangeInput}
                   disabled={!loader}
                />
-               {emailValidate && <p className='alert-form'>Formato de correo ejemplo@dominio.com</p>}
+               {emailValidate && <p className='alert-form'>Este campo es obligtadorio</p>}
             </label>
             <label htmlFor='password'>Contraseña: <i>*</i>
                <div className='SignUp__password'>
@@ -64,20 +65,18 @@ const FormLogin = (props) => {
                   </button>
                </div>
                {passwordValidate &&
-                  <p className='alert-form'>
-                        Incluya uno $@$!%*?&, un número, una letra mayúscula, una minúscula y de 8 a 15 caracteres
-                  </p>
+                  <p className='alert-form'>Este campo es obligtadorio</p>
                }
 
             </label>
 
             <div className='Login__buttons'>
-               <button type='button' disabled={!loader}>Iniciar con Google</button>
+               {/* <button type='button' disabled={!loader}>Iniciar con Google</button> */}
                <button type='submit' disabled={!loader}>Iniciar</button>
             </div>
 
             <div className='Login__forgot'>
-               <p className='Login__redirect'> <Link to='/'>¿Olvidaste tu contraseña? </Link></p>
+               <p className='Login__redirect'> <Link to='/resetpassword'>¿Olvidaste tu contraseña? </Link></p>
             <p className='Login__redirect'>¿Aún no tienes cuenta? <span> <Link to='/Register'>Crear cuenta</Link> </span> </p>
             </div>
          </form>
@@ -98,6 +97,7 @@ FormLogin.propTypes = {
    emailValidate: PropTypes.bool,
    passwordValidate: PropTypes.bool,
    loader: PropTypes.bool,
+   credentials: PropTypes.bool,
    form: PropTypes.object
 }
 

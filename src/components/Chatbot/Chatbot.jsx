@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import '../../assets/styles/components/Chatbot/Chatbot.scss';
 
 const Chatbot = () => {
-   const [openBot, setOpenBot] = useState(false);
+   // const [openBot, setOpenBot] = useState(false);
    const [openMessage, setOpenMessage] = useState(false);
    let idSetTimeOut;
    const handleMessage = () => {
@@ -16,19 +16,17 @@ const Chatbot = () => {
    }
    useEffect(() => {
       idSetTimeOut = setTimeout(() => handleMessage(), 2000);
-      window.console.log(idSetTimeOut);
-
       return () => clearTimeout(idSetTimeOut)
    }, [])
-   const handleChatbot = () => {
-      if(openBot) {
-         setOpenBot(false);
-      } else {
-         setOpenBot(true);
-         setOpenMessage(false)
-         clearTimeout(idSetTimeOut)
-      }
-   }
+   // const handleChatbot = () => {
+   //    if(openBot) {
+   //       setOpenBot(false);
+   //    } else {
+   //       setOpenBot(true);
+   //       setOpenMessage(false)
+   //       clearTimeout(idSetTimeOut)
+   //    }
+   // }
    // const buttonIfrem = document.getElementsByTagName('iframe');
    // window.onload = () => window.console.log(buttonIfrem[0]?.contentWindow.getElementsByTagName('button'),'iframe');
    return  (
@@ -46,14 +44,14 @@ const Chatbot = () => {
                   </div>
                   : null
             }
-            <button
+            {/* <button
                className='Chatbot__open'
                type='button' onClick={handleChatbot}
             >
                <img  src='https://i.imgur.com/FjzAcjI.png' alt='Logo'/>
                <p>Vinzea</p>
-            </button>
-            {
+            </button> */}
+            {/* {
                openBot
                   ? <div className='Chatbot__container'>
                      <button className='Chatbot__close' type='button' onClick={handleChatbot}>X</button>
@@ -64,7 +62,7 @@ const Chatbot = () => {
                      />
                   </div>
                : null
-            }
+            } */}
          </>
          ,
          document.getElementById('chatbot')

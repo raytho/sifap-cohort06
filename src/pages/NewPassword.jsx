@@ -1,25 +1,21 @@
-/* eslint-disable react/forbid-prop-types */
-/* eslint-disable react/require-default-props */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import React from 'react';
 import Header from '../components/Header/Header';
 import AsideLogo from '../components/AsideLogo';
 import LoginSlides from '../components/FormLogin/LoginSlidees';
-import FormResetPassContainer from '../components/FormResetPass/FormResetPassContainer';
+import FormNewPassContainer from '../components/FormResetPass/FormNewPassContainer';
 
 import '../assets/styles/components/ResetPassword/ResetPassword.scss';
 import '../assets/styles/utils/Alerts.scss';
 
 
-const ResetPassword = () => {
+const NewPassword = () => {
    return (
       <>
          <Header />
          <div className="ResetPass__container">
             <div className="ResetPass__aside">
                <AsideLogo SignUpLogo />
-               <FormResetPassContainer />
+               <FormNewPassContainer />
             </div>
                <LoginSlides/>
          </div>
@@ -27,4 +23,4 @@ const ResetPassword = () => {
    )
 }
 
-export default ResetPassword;
+export default NewPassword;

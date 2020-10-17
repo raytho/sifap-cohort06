@@ -18,7 +18,7 @@ const AsideLogo = ({ NavLogo, SignUpLogo }) => {
    <div className={`Aside__logo ${asideLogoClass}`}>
       <div>
          <h1>
-            <img src='https://i.imgur.com/FjzAcjI.png' alt='Logo' />
+            <img src='https://i.imgur.com/FjzAcjI.png' alt='Logo Sifap' />
          </h1>
       </div>
    </div>

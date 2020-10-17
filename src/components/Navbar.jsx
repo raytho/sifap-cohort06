@@ -53,7 +53,6 @@ const Navbar = () => {
             setElement(6);
             break;
          default:
-            document.getElementById(`item-functionality-${1}`).classList.add('isSelect');
             break;
       }
    }

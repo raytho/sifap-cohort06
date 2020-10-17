@@ -13,10 +13,12 @@ import RoleManageContainer from '../components/RoleManage/RoleManage/RoleManageC
 import ManageCFiscales from '../components/ManageCFiscales/ManageCFiscales';
 // import DelegateSuperContainer from '../components/DelegateSuper/DelegateSuperContainer';
 import RoleDetailContainer from '../components/RoleManage/RoleDetail/RoleDetailContainer';
-import Profile from '../components/Profile/Profile';
+import ProfileContainer from '../components/Profile/ProfileContainer';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
-import TFAutenthication from '../components/TFAutenthication/TFAutenthication';
+import ResetPassword from '../pages/ResetPassword';
+import NewPassword from '../pages/NewPassword';
+import TFAuthentication from '../components/TFAutenthication/TFAuthentication';
 
 import Chatbot from '../components/Chatbot/Chatbot';
 
@@ -31,7 +33,6 @@ const App = () => {
       <Chatbot />
       <BrowserRouter>
          <Switch>
-
             {
                isAuth
                   ? (
@@ -44,9 +45,9 @@ const App = () => {
                            <Route exact path='/role-manage' component={RoleManageContainer} />
                            <Route exact path='/role-detail/:id' component={RoleDetailContainer} />
                            <Route exact path='/c-fiscales' component={ManageCFiscales} />
+                           <Route exact path='/profilecontainer' component={ProfileContainer} />
                            {/* <Route exact path='/delegate-super' component={DelegateSuperContainer} /> */}
                         </Layout>
-                        <Route exact path='/profile' component={Profile} />
                         {/* Problema con este redirect, lo hace desde cualquiera ruta */}
                         {/* <Redirect from='/register' to='/' push/> */}
                      </>
@@ -55,7 +56,9 @@ const App = () => {
                         <Redirect from='/' to='/login' />
                         <Route exact path='/register' component={Register} />
                         <Route exact path='/login' component={Login} />
-                        <Route exact path='/tfautenthication' component={TFAutenthication} />
+                        <Route exact path='/tfauthentication' component={TFAuthentication} />
+                        <Route exact path='/resetpassword' component={ResetPassword} />
+                        <Route exact path='/newpassword' component={NewPassword} />
                      </>
                   )
             }

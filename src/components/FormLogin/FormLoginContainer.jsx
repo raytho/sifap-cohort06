@@ -8,20 +8,18 @@ import FormLogin from './FormLogin';
 
 const LoginContainer = () => {
 
-   const LogExEmail = /^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
-
-   const LogExPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
    const [form, setValues] = useState({
       email: '',
       password: '',
    });
    const history = useHistory();
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
-   const { activateAuth, getUser } = useContext(Context)
+   const { activateAuth, setUser, activeTFAToken } = useContext(Context)
    const [emailValidate, setEmailValidate] = useState(false);
    const [passwordValidate, setPasswordValidate] = useState(false);
    const [loader, setLoader] = useState(true);
    const [modalTFA, setModalTFA] = useState(false);
+   const [credentials, setCredentials] = useState(false)
    const dataLogin = btoa(`${form.email}:${form.password}`);
 
    const handleChangeInput = e => {
@@ -30,19 +28,17 @@ const LoginContainer = () => {
          [e.target.name]: e.target.value
       })
    }
-
    const validateForm = () => {
       let email;
       let password;
 
-      if (LogExEmail.test(form.email)) {
+      if (Object.keys(form.email).length > 0) {
          email = true;
          setEmailValidate(false);
       } else {
          setEmailValidate(true);
       }
-      if (true) {
-         // LogExPassword.test(form.password)
+      if (Object.keys(form.password).length > 0) {
          password = true;
          setPasswordValidate(false);
       } else {
@@ -74,30 +70,30 @@ const LoginContainer = () => {
                      'Authorization': `Basic ${dataLogin}`,
                   },
                }).then(async response => {
+                  if(response.status === 500) {
+                     setLoader(true);
+                     setCredentials(true)
+                  }
                   const { token, user } = await response.json();
-                  window.console.log(user.twoFactorActive)
                   if (loader) {
                      if (user.twoFactorActive) {
-                        window.console.log(token);
-                        handleModalOpen()
+                        activeTFAToken(token);
+                        handleModalOpen();
                      } else {
-                        window.console.log(token);
                         activateAuth(token);
-                        getUser(user)
+                        setUser(JSON.stringify(user));
                         history.push('/bill')
                      }
                   }
-               }).catch(error => console.error(error))
+               }).catch(error => window.console.error(error));
             } catch (error) {
                window.console.log(error)
             }
          }
          setLoader(false);
-         console.log(loader, 'out')
          postData();
       }
    }
-
 
    return (
       <FormLogin
@@ -110,6 +106,7 @@ const LoginContainer = () => {
          emailValidate={emailValidate}
          passwordValidate={passwordValidate}
          loader={loader}
+         credentials={credentials}
       />
    )
 }

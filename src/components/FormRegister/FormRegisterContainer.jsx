@@ -1,30 +1,34 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable consistent-return */
-import React, { useState, useContext } from 'react'
-import { Context } from '../../Context';
+import React, { useState, useEffect } from 'react'
+import { useHistory } from "react-router-dom";
 
 import FormRegister from './FormRegister'
 
-const SignUpContainer = ({ history }) => {
+const SignUpContainer = () => {
 
    const RegExEmail = /^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
    const RegExPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
    const [form, setValues] = useState({
-      name: '',
-      identifier: '',
+      firstName: '',
+      fiscalId: '',
       email: '',
       password: '',
       passwordVerify: '',
       country: '',
    });
+   const history = useHistory()
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
-   const { activateAuth } = useContext(Context)
+   const controller = new AbortController();
+   const [countries, setCountries] = useState([])
    const [emailValidate, setEmailValidate] = useState(false);
    const [passwordValidate, setPasswordValidate] = useState(false);
    const [countryValidate, setCountryValidate] = useState(false);
    const [nameValidate, setNameValidate] = useState(false);
-   const [identifierValidate, setIdentifierValidate] = useState(false);
+   const [fiscalIdValidate, setFiscalIdValidate] = useState(false);
    const [passwordVerifyValidate, setPasswordVerifyValidate] = useState(false);
+   const [emailUsed, setEmailUsed] = useState(false);
+   const [modalConfirm, setModalConfirm] = useState(false)
    const handleChangeInput = e => {
       setValues({
          ...form,
@@ -34,7 +38,7 @@ const SignUpContainer = ({ history }) => {
    const validateForm = () => {
       let email;
       let name;
-      let identifier;
+      let fiscalId;
       let password;
       let passwordVerify;
       let country;
@@ -45,17 +49,17 @@ const SignUpContainer = ({ history }) => {
       } else {
          setEmailValidate(true);
       }
-      if (Object.keys(form.name).length > 3 ) {
+      if (Object.keys(form.firstName).length > 3 ) {
          name = true;
          setNameValidate(false);
       } else {
          setNameValidate(true);
       }
-      if (Object.keys(form.identifier).length > 6 ) {
-         identifier = true;
-         setIdentifierValidate(false);
+      if (Object.keys(form.fiscalId).length > 5 ) {
+         fiscalId = true;
+         setFiscalIdValidate(false);
       } else {
-         setIdentifierValidate(true);
+         setFiscalIdValidate(true);
       }
       if (RegExPassword.test(form.password)) {
          password = true;
@@ -76,7 +80,7 @@ const SignUpContainer = ({ history }) => {
          setCountryValidate(true);
       }
 
-      if(email && password && country && name && identifier && passwordVerify) {
+      if(email && password && country && name && fiscalId && passwordVerify) {
          return true
       }
    }
@@ -92,11 +96,13 @@ const SignUpContainer = ({ history }) => {
                      'Content-Type': 'application/json',
                   },
                   body: JSON.stringify(form)
-               }).then(response => {
-                  window.console.log(response.message);
-                  activateAuth()
-                  history.push('/')
-               })
+               }).then(async response => {
+                  if (response.status === 200) {
+                     setEmailUsed(true)
+                  } else if (response.status === 201) {
+                     setModalConfirm(true)
+                  }
+               }).catch(error => window.console.log(error))
             } catch (error) {
                window.console.log(error)
             }
@@ -104,8 +110,26 @@ const SignUpContainer = ({ history }) => {
          postData();
       }
       e.stopPropagation();
-
    }
+
+   const handleModalClose = () => {
+      setModalConfirm(false);
+      history.push('/login');
+   }
+
+   useEffect(() => {
+      const getData = async () => {
+         try {
+            const response = await fetch(`${API}countries`, { signal: controller.signal });
+            const data = await response.json();
+            setCountries(data.data)
+         } catch(error) {
+            window.console.log(error)
+         }
+      }
+      getData();
+      return () => controller.abort()
+   }, [])
 
    return (
       <FormRegister
@@ -116,8 +140,12 @@ const SignUpContainer = ({ history }) => {
          passwordValidate={passwordValidate}
          countryValidate={countryValidate}
          nameValidate={nameValidate}
-         identifierValidate={identifierValidate}
+         fiscalIdValidate={fiscalIdValidate}
          passwordVerify={passwordVerifyValidate}
+         countries={countries}
+         emailUsed={emailUsed}
+         modalConfirm={modalConfirm}
+         handleModalClose={handleModalClose}
        />
    )
 }

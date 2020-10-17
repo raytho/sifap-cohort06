@@ -7,10 +7,9 @@
       position: relative;
       background-color: var(--white-color);
       padding: 1rem;
-      width: 400px;
       text-align: center;
-      @include size(530px, auto);
       border-radius: 10px;
+      @include size(530px, auto);
    }
 
    &__close-button {

@@ -13,16 +13,16 @@ import '../assets/styles/utils/Alerts.scss';
 const Register = () => {
 
    return (
-   <>
-      <Header />
-      <div className='SignUp__container'>
-         <div className='SignUp__aside'>
-            <AsideLogo SignUpLogo/>
-            <FormRegisterContainer />
+      <>
+         <Header />
+         <div className='SignUp__container'>
+            <div className='SignUp__aside'>
+               <AsideLogo SignUpLogo/>
+               <FormRegisterContainer />
+            </div>
+            <RegisterSlides />
          </div>
-         <RegisterSlides />
-      </div>
-   </>
+      </>
    )
 }
 

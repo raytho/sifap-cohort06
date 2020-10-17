@@ -84,14 +84,37 @@
       text-decoration: none;
       @include size(100%, initial);
    }
-   li:hover {
-      color: var(--main-color);
+   button {
+      width: 180px;
+      display: flex;
+      justify-content: flex-start;
+      position: relative;
+      right: 5px;
+      font-size: var(--font-smallest);
+      color: var(--secundary-color);
+      background-color: transparent;
+      border: none;
+      outline-color: var(--detail-color);
    }
+   li:hover,
+   button:hover  {
+      color: var(--main-color);
+      cursor: pointer;
+   }
+
 }
 .Header__user:hover .Header__menu, .Header__menu:hover {
    visibility: visible;
    opacity: 1;
    animation: .5s fadeIn ease;
+}
+.Modal__loader  {
+   position: absolute;
+   z-index: 1800px;
+   font-family: var(--font-title);
+   font-size: var(--font-big);
+   color: var(--white-color);
+
 }
 @keyframes fadeIn {
    0% {

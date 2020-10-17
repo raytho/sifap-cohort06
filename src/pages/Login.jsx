@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../components/Header/Header';
 import AsideLogo from '../components/AsideLogo';
-import LoginSlides from '../components/FormLogin/LoginSlidees'
+import LoginSlides from '../components/FormLogin/LoginSlidees';
 import FormLoginContainer from '../components/FormLogin/FormLoginContainer';
 
 

@@ -1,15 +1,26 @@
 /* eslint-disable react/require-default-props */
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { Context } from '../../Context';
+import Modal from '../Modal';
 
 import '../../assets/styles/layout/Header.scss';
 
-const HeaderUser = ({ name, img, email, rol}) => {
+const HeaderUser = (props) => {
 
-   const { user } = useContext(Context)
-   window.console.log(user, 'user header');
+   const {
+      name,
+      img,
+      email,
+      rol,
+      logOut,
+      modal,
+      // handleModalClose
+   } = props;
+   // const { user } = useContext(Context)
+   // window.console.log(user, 'user header');
 
    return (
       <>
@@ -25,13 +36,16 @@ const HeaderUser = ({ name, img, email, rol}) => {
                   <p>{rol}</p>
                </li>
                <li>
-                  <a href='/profile'>Perfil</a>
+                  <Link to='/profilecontainer'>Perfil</Link>
                </li>
                <li>
-                  <a href='/'>Salir</a>
+                  <button type='button' onClick={logOut}>Salir</button>
                </li>
             </ul>
          </div>
+         <Modal isOpen={modal}>
+            <p className='Modal__loader'>Cargando...</p>
+         </Modal>
       </>
    )
 }
@@ -41,6 +55,9 @@ HeaderUser.propTypes = {
    img:  PropTypes.string,
    email:   PropTypes.string,
    rol:  PropTypes.string,
+   logOut: PropTypes.func,
+   modal: PropTypes.bool,
+   // handleModalClose: PropTypes.func,
 }
 
 export default HeaderUser;

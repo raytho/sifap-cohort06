@@ -5,20 +5,37 @@ export const Context = createContext();
 
 const Provider = ({ children }) => {
    const [isAuth, setIsAuth] = useState(() => {
-      return true //window.sessionStorage.getItem('token');
+      return window.sessionStorage.getItem('token');
 
    });
-   const [user, setUser] = useState({})
+   // vamos a usar este estado para ocultar las rutas de authentication
+   const [TFAToken, setTFAToken] = useState(() => {
+      return window.sessionStorage.getItem('TFAToken');
+   });
+   // const [user, setUser] = useState();
    // Value va a ser le objeto que vamos a poder acceder en toda la app
    const value = {
       isAuth,
       activateAuth: token => {
          setIsAuth(true)
-         window.sessionStorage.setItem('token', token)
+         window.sessionStorage.setItem('token', token);
       },
-      user,
-      getUser: userData => {
-         setUser(userData)
+      removeAuth : () => {
+         setIsAuth(false)
+         window.sessionStorage.removeItem('token');
+      },
+      setUser: userData => {
+         window.sessionStorage.setItem('user', userData);
+      },
+      TFAToken,
+      activeTFAToken: token => {
+         window.sessionStorage.setItem('TFAToken', token);
+      },
+      removeTFAToken: () => {
+         window.sessionStorage.removeItem('authToken');
+      },
+      setTypeTFA: type => {
+         window.sessionStorage.setItem('typeTFA', type)
       }
    }
 
