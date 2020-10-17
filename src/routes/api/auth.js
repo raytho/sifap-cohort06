@@ -142,16 +142,19 @@ function authApi(app) {
         next(boom.unauthorized());
       } else {
         try {
-          if (isActive) {
+          if (
+            !(isActive === null || isActive === "" || isActive === undefined)
+          ) {
             const active = await usersService.activeTwoFactorUserByID(
               isActive,
               user
             );
 
             if (active) {
-              res
-                .status(200)
-                .json({ data: { message: "2FA is Activate" }, error: null });
+              res.status(200).json({
+                data: { message: "2FA value has change" },
+                error: null,
+              });
             } else {
               res.status(500).json({
                 message: "No autorizado",
@@ -293,6 +296,7 @@ const generateToken = (req, res, next, user) => {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
       const { userId, email, twoFactorActive, role } = user;
+      const twoFactorToNumber = twoFactorActive == 1 ? true : false;
       const payload = {
         sub: userId,
         email,
@@ -303,7 +307,7 @@ const generateToken = (req, res, next, user) => {
       });
       return res
         .status(200)
-        .json({ token, user: { userId, email, twoFactorActive, permissions } });
+        .json({ token, user: { userId, email, twoFactorActive: twoFactorToNumber, permissions } });
     }
   });
 };
@@ -314,6 +318,7 @@ const generateTempToken = (req, res, next, user) => {
       next(error);
     } else {
       const { userId, email, twoFactorActive } = user;
+      const twoFactorToNumber = twoFactorActive == 1 ? true : false;
       const payload = {
         sub: userId,
         email,
@@ -323,7 +328,7 @@ const generateTempToken = (req, res, next, user) => {
       });
       return res
         .status(200)
-        .json({ token, user: { userId, email, twoFactorActive } });
+        .json({ token, user: { userId, email, twoFactorActive: twoFactorToNumber } });
     }
   });
 };
