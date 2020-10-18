@@ -412,7 +412,7 @@ function MysqlLib() {
     getPermissesByRol(rolId) {
       return new Promise((resolve, reject) => {
         connection.query(
-          `SELECT a.idPermission, b.name FROM sifap.userPermissions a
+          `SELECT a.idPermission, b.name, b.urlIcon FROM sifap.userPermissions a
             INNER JOIN sifap.permissions b
             ON a.idPermission = b.idPermission WHERE a.rolId = ?`,
           [rolId],
