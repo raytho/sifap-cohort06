@@ -44,7 +44,7 @@ const Profile = (props) => {
                   <div className='Profile__img'>
                      <img src={DEFAULT_IMG_USER} alt='Foto de perfil'/>
                      <button type='button'>
-                        <img src={iconEdit} alt='icono de editar'/>
+                        {/* <img src={iconEdit} alt='icono de editar'/> */}+
                      </button>
                   </div>
                   <div className='Profile__item'>
@@ -93,17 +93,8 @@ const Profile = (props) => {
                      </div>
                   </div>
                </div>
-
+               {/* Segunda parte */}
                <div>
-               <div className='Profile__item'>
-                     <p>Ciudad: </p>
-                     <div>
-                        <p>Santiago de Cali, Valle del Cauca</p>
-                        <button type='button' className='Profile__edit'>
-                           <img src={iconEdit} alt='icono de editar'/>
-                        </button>
-                     </div>
-                  </div>
                   <div className='Profile__item'>
                      <p>Número de telefono: </p>
                      <div>
@@ -141,13 +132,12 @@ const Profile = (props) => {
                          </div>
                      }
                   </div>
-                  
                   <div className='Profile__button-container'>
-                  <div className='Profile__result'>
-                     {loader && <p>Cargando...</p>}
-                     <p>{saved &&  'Se guardaron los cambios'}</p>
-                     <p>{notSaved &&  'No se se guardaron los cambios'}</p>
-                  </div>
+                     <div className='Profile__result'>
+                        {loader && <p>Cargando...</p>}
+                        <p>{saved &&  'Se guardaron los cambios'}</p>
+                        <p>{notSaved &&  'No se se guardaron los cambios'}</p>
+                     </div>
                      <button  type='submit'>Guardar</button>
                   </div>
                </div>

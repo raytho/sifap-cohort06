@@ -31,7 +31,7 @@
 }
 .Profile__button-container {
    width: 420px;
-   margin: 5px 0 30px 0;
+   margin: 130px 0 30px 0;
    display: flex;
    justify-content: space-between;
    button {
@@ -50,17 +50,20 @@
       border-radius: 50%;
    }
    button {
+      width: 25px;
+      height: 25px;
+      padding: 0;
+      margin: 0;
       position: relative;
       top: -20px;
       left: 128px;
-      background-color: transparent;
+      font-size: 25px;
+      color: var(--white-color);
+      line-height: 1;
+      background-color: var(--secundary-color);
+      border-radius: 50%;
       border: none;
       @extend %reset-btn;
-      img {
-         width: 12px;
-         height: 12px;
-         opacity: .5;
-      }
    }
 }
 .Profile__item {

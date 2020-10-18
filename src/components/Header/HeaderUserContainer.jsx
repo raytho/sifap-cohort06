@@ -11,7 +11,7 @@ const DEFAULT_ROL = 'Empleado'
 const HeaderuserContainer = () => {
 
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
-   const { removeAuth, tokenTFA } = useContext(Context);
+   const { removeAuth, tokenTFA, removeUser } = useContext(Context);
    const history = useHistory();
    const [modal, setModal] = useState(false);
    const controller = new AbortController()
@@ -29,7 +29,7 @@ const HeaderuserContainer = () => {
          }).then(response => {
             window.console.log(response);
             removeAuth();
-            
+            removeUser();
             history.push('/login');
          });
       } catch(error) {

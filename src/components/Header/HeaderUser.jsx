@@ -36,7 +36,7 @@ const HeaderUser = (props) => {
                   <p>{rol}</p>
                </li>
                <li>
-                  <Link to='/profilecontainer'>Perfil</Link>
+                  <Link to='/profile'>Perfil</Link>
                </li>
                <li>
                   <button type='button' onClick={logOut}>Salir</button>

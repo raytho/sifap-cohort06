@@ -56,11 +56,11 @@ const TFAuthentication = () => {
                }).then(async response => {
                   if (response.status === 500) setCodeValidate(false)
                   const { token, user } = await response.json();
+                  setUser(JSON.stringify(user));
                   setResend(true);
                   activateAuth(token);
-                  setUser(JSON.stringify(user));
                   removeTFAToken();
-                  history.push('/bill');
+                  history.push('/emitir-facturas');
                })
             } catch(error) {
                window.console.log(error);

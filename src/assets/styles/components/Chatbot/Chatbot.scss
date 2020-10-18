@@ -29,6 +29,7 @@
    background-color: var(--white-color);
    border-radius: 5px 20px 5px 5px;
    box-shadow: 0 0 15px 1px rgba(3, 36, 35, 0.5);
+   z-index: 2000;
    @include size(250px, 90px);
    button  {
       padding: 2px;
@@ -53,37 +54,37 @@
       @include  icon-arrow(absolute, 23px, -20px, 10px, var(--white-color), 90deg);
    }
 }
-.Chatbot__open {
-   position: fixed;
-   top: 80%;
-   left: 90%;
-   font-family: var(--font-title);
-   background-color: var(--detail-color);
-   border: 1px solid var(--secundary-color);
-   border-radius: 50%;
-   z-index: 1200;
-   @include size(80px, 80px);
-   @extend %reset-btn;
-   img {
-      width: 45%;
-      height: 45%;
-   }
-   p {
-      color: var(--secundary-color);
-   }
-}
-.Chatbot__close {
-   position: absolute;
-   top: 20px;
-   left: 282px;
-   color: var(--white-color);
-   font-family: var(--font-title);
-   font-size: var(--font-small);
-   font-weight: 600;
-   background-color: transparent;
-   border: none;
-   border-radius: 5px 20px 5px 5px;
-   z-index: 1600;
-   @include size(30px, 30px);
-   @extend %reset-btn;
-}
+// .Chatbot__open {
+//    position: fixed;
+//    top: 80%;
+//    left: 90%;
+//    font-family: var(--font-title);
+//    background-color: var(--detail-color);
+//    border: 1px solid var(--secundary-color);
+//    border-radius: 50%;
+//    z-index: 1200;
+//    @include size(80px, 80px);
+//    @extend %reset-btn;
+//    img {
+//       width: 45%;
+//       height: 45%;
+//    }
+//    p {
+//       color: var(--secundary-color);
+//    }
+// }
+// .Chatbot__close {
+//    position: absolute;
+//    top: 20px;
+//    left: 282px;
+//    color: var(--white-color);
+//    font-family: var(--font-title);
+//    font-size: var(--font-small);
+//    font-weight: 600;
+//    background-color: transparent;
+//    border: none;
+//    border-radius: 5px 20px 5px 5px;
+//    z-index: 1600;
+//    @include size(30px, 30px);
+//    @extend %reset-btn;
+// }

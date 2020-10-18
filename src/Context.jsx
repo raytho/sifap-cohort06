@@ -27,6 +27,9 @@ const Provider = ({ children }) => {
       setUser: userData => {
          window.sessionStorage.setItem('user', userData);
       },
+      removeUser: () => {
+         window.sessionStorage.removeItem('user');
+      },
       TFAToken,
       activeTFAToken: token => {
          window.sessionStorage.setItem('TFAToken', token);

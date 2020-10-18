@@ -38,14 +38,14 @@ const App = () => {
                   ? (
                      <>
                         <Layout>
-                           <Route exact path='/bill' component={Bill} />
-                           <Route exact path='/history' component={History} />
-                           <Route exact path='/statistics' component={Statistics} />
-                           <Route exact path='/customers' component={Customers} />
-                           <Route exact path='/role-manage' component={RoleManageContainer} />
+                           <Route exact path='/emitir-facturas' component={Bill} />
+                           <Route exact path='/historial' component={History} />
+                           <Route exact path='/estadisticas' component={Statistics} />
+                           <Route exact path='/clientes' component={Customers} />
+                           <Route exact path='/roles' component={RoleManageContainer} />
                            <Route exact path='/role-detail/:id' component={RoleDetailContainer} />
-                           <Route exact path='/c-fiscales' component={ManageCFiscales} />
-                           <Route exact path='/profilecontainer' component={ProfileContainer} />
+                           <Route exact path='/c.-fiscales' component={ManageCFiscales} />
+                           <Route exact path='/profile' component={ProfileContainer} />
                            {/* <Route exact path='/delegate-super' component={DelegateSuperContainer} /> */}
                         </Layout>
                         {/* Problema con este redirect, lo hace desde cualquiera ruta */}

@@ -80,9 +80,9 @@ const LoginContainer = () => {
                         activeTFAToken(token);
                         handleModalOpen();
                      } else {
-                        activateAuth(token);
                         setUser(JSON.stringify(user));
-                        history.push('/bill')
+                        activateAuth(token);
+                        history.push('/emitir-facturas')
                      }
                   }
                }).catch(error => window.console.error(error));
