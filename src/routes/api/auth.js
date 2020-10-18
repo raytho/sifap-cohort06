@@ -307,7 +307,16 @@ const generateToken = (req, res, next, user) => {
       });
       return res
         .status(200)
-        .json({ token, user: { userId, email, twoFactorActive: twoFactorToNumber, permissions } });
+        .json({
+          token,
+          user: {
+            userId,
+            email,
+            twoFactorActive: twoFactorToNumber,
+            role,
+            permissions,
+          },
+        });
     }
   });
 };
@@ -328,7 +337,10 @@ const generateTempToken = (req, res, next, user) => {
       });
       return res
         .status(200)
-        .json({ token, user: { userId, email, twoFactorActive: twoFactorToNumber } });
+        .json({
+          token,
+          user: { userId, email, twoFactorActive: twoFactorToNumber },
+        });
     }
   });
 };
