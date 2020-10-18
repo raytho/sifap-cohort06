@@ -295,7 +295,16 @@ const generateToken = (req, res, next, user) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      const { userId, email, twoFactorActive, role } = user;
+      console.log(user);
+      const {
+        userId,
+        email,
+        country,
+        firstName,
+        phoneNumber,
+        twoFactorActive,
+        role,
+      } = user;
       const twoFactorToNumber = twoFactorActive == 1 ? true : false;
       const payload = {
         sub: userId,
@@ -305,18 +314,19 @@ const generateToken = (req, res, next, user) => {
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "24h",
       });
-      return res
-        .status(200)
-        .json({
-          token,
-          user: {
-            userId,
-            email,
-            twoFactorActive: twoFactorToNumber,
-            role,
-            permissions,
-          },
-        });
+      return res.status(200).json({
+        token,
+        user: {
+          userId,
+          email,
+          country,
+          firstName,
+          phoneNumber,
+          twoFactorActive: twoFactorToNumber,
+          role,
+          permissions,
+        },
+      });
     }
   });
 };
@@ -335,12 +345,10 @@ const generateTempToken = (req, res, next, user) => {
       const token = jwt.sign(payload, config.authTwoFactorJwtSecret, {
         expiresIn: "12m",
       });
-      return res
-        .status(200)
-        .json({
-          token,
-          user: { userId, email, twoFactorActive: twoFactorToNumber },
-        });
+      return res.status(200).json({
+        token,
+        user: { userId, email, twoFactorActive: twoFactorToNumber },
+      });
     }
   });
 };
