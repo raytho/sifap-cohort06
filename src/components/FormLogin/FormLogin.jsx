@@ -71,10 +71,9 @@ const FormLogin = (props) => {
             </label>
 
             <div className='Login__buttons'>
-               {/* <button type='button' disabled={!loader}>Iniciar con Google</button> */}
                <button type='submit' disabled={!loader}>Iniciar</button>
             </div>
-
+            {!loader && <p>Cargando...</p>}
             <div className='Login__forgot'>
                <p className='Login__redirect'> <Link to='/resetpassword'>¿Olvidaste tu contraseña? </Link></p>
             <p className='Login__redirect'>¿Aún no tienes cuenta? <span> <Link to='/Register'>Crear cuenta</Link> </span> </p>

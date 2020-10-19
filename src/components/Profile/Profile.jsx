@@ -31,7 +31,7 @@ const Profile = (props) => {
       notSaved
    } = props;
    const user = JSON.parse(window.sessionStorage.getItem('user'));
-   return(
+   return (
       <>
          <Title {...propsProfile} />
          <div className='Profile__panel'>

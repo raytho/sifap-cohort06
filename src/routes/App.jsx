@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { HashRouter ,Switch, Route, Redirect } from 'react-router-dom';
 import { Context } from '../Context';
 
 import '../assets/styles/Global.scss';
@@ -31,7 +31,7 @@ const App = () => {
    return (
       <>
       <Chatbot />
-      <BrowserRouter>
+      <HashRouter>
          <Switch>
             {
                isAuth
@@ -63,7 +63,7 @@ const App = () => {
                   )
             }
          </Switch>
-      </BrowserRouter>
+      </HashRouter>
       </>
    );
 }
