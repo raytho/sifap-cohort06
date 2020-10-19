@@ -49,11 +49,7 @@ function authApi(app) {
     validationHandler(createUserSchema),
     async (req, res, next) => {
       const { body: user } = req;
-      // const checkFirstUser = await usersService.getFirstUser();
-      // const checkInvitedUser = await usersService.getInvitedUserByMail(user);
-      // if (!checkFirstUser && !checkInvitedUser) {
-      //   console.log("llegué acá");
-      // }
+
       try {
         const existingUser = await usersService.getUserByMail(user);
         if (existingUser) {
@@ -295,7 +291,6 @@ const generateToken = (req, res, next, user) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      console.log(user);
       const {
         userId,
         email,

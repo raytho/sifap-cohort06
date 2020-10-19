@@ -12,7 +12,7 @@ class UsersService {
   async createSuperAdminUser({ user }) {
     const { firstName, fiscalId, email, password, country, typeEmail } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const role = "Administrador";
+    const role = "Empleado";
     const userId = nanoid(4);
 
     const response = await this.mysqlLib.createSuperAdminUser({
