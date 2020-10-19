@@ -11,29 +11,25 @@ import '../../assets/styles/layout/Header.scss';
 const HeaderUser = (props) => {
 
    const {
-      name,
       img,
-      email,
-      rol,
       logOut,
       modal,
       // handleModalClose
    } = props;
-   // const { user } = useContext(Context)
-   // window.console.log(user, 'user header');
+   const user = JSON.parse(window.sessionStorage.getItem('user'));
 
    return (
       <>
          <div className='Header__user-container'>
-            <p>{name}</p>
+            <p>{user.firstName}</p>
             <div>
                <img src={img} alt='Foto usuario'/>
             </div>
             <ul className='Header__menu'>
                <li>
-                  <p>{name}</p>
-                  <p>{email}</p>
-                  <p>{rol}</p>
+                  <p>{user.firstName}</p>
+                  <p>{user.email}</p>
+                  <p>{user.role}</p>
                </li>
                <li>
                   <Link to='/profile'>Perfil</Link>

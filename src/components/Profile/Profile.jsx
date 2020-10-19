@@ -30,13 +30,13 @@ const Profile = (props) => {
       saved,
       notSaved
    } = props;
-
+   const user = JSON.parse(window.sessionStorage.getItem('user'));
    return(
       <>
          <Title {...propsProfile} />
          <div className='Profile__panel'>
             <div className='Profile__header'>
-               <p>Aquí va el rol</p>
+               <p>{user.role}</p>
             </div>
             <form className='Profile__main' onSubmit={handleSubmit}>
                <div>
@@ -47,7 +47,7 @@ const Profile = (props) => {
                   <div className='Profile__item'>
                      <p>Nombre: </p>
                      <div>
-                        <p>Daniel Esteban Santos Méndez</p>
+                        <p>{user.firstName}</p>
                         <button type='button' className='Profile__edit'>
                            <img src={iconEdit} alt='icono de editar'/>
                         </button>
@@ -118,10 +118,10 @@ const Profile = (props) => {
                               <span>Puedes obtener el código de dos formas:</span>
                            </p>
                            <p>
-                              <span>1.</span> Usa la aplicación <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=es_EC'>Google Authenticator</a> para que escanear el código QR y te dará el código.
+                              <span>1.</span> Usa <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=es_EC'>Google Authenticator</a> para escanear el código QR y te dará el código.
                            </p>
                               <div className='Profile__QR'>
-                              <p>Escanea el código QR:</p>
+                              <p>Código QR:</p>
                               <div>
                                  <img src={qr} alt='Código QR'/>
                               </div>
@@ -134,7 +134,7 @@ const Profile = (props) => {
                            <span>¡Recuerda!</span>
                         </p>
                         <p>
-                           Una vez escaneado el código QR, Google Athenticator lo guardará y lo estará generando cada 30 segundos.
+                           Si ya escaneaste el código QR, Google Athenticator lo guardará y lo estará generando cada 30 segundos.
                         </p>
                         <p>
                           Al iniciar sesión podrás elegir el método autenticación, si no has escaneado el código QR lo puedes hacer por correo y si ya lo escaneaste tu eliges el método.
