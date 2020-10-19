@@ -9,7 +9,7 @@ import FormModalTFA from './FormModalTFA';
 
 import '../../assets/styles/layout/Modal.scss';
 
-import ShowPass from '../../assets/static/images/ShowPass.png';
+import ShowPass from '../../assets/static/icon/ShowPass.png';
 
 
 

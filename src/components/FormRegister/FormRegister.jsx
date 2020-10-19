@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import PropTypes, { shape } from 'prop-types';
 import RegisterConfirmModal from './RegisterConfirmtionModal';
 
-import ShowPass from '../../assets/static/images/ShowPass.png';
+import ShowPass from '../../assets/static/icon/ShowPass.png';
 
 const FormRegister = (props) => {
    const {

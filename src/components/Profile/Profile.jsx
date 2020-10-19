@@ -31,21 +31,18 @@ const Profile = (props) => {
       notSaved
    } = props;
 
-   // const check = form.isActive ? 'checked' : null;
    return(
       <>
          <Title {...propsProfile} />
          <div className='Profile__panel'>
             <div className='Profile__header'>
-               <p>Daniel Esteban Santos Méndez</p>
+               <p>Aquí va el rol</p>
             </div>
             <form className='Profile__main' onSubmit={handleSubmit}>
                <div>
                   <div className='Profile__img'>
                      <img src={DEFAULT_IMG_USER} alt='Foto de perfil'/>
-                     <button type='button'>
-                        {/* <img src={iconEdit} alt='icono de editar'/> */}+
-                     </button>
+                     <button type='button'>+</button>
                   </div>
                   <div className='Profile__item'>
                      <p>Nombre: </p>
@@ -92,9 +89,6 @@ const Profile = (props) => {
                         </button>
                      </div>
                   </div>
-               </div>
-               {/* Segunda parte */}
-               <div>
                   <div className='Profile__item'>
                      <p>Número de telefono: </p>
                      <div>
@@ -104,11 +98,46 @@ const Profile = (props) => {
                         </button>
                      </div>
                   </div>
+               </div>
+
+
+
+               {/* Seguridad */}
+               <div>
                   <div className='Profile__authentication'>
                      <h3>Seguridad:</h3>
                      <div>
                         <p>
-                           Para mayor seguridad de tu cuenta puedes activar autenticación en 2 por medio de un código con Google Authenticator o tu correo electrónico y elegir una al momento de iniciar sesión.
+                           <span>Por seguridad puedes activar autenticación en 2 pasos:</span>
+                        </p>
+                        <div>
+                           <p>
+                              Lo puedes realizar por medio de un código el cual tendrás que digitar al momento de iniciar sesión.
+                           </p>
+                           <p>
+                              <span>Puedes obtener el código de dos formas:</span>
+                           </p>
+                           <p>
+                              <span>1.</span> Usa la aplicación <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=es_EC'>Google Authenticator</a> para que escanear el código QR y te dará el código.
+                           </p>
+                              <div className='Profile__QR'>
+                              <p>Escanea el código QR:</p>
+                              <div>
+                                 <img src={qr} alt='Código QR'/>
+                              </div>
+                              </div>
+                           <p>
+                              <span>2.</span> Recibir un mensaje con el código a tu correo de registro.
+                           </p>
+                        </div>
+                        <p>
+                           <span>¡Recuerda!</span>
+                        </p>
+                        <p>
+                           Una vez escaneado el código QR, Google Athenticator lo guardará y lo estará generando cada 30 segundos.
+                        </p>
+                        <p>
+                          Al iniciar sesión podrás elegir el método autenticación, si no has escaneado el código QR lo puedes hacer por correo y si ya lo escaneaste tu eliges el método.
                         </p>
                         <label className='check'>Activar Autenticación
                            <input
@@ -121,16 +150,15 @@ const Profile = (props) => {
                            <span className='checkmark' />
                         </label>
                      </div>
-                     {
+                     {/* {
                         form.isActive &&
                         <div className='Profile__QR'>
-                           <p>Escanea el código QR para tener tu código con Google Authenticator:</p>
+                           <p>Escanea el código QR:</p>
                            <div>
                               <img src={qr} alt='Código QR'/>
                            </div>
-                           <p>Hazlo una vez actices o desactives.</p>
-                         </div>
-                     }
+                        </div>
+                     } */}
                   </div>
                   <div className='Profile__button-container'>
                      <div className='Profile__result'>
