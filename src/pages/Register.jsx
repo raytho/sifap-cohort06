@@ -2,7 +2,6 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import Header from '../components/Header/Header';
 import AsideLogo from '../components/AsideLogo';
 import RegisterSlides from '../components/FormRegister/RegisterSlides';
 import FormRegisterContainer from '../components/FormRegister/FormRegisterContainer'
@@ -14,7 +13,6 @@ const Register = () => {
 
    return (
       <>
-         <Header />
          <div className='SignUp__container'>
             <div className='SignUp__aside'>
                <AsideLogo SignUpLogo/>

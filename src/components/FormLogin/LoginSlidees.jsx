@@ -1,9 +1,16 @@
 import React from 'react';
 
+import useMediaQuery from '../../hooks/useMediaQuery';
+
 import '../../assets/styles/components/Register/RegisterSlides.scss';
 
 const LoginSlides = () => {
+
+   const slideView = useMediaQuery()
+
    return (
+      slideView
+      ?
       <div className='SignUp__slide LogIn'>
          <h2>SIFAP <span> - Sistema de facturación para personas físicas con actividadempresarial.</span></h2>
          <ul>
@@ -27,7 +34,9 @@ const LoginSlides = () => {
             <span className='fill'> </span>
          </div>
       </div>
+      : null
    )
+
 }
 
 export default LoginSlides;

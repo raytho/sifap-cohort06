@@ -24,7 +24,7 @@ const FormRegister = (props) => {
       modalConfirm,
       handleModalClose
    } = props;
-   const [showPassword, setShowPassword] = useState(false)
+   const [showPassword, setShowPassword] = useState(false);
    return (
       <div className='SignUp__form'>
       <form onSubmit={handleSubmit}>

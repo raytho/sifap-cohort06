@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { HashRouter ,Switch, Route, Redirect } from 'react-router-dom';
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Context } from '../Context';
 
 import '../assets/styles/Global.scss';

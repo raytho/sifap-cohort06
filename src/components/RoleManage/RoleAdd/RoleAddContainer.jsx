@@ -63,7 +63,7 @@ const RoleAddContainer = ({ dataLength }) => {
          return true
       }
    }
-
+   window.console.log(form);
    // Super admin create new user admin/employee
    const handleSubmit = e => {
       e.preventDefault();

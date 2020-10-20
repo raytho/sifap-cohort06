@@ -3,7 +3,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import React from 'react';
-import Header from '../components/Header/Header';
 import AsideLogo from '../components/AsideLogo';
 import LoginSlides from '../components/FormLogin/LoginSlidees';
 import FormResetPassContainer from '../components/FormResetPass/FormResetPassContainer';
@@ -15,7 +14,6 @@ import '../assets/styles/utils/Alerts.scss';
 const ResetPassword = () => {
    return (
       <>
-         <Header />
          <div className="ResetPass__container">
             <div className="ResetPass__aside">
                <AsideLogo SignUpLogo />

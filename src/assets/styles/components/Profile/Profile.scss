@@ -29,6 +29,15 @@
    & > div:nth-of-type(2) {
       margin: 0 0 0 50px;
    }
+   input {
+      height: 30px;
+      font-family: var(--font-text);
+      font-size: var(--font-smaller);
+      // background-color: rgba(3, 36, 35, .1);
+      border: none;
+      border-bottom: 1px solid var(--secundary-color);
+      outline-color: var(--detail-color);
+   }
 }
 .Profile__button-container {
    width: 420px;
@@ -97,8 +106,8 @@
    border: none;
    @extend %reset-btn;
    img {
-      width: 12px;
-      height: 12px;
+      width: 16px;
+      height: 16px;
       opacity: .5;
    }
 }

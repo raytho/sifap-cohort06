@@ -3,10 +3,10 @@ import React from 'react';
 
 import '../assets/styles/layout/Title.scss';
 
-const Title = ({ title, icon, alt }) => (
+const Title = ({icon }) => (
    <div className='Title'>
-      <img src={icon} alt={alt} />
-      <h2>{title}</h2>
+      <img src={icon} alt='Imagen de perfil' />
+      <h2>Perfil</h2>
    </div>
 );
 

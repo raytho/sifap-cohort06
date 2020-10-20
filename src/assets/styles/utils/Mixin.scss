@@ -23,3 +23,25 @@
    border-radius: 5px;
    @extend %reset-btn;
 }
+@mixin media($breakpoint) {
+   @if $breakpoint == cellphone {
+     @media screen and (min-width: 480px) and (max-width: 599px) {
+       @content;
+     }
+   }
+   @else if $breakpoint == tablet-small {
+     @media screen and (min-width: 600px) and (max-width: 799px) {
+       @content;
+     }
+   }
+   @else if $breakpoint == tablet {
+     @media screen and (min-width: 800px) and (max-width: 1023px) {
+       @content;
+     }
+   }
+   @else if $breakpoint == laptop {
+     @media screen and (min-width: 1024px){
+       @content;
+     }
+   }
+ }

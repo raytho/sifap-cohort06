@@ -20,7 +20,7 @@
 }
 
 .Chatbot__message {
-   position: fixed;
+   position: absolute;
    top: 82.5%;
    left: 73.5%;
    margin: 0 12px 0 0;
@@ -53,6 +53,12 @@
    &::before {
       @include  icon-arrow(absolute, 23px, -20px, 10px, var(--white-color), 90deg);
    }
+}
+.bot {
+   width: 200px;
+   height: 200px;
+   background-color: red;
+   // top: 0;
 }
 // .Chatbot__open {
 //    position: fixed;

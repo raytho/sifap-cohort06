@@ -36,9 +36,10 @@ const TFAuthentication = () => {
          setNumValidate(true);
       }
    }
+
+
    const handleSubmit = e => {
       e.preventDefault();
-      // const { dataToken: { dataToken, type } } = tokenTFA;
       const code = (Object.values(form).join(''));
       if (numValidate) {
          const postData = async () => {

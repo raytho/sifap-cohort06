@@ -8,51 +8,100 @@ const ProfileContainer = () => {
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    const token = window.sessionStorage.getItem('token');
    const [qr, setQr] = useState();
-   const [loader, setLoader] = useState(false)
-   const [saved, setSaved] = useState(false)
-   const [notSaved, setNotSaved] = useState(false)
+   const [loader, setLoader] = useState(false);
+   const [saved, setSaved] = useState(false);
+   const [notSaved, setNotSaved] = useState(false);
    const controller = new AbortController();
    const { setUser } = useContext(Context);
    const [form, setValues] = useState({
-      isActive: user.twoFactorActive
+      firstName: user.firstName,
+      dateOfBirth: user.dateOfBirth,
+      city: user.city,
+      state: user.state,
+      country: user.country,
+      fiscalId: user.fiscalId,
+      phoneNumber: user.phoneNumber,
+      twoFactorActive: user.twoFactorActive
    });
    const handleChangeInput = e => {
-      setValues({
-         ...form,
-         [e.target.name]: e.target.checked
-      })
+      if (e.target.name === 'twoFactorActive') {
+         setValues({
+            ...form,
+            [e.target.name]: e.target.checked
+         })
+      } else {
+         setValues({
+            ...form,
+            [e.target.name]: e.target.value
+         })
+         user.firstName = form.firstName;
+         user.dateOfBirth = form.dateOfBirth;
+         user.city = form.city;
+         user.state = form.state;
+         user.country = form.country;
+         user.fiscalId = form.fiscalId;
+         user.phoneNumber = form.phoneNumber;
+         setUser(JSON.stringify(user));
+      }
    }
    const handleSubmit = e => {
       e.preventDefault();
-      const postData = async () => {
-         user.twoFactorActive = form.isActive
+
+      const putData = async () => {
+         user.twoFactorActive = form.twoFactorActive;
          setUser(JSON.stringify(user));
          try {
             setLoader(true);
-            await fetch(`${API}auth/two-factor-activate`, {
-               method: 'POST',
+            await fetch(`${API}user/data/profile`, {
+               method: 'PUT',
                headers: {
                   'Accept': 'application/json',
-                  'Content-Type': 'application/json',
+                 'Content-Type': 'application/json',
                   'Authorization': `Bearer ${token}`,
                },
-               body: JSON.stringify(form),
+               body: JSON.stringify(form)
             })
             .then(async response => {
-               const { data: { message } } = await response.json();
-               if (message === '2FA value has change') {
+               const { data: { message: { status }  }} = await response.json();
+               if (status === 'Saved') {
                   setSaved(true);
                   setLoader(false);
                } else {
                   setNotSaved(true);
                   setLoader(false);
                }
-            })
+            }).catch(error => window.console.log(error));
          } catch(error) {
-            window.console.log(error, 'este');
+            window.console.log(error);
+            setLoader(false);
          }
+         // try {
+         //    setLoader(true);
+         //    await fetch(`${API}auth/two-factor-activate`, {
+         //       method: 'POST',
+         //       headers: {
+         //          'Accept': 'application/json',
+         //          'Content-Type': 'application/json',
+         //          'Authorization': `Bearer ${token}`,
+         //       },
+         //       body: JSON.stringify(form),
+         //    })
+         //    .then(async response => {
+         //       const { data: { message } } = await response.json();
+         //       if (message === '2FA value has change') {
+         //          setSaved(true);
+         //          setLoader(false);
+         //       } else {
+         //          setNotSaved(true);
+         //          setLoader(false);
+         //       }
+         //    })
+         // } catch(error) {
+         //    window.console.log(error);
+         //    setLoader(false);
+         // }
       }
-      postData()
+      putData()
    }
 
    useEffect(() => {

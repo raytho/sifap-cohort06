@@ -7,7 +7,7 @@ import '../../../assets/styles/components/RoleManage/ItemUser.scss';
 
 
 const UserItemInvited = () =>{
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/superAdmin/'
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
 
    const [modal, setModal] = useState(false);
    const [userId, setUserId] = useState('');
@@ -20,7 +20,7 @@ const UserItemInvited = () =>{
       setModal(false)
    }
    return (
-      <GetData api={`${API}getInvitedUsers`} >
+      <GetData api={`${API}superAdmin/getInvitedUsers`} >
          {
             ({ loading, error, data }) => {
                if (loading) return <p>Cargando...</p>

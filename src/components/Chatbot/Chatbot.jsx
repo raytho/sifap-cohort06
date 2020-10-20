@@ -14,9 +14,17 @@ const Chatbot = () => {
          setOpenMessage(true);
       }
    }
+   // useEffect(() => {
+   //    idSetTimeOut = setTimeout(() => handleMessage(), 2000);
+   //    return () => clearTimeout(idSetTimeOut)
+   // }, []);
    useEffect(() => {
-      idSetTimeOut = setTimeout(() => handleMessage(), 2000);
-      return () => clearTimeout(idSetTimeOut)
+      window.onload = () => {
+         const buttonIfrem = document.getElementById('sntch_button');
+         buttonIfrem.classList.add('bot')
+         // window.console.log(buttonIfrem, 'chat');
+      }
+
    }, [])
    // const handleChatbot = () => {
    //    if(openBot) {
@@ -27,7 +35,6 @@ const Chatbot = () => {
    //       clearTimeout(idSetTimeOut)
    //    }
    // }
-   // const buttonIfrem = document.getElementsByTagName('iframe');
    // window.onload = () => window.console.log(buttonIfrem[0]?.contentWindow.getElementsByTagName('button'),'iframe');
    return  (
       ReactDOM.createPortal(
