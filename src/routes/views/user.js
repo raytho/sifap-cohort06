@@ -82,6 +82,7 @@ function userView(app) {
 
             res.status(200).json({
               data: { message: {
+                status: "Saved",
                 phoneNumber: userData.phoneNumber,
                 firstName: userData.firstName,
                 city: userData.city,
@@ -96,7 +97,7 @@ function userView(app) {
             });
           } else {
             res.status(500).json({
-              message: "Todo mal",
+              message: "No fue posible actualizar",
             });
           }
         }
