@@ -297,6 +297,7 @@ const generateToken = (req, res, next, user) => {
         city,
         state,
         fiscalId,
+        dateOfBirth,
         fiscalAct,
         country,
         firstName,
@@ -313,6 +314,8 @@ const generateToken = (req, res, next, user) => {
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "24h",
       });
+
+      const formatDate = formatUTCTime(dateOfBirth);
       return res.status(200).json({
         token,
         user: {
@@ -322,6 +325,7 @@ const generateToken = (req, res, next, user) => {
           city,
           state,
           fiscalId,
+          dateOfBirth: formatDate,
           fiscalAct,
           firstName,
           phoneNumber,
@@ -354,6 +358,15 @@ const generateTempToken = (req, res, next, user) => {
       });
     }
   });
+};
+
+const formatUTCTime = (date) => {
+  const day = date.getUTCDate(); // Hours
+  let month =date.getUTCMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
+  const years = date.getUTCFullYear();
+  const newDate = `${years}-${month}-${day}`;
+  return newDate;
 };
 
 module.exports = authApi;

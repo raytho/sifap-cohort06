@@ -77,7 +77,9 @@ function userView(app) {
 
           if (updateUser) {
             const userData = await usersService.getUserByMail(user);
-            const twoFactorToNumber = user.twoFactorActive == 1 ? true : false;           
+            const twoFactorToNumber = user.twoFactorActive == 1 ? true : false; 
+            const formatTime = formatUTCTime(userData.dateOfBirth);   
+
             res.status(200).json({
               data: { message: {
                 phoneNumber: userData.phoneNumber,
@@ -86,6 +88,7 @@ function userView(app) {
                 state: userData.state,
                 country: userData.country,
                 fiscalId: userData.fiscalId,
+                dateOfBirth: formatTime,
                 FiscalAct: userData.fiscalAct,
                 twoFactorActive: twoFactorToNumber,
               } },
@@ -104,5 +107,14 @@ function userView(app) {
     })(req, res, next);
   });
 }
+
+const formatUTCTime = (date) => {
+  const day = date.getUTCDate(); // Hours
+  let month =date.getUTCMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
+  const years = date.getUTCFullYear();
+  const newDate = `${years}-${month}-${day}`;
+  return newDate;
+};
 
 module.exports = userView;
