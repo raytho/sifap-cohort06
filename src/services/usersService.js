@@ -211,6 +211,11 @@ class UsersService {
     const active = await this.mysqlLib.updateTwoFactorByUser(isActive, user);
     return active.affectedRows;
   }
+
+  async updateUserProfile(user, id) {
+    const active = await this.mysqlLib.updateUserProfile(user, id);
+    return active.affectedRows;
+  }
 }
 
 module.exports = UsersService;

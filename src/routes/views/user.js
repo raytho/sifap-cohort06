@@ -20,12 +20,11 @@ function userView(app) {
             message: "No autorizado",
           });
         } else {
-          twoFactorAuth.generateQr()
-            .then( qrCode => {
-              res.status(200).json({
-                message: qrCode,
-              });
+          twoFactorAuth.generateQr().then((qrCode) => {
+            res.status(200).json({
+              message: qrCode,
             });
+          });
         }
       } catch (error) {
         next(error);
@@ -58,6 +57,47 @@ function userView(app) {
             },
           });
         }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.put("/data/profile", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      const userData = req.body;
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        }
+        else {
+          const updateUser = await usersService.updateUserProfile(userData, user.userId);
+
+          if (updateUser) {
+            const userData = await usersService.getUserByMail(user);
+            const twoFactorToNumber = user.twoFactorActive == 1 ? true : false;           
+            res.status(200).json({
+              data: { message: {
+                phoneNumber: userData.phoneNumber,
+                firstName: userData.firstName,
+                city: userData.city,
+                state: userData.state,
+                country: userData.country,
+                fiscalId: userData.fiscalId,
+                FiscalAct: userData.fiscalAct,
+                twoFactorActive: twoFactorToNumber,
+              } },
+              error: null,
+            });
+          } else {
+            res.status(500).json({
+              message: "Todo mal",
+            });
+          }
+        }
+        
       } catch (error) {
         next(error);
       }
