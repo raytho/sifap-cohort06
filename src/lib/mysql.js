@@ -182,6 +182,22 @@ function MysqlLib() {
       });
     },
 
+    getInvitedUserByCreatedMail(email) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT * FROM users WHERE createdBy = ?",
+          email,
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
     removeInvitedUserByID(id) {
       return new Promise(function (resolve, reject) {
         connection.query(
@@ -427,11 +443,28 @@ function MysqlLib() {
         );
       });
     },
+
     updateTwoFactorByUser(isActive, user) {
       return new Promise(function (resolve, reject) {
         connection.query(
           "UPDATE users SET twoFactorActive = ? WHERE userId = ?",
           [isActive, user.userId],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    updateUserProfile(data, id) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "UPDATE users SET phoneNumber=?, firstName=?, dateOfBirth=?, city=?, state=?, country=?, fiscalId=?, twoFactorActive=? WHERE userId = ?",
+          [data.phoneNumber, data.firstName, data.dateOfBirth, data.city, data.state, data.country, data.fiscalId, data.twoFactorActive, id],
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));

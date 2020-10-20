@@ -49,12 +49,8 @@ function authApi(app) {
     validationHandler(createUserSchema),
     async (req, res, next) => {
       const { body: user } = req;
-      // const checkFirstUser = await usersService.getFirstUser();
-      // const checkInvitedUser = await usersService.getInvitedUserByMail(user);
-      // if (!checkFirstUser && !checkInvitedUser) {
-      //   console.log("llegué acá");
-      // }
       try {
+        const hasInvited = await usersService.getInviteInfo(user);
         const existingUser = await usersService.getUserByMail(user);
         if (existingUser) {
           res.status(200).json({
@@ -62,7 +58,7 @@ function authApi(app) {
               "Este correo ya está en uso, por favor intente con otro o reestableza su contraseña",
           });
         } else {
-          await usersService.createSuperAdminUser({ user });
+          await usersService.createSuperAdminUser({ user }, hasInvited);
           res.status(201).json({
             message: "User created",
           });
@@ -295,10 +291,13 @@ const generateToken = (req, res, next, user) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      console.log(user);
       const {
         userId,
         email,
+        city,
+        state,
+        fiscalId,
+        fiscalAct,
         country,
         firstName,
         phoneNumber,
@@ -320,6 +319,10 @@ const generateToken = (req, res, next, user) => {
           userId,
           email,
           country,
+          city,
+          state,
+          fiscalId,
+          fiscalAct,
           firstName,
           phoneNumber,
           twoFactorActive: twoFactorToNumber,

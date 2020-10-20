@@ -13,6 +13,7 @@
   "dependencies": {
     "@hapi/boom": "^9.1.0",
     "@hapi/joi": "^17.1.1",
+    "aws-sdk": "^2.774.0",
     "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
     "chalk": "^4.1.0",
@@ -22,6 +23,7 @@
     "helmet": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.2",
+    "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "nanoid": "^3.1.12",
     "nodemailer": "^6.4.13",
