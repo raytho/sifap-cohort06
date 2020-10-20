@@ -1,45 +1,60 @@
 const express = require("express");
 // eslint-disable-next-line no-unused-vars
-const { passport } = require("passport");
+const passport = require("passport");
 const usersService = require("../../services/usersService");
 const validationHandler = require("../../utils/middleware/validationHandler");
 
 const { createUserSchema } = require("../../utils/schemas/users");
 const { inviteUserSchema } = require("../../utils/schemas/usersInvitation");
+require("../../utils/auth/strategies/jwt");
 
 const inviteNewUser = (app) => {
   const router = express.Router();
   app.use("/api/superAdmin", router);
 
   // Invitations
-  router.post(
-    "/invite-user",
-    validationHandler(inviteUserSchema),
-    async (req, res) => {
-      const { body: user } = req;
-      const role = user.role;
-      const userService = new usersService();
-      try {
-        if (role === "administrador") {
-          user.role = 2;
-        } else {
-          user.role = 3;
-        }
-        const userInvited = await userService.addUserInvited({ user });
+  router.post("/invite-user", async (req, res, next) => {
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (error, userToken) => {
+        validationHandler(inviteUserSchema);
 
-        if (userInvited) {
-          res.status(200).json({
-            message: "Invitation sent",
-          });
+        const { email } = userToken;
+        const { body: user } = req;
+        const role = user.role;
+
+        const userService = new usersService();
+        if (userToken.role.toLowerCase() === "empleado") {
+          res.status(500).json({ message: "Error creating user as employ" });
         } else {
-          res.status(500).json({ message: "Error creating user" });
+          try {
+            if (role.toLowerCase() === "administrador") {
+              user.role = 2;
+            } else {
+              user.role = 3;
+            }
+            const userInvited = await userService.addUserInvited(
+              { user },
+              email
+            );
+            const sendInvite = await userService.sendUserInvitation(req, user);
+            console.log(sendInvite);
+            if (userInvited) {
+              res.status(200).json({
+                message: "Invitation sent",
+              });
+            } else {
+              res.status(500).json({ message: "Error creating user" });
+            }
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Error creating user" });
+          }
         }
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error creating user" });
       }
-    }
-  );
+    )(req, res, next);
+  });
 
   router.get("/getInvitedUsers", async (req, res) => {
     const userService = new usersService();
@@ -52,6 +67,27 @@ const inviteNewUser = (app) => {
       console.log(error);
       res.status(500).json({ message: "Error to get user" });
     }
+  });
+
+  router.get("/getInvitedUsersFilter", async (req, res, next) => {
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (error, userToken) => {
+        const userService = new usersService();
+        try {
+          const getUser = await userService.getInvitedUserByCreatedMail(
+            userToken
+          );
+          if (getUser) {
+            res.status(200).send(getUser);
+          }
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ message: "Error to get user" });
+        }
+      }
+    )(req, res, next);
   });
 
   router.get("/users-invitation/:id", async (req, res) => {

@@ -9,10 +9,11 @@ class UsersService {
     this.mysqlLib = new MysqlLib();
   }
 
-  async createSuperAdminUser({ user }) {
+  async createSuperAdminUser({ user }, userInvitation) {
     const { firstName, fiscalId, email, password, country, typeEmail } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const role = "Empleado";
+    const role = userInvitation.role;
+    const createdBy = userInvitation.createdBy;
     const userId = nanoid(4);
 
     const response = await this.mysqlLib.createSuperAdminUser({
@@ -24,6 +25,7 @@ class UsersService {
       typeEmail,
       country,
       role,
+      createdBy,
     });
     return response;
   }
@@ -92,6 +94,15 @@ class UsersService {
     }
   }
 
+  async getInviteInfo({ email }) {
+    try {
+      const infoInvite = await this.mysqlLib.getInvitedUserByMail(email);
+      return infoInvite[0];
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async deleteUserById(id) {
     const user = await this.mysqlLib.removeUserByID(id);
     return user;
@@ -114,6 +125,35 @@ class UsersService {
         Please click on the following link, or paste this into your browser to complete the process:
         http://${request.host}/reset/${request.token} 
         If you did not request this, please ignore this email and your password will remain unchanged.`,
+    };
+
+    smtpTransport.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+        return info.response;
+      }
+    });
+  }
+
+  async sendUserInvitation(request, user) {
+    const smtpTransport = nodemailer.createTransport({
+      service: config.mailProvider,
+      auth: {
+        user: config.mailAccount,
+        pass: config.mailPassword,
+      },
+    });
+
+    const mailOptions = {
+      to: user.email,
+      from: "invite_sifap@sifap.com",
+      subject: "Sifap Invite",
+      text: `You're invite to join in SIFAP system. Please create an account in the following link
+        Please click on the following link, or paste this into your browser to complete the process:
+        http://${request.host}/#/Register 
+        If you did not request this, please ignore this email.`,
     };
 
     smtpTransport.sendMail(mailOptions, function (error, info) {
@@ -160,7 +200,7 @@ class UsersService {
     return response;
   }
   // CRUD Users Invitations
-  async addUserInvited({ user }) {
+  async addUserInvited({ user }, createdBy) {
     const { email, firstName, role } = user;
     const userId = nanoid(4);
 
@@ -169,6 +209,7 @@ class UsersService {
       firstName,
       role,
       userId,
+      createdBy,
     });
     return response;
   }
@@ -183,8 +224,13 @@ class UsersService {
     return user;
   }
 
-  async getInvitedUserByMail( { email } ) {
-    const user = await this.mysqlLib.getInvitedUserByMail(email);
+  async getInvitedUserByMail(userToken) {
+    const user = await this.mysqlLib.getInvitedUserByMail(userToken.email);
+    return user;
+  }
+
+  async getInvitedUserByCreatedMail({ email }) {
+    const user = await this.mysqlLib.getInvitedUserByCreatedMail(email);
     return user;
   }
 
