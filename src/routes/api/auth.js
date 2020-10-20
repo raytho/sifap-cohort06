@@ -291,7 +291,6 @@ const generateToken = (req, res, next, user) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      console.log(user);
       const {
         userId,
         email,

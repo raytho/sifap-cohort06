@@ -13,8 +13,7 @@ class UsersService {
     console.log(userInvitation);
     const { firstName, fiscalId, email, password, country, typeEmail } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const role = userInvitation.role;
-    const createdBy = userInvitation.createdBy;
+    const role = "Empleado";
     const userId = nanoid(4);
 
     const response = await this.mysqlLib.createSuperAdminUser({
@@ -251,6 +250,11 @@ class UsersService {
 
   async activeTwoFactorUserByID(isActive, user) {
     const active = await this.mysqlLib.updateTwoFactorByUser(isActive, user);
+    return active.affectedRows;
+  }
+
+  async updateUserProfile(user, id) {
+    const active = await this.mysqlLib.updateUserProfile(user, id);
     return active.affectedRows;
   }
 }
