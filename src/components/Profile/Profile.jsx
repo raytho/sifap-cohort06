@@ -48,29 +48,29 @@ const Profile = (props) => {
    }
 
    useEffect(() => {
-      if(name ){
+      if (name) {
          document.getElementById('input-name').focus();
       }
-      if(dateOfBirth){
+      if (dateOfBirth) {
          document.getElementById('input-birth').focus();
       }
-      if(city){
+      if (city) {
          document.getElementById('input-city').focus();
       }
-      if(country){
+      if (country) {
          document.getElementById('input-country').focus();
       }
-      if(fiscalId){
+      if (fiscalId) {
          document.getElementById('input-fiscalId').focus();
       }
-      if(phoneNumber){
+      if (phoneNumber) {
          document.getElementById('input-phone').focus();
       }
    }, [name, dateOfBirth, city, country, fiscalId, phoneNumber]);
 
    useEffect(() => {
       document.getElementById('form').addEventListener('keypress', e => {
-         if(e.code === 'Enter') {
+         if (e.code === 'Enter') {
             e.preventDefault();
          }
       })
@@ -99,6 +99,7 @@ const Profile = (props) => {
                               value={form.firstName}
                               type='text'
                               name='firstName'
+                              placeholder='Nombre'
                               onChange={handleChangeInput}
                            />
                            : <p>{user.firstName}</p>
@@ -137,6 +138,7 @@ const Profile = (props) => {
                               value={form.fiscalId}
                               type='text'
                               name='fiscalId'
+                              placeholder='N° de indetificación'
                               onChange={handleChangeInput}
                            />
                            : <p>{user.fiscalId}</p>
@@ -174,6 +176,7 @@ const Profile = (props) => {
                               value={form.dateOfBirth}
                               type='text'
                               name='dateOfBirth'
+                              placeholder='AAAA-MM-DD'
                               onChange={handleChangeInput}
                            />
                            : <p>{user.dateOfBirth}</p>
@@ -211,6 +214,7 @@ const Profile = (props) => {
                               value={form.country}
                               type='text'
                               name='country'
+                              placeholder='País'
                               onChange={handleChangeInput}
                            />
                            : <p>{user.country}</p>
@@ -249,16 +253,18 @@ const Profile = (props) => {
                                  value={form.city}
                                  type='text'
                                  name='city'
+                                 placeholder='Ciudad'
                                  onChange={handleChangeInput}
                               />
                               <input
                                  value={form.state}
                                  type='text'
                                  name='state'
+                                 placeholder='Estado, provincia'
                                  onChange={handleChangeInput}
                               />
                            </>
-                           : <p>{user.city}, {user.state}</p>
+                           : <p>{user.state.length < 1 ? `${user.city}` : `${user.city}, ${user.state}`}</p>
                         }
                         <button
                            type='button'
@@ -293,6 +299,7 @@ const Profile = (props) => {
                                  value={form.phoneNumber}
                                  type='text'
                                  name='phoneNumber'
+                                 placeholder='N° de teléfono'
                                  onChange={handleChangeInput}
                               />
                            : <p>{user.phoneNumber}</p>

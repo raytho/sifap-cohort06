@@ -11,6 +11,7 @@ const UserItemInvited = () =>{
 
    const [modal, setModal] = useState(false);
    const [userId, setUserId] = useState('');
+   const token = window.sessionStorage.getItem('token');
 
    const handleModalOpen = id => {
       setModal(true)
@@ -20,7 +21,7 @@ const UserItemInvited = () =>{
       setModal(false)
    }
    return (
-      <GetData api={`${API}superAdmin/getInvitedUsers`} >
+      <GetData api={`${API}superAdmin/getInvitedUsersFilter`} token={token}>
          {
             ({ loading, error, data }) => {
                if (loading) return <p>Cargando...</p>

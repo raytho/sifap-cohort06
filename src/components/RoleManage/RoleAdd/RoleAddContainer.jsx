@@ -6,16 +6,17 @@ import RoleAddCtrl from './RoleAddCtrl';
 
 const RoleAddContainer = ({ dataLength }) => {
 
+   const RegExEmail = /^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+   const token = window.sessionStorage.getItem('token');
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
    const [modal, setModal] = useState(false);
+   const [nameValidate, setNameValidate] = useState(false);
+   const [emailValidate, setEmailValidate] = useState(false);
+   const [roleValidate, setRoleValidate] = useState(false);
    const [form, setValues] = useState({
       email: '',
       firstName: '',
    });
-   const [nameValidate, setNameValidate] = useState(false);
-   const [emailValidate, setEmailValidate] = useState(false);
-   const [roleValidate, setRoleValidate] = useState(false);
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
-
    // Manage input
    const handleChangeInput = e => {
       setValues({
@@ -43,7 +44,7 @@ const RoleAddContainer = ({ dataLength }) => {
       } else {
          setNameValidate(true);
       }
-      if(/^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/.test(form.email)) {
+      if(RegExEmail.test(form.email)) {
          email = true;
          setEmailValidate(false);
       } else {
@@ -63,7 +64,6 @@ const RoleAddContainer = ({ dataLength }) => {
          return true
       }
    }
-   window.console.log(form);
    // Super admin create new user admin/employee
    const handleSubmit = e => {
       e.preventDefault();
@@ -76,8 +76,13 @@ const RoleAddContainer = ({ dataLength }) => {
                   headers: {
                      'Accept': 'application/json',
                      'Content-Type': 'application/json',
+                     'Authorization': `Bearer ${token}`
                   },
                   body: JSON.stringify(form)
+               }).then(async response => {
+                  window.console.log(response)
+                  const { data } = await response;
+                  window.console.log(data)
                });
             } catch (error) {
                window.console.log(error.message);

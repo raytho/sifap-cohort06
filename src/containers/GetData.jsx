@@ -3,16 +3,21 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-const GetData = ({ api, children, change }) => {
+const GetData = ({ api, children, change, token }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [data, setData] = useState([]);
   const controller = new AbortController()
-
   useEffect(() => {
     const getData = async () => {
       try {
-         const response = await fetch(api, { signal: controller.signal });
+         const response = await fetch(api, {
+            method: 'GET',
+            headers: {
+               'Authorization': `Bearer ${token}`
+            },
+            signal: controller.signal
+         });
          const result = await response.json();
          setData(result);
          setLoading(false);

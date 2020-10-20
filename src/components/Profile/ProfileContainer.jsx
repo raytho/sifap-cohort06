@@ -7,12 +7,12 @@ const ProfileContainer = () => {
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    const token = window.sessionStorage.getItem('token');
+   const controller = new AbortController();
+   const { setUser } = useContext(Context);
    const [qr, setQr] = useState();
    const [loader, setLoader] = useState(false);
    const [saved, setSaved] = useState(false);
    const [notSaved, setNotSaved] = useState(false);
-   const controller = new AbortController();
-   const { setUser } = useContext(Context);
    const [form, setValues] = useState({
       firstName: user.firstName,
       dateOfBirth: user.dateOfBirth,
@@ -34,19 +34,20 @@ const ProfileContainer = () => {
             ...form,
             [e.target.name]: e.target.value
          })
-         user.firstName = form.firstName;
-         user.dateOfBirth = form.dateOfBirth;
-         user.city = form.city;
-         user.state = form.state;
-         user.country = form.country;
-         user.fiscalId = form.fiscalId;
-         user.phoneNumber = form.phoneNumber;
-         setUser(JSON.stringify(user));
       }
    }
+   useEffect(() => {
+      user.firstName = form.firstName;
+      user.dateOfBirth = form.dateOfBirth;
+      user.city = form.city;
+      user.state = form.state;
+      user.country = form.country;
+      user.fiscalId = form.fiscalId;
+      user.phoneNumber = form.phoneNumber;
+      setUser(JSON.stringify(user));
+   }, [form])
    const handleSubmit = e => {
       e.preventDefault();
-
       const putData = async () => {
          user.twoFactorActive = form.twoFactorActive;
          setUser(JSON.stringify(user));
@@ -123,7 +124,8 @@ const ProfileContainer = () => {
       getData()
 
       return () => controller.abort();
-   }, [])
+   }, []);
+
    return (
       <Profile
          handleChangeInput={handleChangeInput}
