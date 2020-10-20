@@ -10,10 +10,10 @@ class UsersService {
   }
 
   async createSuperAdminUser({ user }, userInvitation) {
-    console.log(userInvitation);
     const { firstName, fiscalId, email, password, country, typeEmail } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const role = "Empleado";
+    const role = userInvitation.role;
+    const createdBy = userInvitation.createdBy;
     const userId = nanoid(4);
 
     const response = await this.mysqlLib.createSuperAdminUser({
@@ -224,8 +224,13 @@ class UsersService {
     return user;
   }
 
-  async getInvitedUserByMail({ email }) {
-    const user = await this.mysqlLib.getInvitedUserByMail(email);
+  async getInvitedUserByMail(userToken) {
+    const user = await this.mysqlLib.getInvitedUserByMail(userToken.email);
+    return user;
+  }
+
+  async getInvitedUserByCreatedMail({ email }) {
+    const user = await this.mysqlLib.getInvitedUserByCreatedMail(email);
     return user;
   }
 

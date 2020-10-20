@@ -69,6 +69,27 @@ const inviteNewUser = (app) => {
     }
   });
 
+  router.get("/getInvitedUsersFilter", async (req, res, next) => {
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (error, userToken) => {
+        const userService = new usersService();
+        try {
+          const getUser = await userService.getInvitedUserByCreatedMail(
+            userToken
+          );
+          if (getUser) {
+            res.status(200).send(getUser);
+          }
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ message: "Error to get user" });
+        }
+      }
+    )(req, res, next);
+  });
+
   router.get("/users-invitation/:id", async (req, res) => {
     const id = req.params.id;
     const userService = new usersService();

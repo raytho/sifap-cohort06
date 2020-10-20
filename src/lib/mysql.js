@@ -182,6 +182,22 @@ function MysqlLib() {
       });
     },
 
+    getInvitedUserByCreatedMail(email) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT * FROM users WHERE createdBy = ?",
+          email,
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
     removeInvitedUserByID(id) {
       return new Promise(function (resolve, reject) {
         connection.query(
