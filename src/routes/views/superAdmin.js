@@ -25,7 +25,7 @@ const inviteNewUser = (app) => {
         const role = user.role;
 
         const userService = new usersService();
-        if (userToken.role.toLowerCase() === "empleado") {
+        if (userToken.role === "empleado") {
           res.status(500).json({ message: "Error creating user as employ" });
         } else {
           try {

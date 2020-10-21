@@ -209,12 +209,11 @@ class UsersService {
   }
   // CRUD Users Invitations
   async addUserInvited({ user }, createdBy) {
-    const { email, firstName, role } = user;
+    const { email, role } = user;
     const userId = nanoid(4);
 
     const response = await this.mysqlLib.addUserInvited({
       email,
-      firstName,
       role,
       userId,
       createdBy,
@@ -279,7 +278,10 @@ class UsersService {
   }
 
   async insertUserProfileUrl(url, userId) {
-    const changedImgProfile = await this.mysqlLib.updateProfileImage(url, userId);
+    const changedImgProfile = await this.mysqlLib.updateProfileImage(
+      url,
+      userId
+    );
     return changedImgProfile;
   }
 }
