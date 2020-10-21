@@ -118,72 +118,73 @@ function userView(app) {
   });
 
   router.post("/data/profile-image", async (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, async (error, user) => {
-      try {
-        if (error || !user) {
-          res.status(500).json({
-            message: "No autorizado",
-          });
-        } else {
-          console.log(req.headers);
-          console.log(req.body);
-          const singleUpload = upload.single("image");
+    // passport.authenticate("jwt", { session: false }, async (error, user) => {
+    // try {
+    //   if (error || !user) {
+    //     res.status(500).json({
+    //       message: "No autorizado",
+    //     });
+    //   } else {
+    console.log(req.headers);
+    console.log(req.image);
+    const singleUpload = upload.single("image");
 
-          singleUpload(req, res, async function (err) {
-            if (req.fileValidationError) {
-              return res.status(500).json({
-                error: req.fileValidationError,
-              });
-            } else if (!req.file) {
-              return res.status(500).json({
-                error: "Error al subir el archivo",
-                uploaded: false,
-              });
-            } else if (err instanceof multer.MulterError) {
-              return res.status(500).json({
-                error: err,
-              });
-            } else if (err) {
-              return res.status(500).json({
-                error: err,
-              });
-            }
-            const DEFAULT_IMG_URL =
-              "https://sifap-profile-pictures.s3.us-east-2.amazonaws.com/default-user.png";
-
-            const lastImgUrl = user.profile_picture_url;
-
-            if (lastImgUrl !== DEFAULT_IMG_URL) {
-              const fileNameToDelete = lastImgUrl.split("/").slice(-1)[0];
-              deleteLastImg(fileNameToDelete, function (err) {
-                if (err) {
-                  return next(err);
-                } 
-              });
-            }
-            const imgUrl = req.file.location;
-            const updatedProfileImgUrl = await usersService.insertUserProfileUrl(
-              imgUrl,
-              user.userId
-            );
-            if (updatedProfileImgUrl) {
-              res.status(201).json({
-                message: "Imagen publicada correctamente",
-                profile_picture_url: imgUrl,
-                uploaded: true,
-              });
-            } else {
-              res.status(500).json({
-                message: "No fue posible actualizar",
-                uploaded: true,
-              });
-            }
-          });
-        }
-      } catch (error) {
-        next(error);
+    singleUpload(req, res, async function (err) {
+      if (req.fileValidationError) {
+        return res.status(500).json({
+          error: req.fileValidationError,
+        });
+      } else if (!req.file) {
+        return res.status(500).json({
+          error: "Error al subir el archivo",
+          uploaded: false,
+        });
+      } else if (err instanceof multer.MulterError) {
+        return res.status(500).json({
+          error: err,
+        });
+      } else if (err) {
+        return res.status(500).json({
+          error: err,
+        });
       }
-    })(req, res, next);
+      // const DEFAULT_IMG_URL =
+      //   "https://sifap-profile-pictures.s3.us-east-2.amazonaws.com/default-user.png";
+
+      // const lastImgUrl = user.profile_picture_url;
+
+      // if (lastImgUrl !== DEFAULT_IMG_URL) {
+      //   const fileNameToDelete = lastImgUrl.split("/").slice(-1)[0];
+      //   deleteLastImg(fileNameToDelete, function (err) {
+      //     if (err) {
+      //       return next(err);
+      //     }
+      //   });
+      // }
+      // const imgUrl = req.file.location;
+      // const updatedProfileImgUrl = await usersService.insertUserProfileUrl(
+      //   imgUrl,
+      //   user.userId
+      // );
+      // if (updatedProfileImgUrl) {
+      res.status(201).json({
+        message: "Imagen publicada correctamente",
+        // profile_picture_url: imgUrl,
+        uploaded: true,
+      });
+      // } else {
+      //   res.status(500).json({
+      //     message: "No fue posible actualizar",
+      //     uploaded: true,
+      //   });
+      // }
+    });
+    // }
+    // } catch (error) {
+    //   next(error);
+    // }
+    // }
+    // )(req, res, next);
   });
 }
 
