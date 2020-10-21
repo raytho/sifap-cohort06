@@ -1,6 +1,11 @@
 const express = require("express");
 const passport = require("passport");
 const UsersService = require("../../services/usersService");
+const {
+  upload,
+  deleteLastImg,
+} = require("../../services/storage/profilePicturesUpload");
+const multer = require("multer");
 
 // jwt stategy
 require("../../utils/auth/strategies/jwt");
@@ -71,38 +76,121 @@ function userView(app) {
           res.status(500).json({
             message: "No autorizado",
           });
-        }
-        else {
-          const updateUser = await usersService.updateUserProfile(userData, user.userId);
+        } else {
+          const updateUser = await usersService.updateUserProfile(
+            userData,
+            user.userId
+          );
 
           if (updateUser) {
             const userData = await usersService.getUserByMail(user);
-            const twoFactorToNumber = user.twoFactorActive == 1 ? true : false;           
+            const twoFactorToNumber = user.twoFactorActive == 1 ? true : false;
+            const formatTime = formatUTCTime(userData.dateOfBirth);
+
             res.status(200).json({
-              data: { message: {
-                phoneNumber: userData.phoneNumber,
-                firstName: userData.firstName,
-                city: userData.city,
-                state: userData.state,
-                country: userData.country,
-                fiscalId: userData.fiscalId,
-                FiscalAct: userData.fiscalAct,
-                twoFactorActive: twoFactorToNumber,
-              } },
+              data: {
+                message: {
+                  status: "Saved",
+                  phoneNumber: userData.phoneNumber,
+                  firstName: userData.firstName,
+                  city: userData.city,
+                  state: userData.state,
+                  country: userData.country,
+                  fiscalId: userData.fiscalId,
+                  dateOfBirth: formatTime,
+                  FiscalAct: userData.fiscalAct,
+                  twoFactorActive: twoFactorToNumber,
+                  profile_picture_url: userData.profile_picture_url,
+                },
+              },
               error: null,
             });
           } else {
             res.status(500).json({
-              message: "Todo mal",
+              message: "No fue posible actualizar",
             });
           }
         }
-        
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.post("/data/profile-image", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+          const singleUpload = upload.single("image");
+
+          singleUpload(req, res, async function (err) {
+            if (req.fileValidationError) {
+              return res.status(500).json({
+                error: req.fileValidationError,
+              });
+            } else if (!req.file) {
+              return res.status(500).json({
+                error: "No se especificó ningun archivo",
+                uploaded: false,
+              });
+            } else if (err instanceof multer.MulterError) {
+              return res.status(500).json({
+                error: err,
+              });
+            } else if (err) {
+              return res.status(500).json({
+                error: err,
+              });
+            }
+            const DEFAULT_IMG_URL =
+              "https://sifap-profile-pictures.s3.us-east-2.amazonaws.com/default-user.png";
+              
+            const lastImgUrl = user.profile_picture_url;
+
+            if (lastImgUrl !== DEFAULT_IMG_URL) {
+              const fileNameToDelete = lastImgUrl.split("/").slice(-1)[0];
+              deleteLastImg(fileNameToDelete, function (err) {
+                if (err) {
+                  return next(err);
+                } 
+              });
+            }
+            const imgUrl = req.file.location;
+            const updatedProfileImgUrl = await usersService.insertUserProfileUrl(
+              imgUrl,
+              user.userId
+            );
+            if (updatedProfileImgUrl) {
+              res.status(201).json({
+                message: "Imagen publicada correctamente",
+                profile_picture_url: imgUrl,
+                uploaded: true,
+              });
+            } else {
+              res.status(500).json({
+                message: "No fue posible actualizar",
+              });
+            }
+          });
+        }
       } catch (error) {
         next(error);
       }
     })(req, res, next);
   });
 }
+
+const formatUTCTime = (date) => {
+  const day = date.getUTCDate();
+  let month = date.getUTCMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
+  const years = date.getUTCFullYear();
+  const newDate = `${years}-${month}-${day}`;
+  return newDate;
+};
 
 module.exports = userView;

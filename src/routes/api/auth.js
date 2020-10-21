@@ -59,6 +59,7 @@ function authApi(app) {
           });
         } else {
           await usersService.createSuperAdminUser({ user }, hasInvited);
+          await usersService.updateInvitationByUserInvited(hasInvited);
           res.status(201).json({
             message: "User created",
           });
@@ -297,12 +298,14 @@ const generateToken = (req, res, next, user) => {
         city,
         state,
         fiscalId,
+        dateOfBirth,
         fiscalAct,
         country,
         firstName,
         phoneNumber,
         twoFactorActive,
         role,
+        profile_picture_url,
       } = user;
       const twoFactorToNumber = twoFactorActive == 1 ? true : false;
       const payload = {
@@ -313,6 +316,8 @@ const generateToken = (req, res, next, user) => {
       const token = jwt.sign(payload, config.authJwtSecret, {
         expiresIn: "24h",
       });
+
+      const formatDate = formatUTCTime(dateOfBirth);
       return res.status(200).json({
         token,
         user: {
@@ -322,11 +327,13 @@ const generateToken = (req, res, next, user) => {
           city,
           state,
           fiscalId,
+          dateOfBirth: formatDate,
           fiscalAct,
           firstName,
           phoneNumber,
           twoFactorActive: twoFactorToNumber,
           role,
+          profile_picture_url,
           permissions,
         },
       });
@@ -354,6 +361,15 @@ const generateTempToken = (req, res, next, user) => {
       });
     }
   });
+};
+
+const formatUTCTime = (date) => {
+  const day = date.getUTCDate(); // Hours
+  let month = date.getUTCMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
+  const years = date.getUTCFullYear();
+  const newDate = `${years}-${month}-${day}`;
+  return newDate;
 };
 
 module.exports = authApi;

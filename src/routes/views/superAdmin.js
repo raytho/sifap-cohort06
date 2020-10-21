@@ -56,17 +56,25 @@ const inviteNewUser = (app) => {
     )(req, res, next);
   });
 
-  router.get("/getInvitedUsers", async (req, res) => {
-    const userService = new usersService();
-    try {
-      const getUser = await userService.getAllInvitedUsers();
-      if (getUser) {
-        res.status(200).send(getUser);
+  router.get("/getInvitedUsers", async (req, res, next) => {
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (error, userToken) => {
+        const userService = new usersService();
+        try {
+          const getUser = await userService.getActiveInvitesUsersByCreatedUser(
+            userToken
+          );
+          if (getUser) {
+            res.status(200).send(getUser);
+          }
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ message: "Error to get user" });
+        }
       }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Error to get user" });
-    }
+    )(req, res, next);
   });
 
   router.get("/getInvitedUsersFilter", async (req, res, next) => {
@@ -156,18 +164,22 @@ const inviteNewUser = (app) => {
     }
   );
 
-  router.get("/get-users", async (req, res) => {
-    const userService = new usersService();
-    try {
-      const getUsers = await userService.getAllUsers();
-      if (getUsers) {
-        res.status(200).send(getUsers);
+  router.get(
+    "/get-users",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+      const userService = new usersService();
+      try {
+        const getUsers = await userService.getAllUsers();
+        if (getUsers) {
+          res.status(200).send(getUsers);
+        }
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error to get users" });
       }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Error to get users" });
     }
-  });
+  );
 
   router.get("/get-user/:id", async (req, res) => {
     const id = req.params.id;

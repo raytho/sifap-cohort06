@@ -198,6 +198,37 @@ function MysqlLib() {
       });
     },
 
+    getActiveInvitesUsersByCreatedUser(email) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT * FROM users_invitation WHERE createdBy = ? AND active = 1",
+          email,
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    updateInvitationByUserInvited(email) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "UPDATE users_invitation SET active = 0 WHERE createdBy = ?",
+          [email],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
     removeInvitedUserByID(id) {
       return new Promise(function (resolve, reject) {
         connection.query(
@@ -464,7 +495,33 @@ function MysqlLib() {
       return new Promise(function (resolve, reject) {
         connection.query(
           "UPDATE users SET phoneNumber=?, firstName=?, dateOfBirth=?, city=?, state=?, country=?, fiscalId=?, twoFactorActive=? WHERE userId = ?",
-          [data.phoneNumber, data.firstName, data.dateOfBirth, data.city, data.state, data.country, data.fiscalId, data.twoFactorActive, id],
+          [
+            data.phoneNumber,
+            data.firstName,
+            data.dateOfBirth,
+            data.city,
+            data.state,
+            data.country,
+            data.fiscalId,
+            data.twoFactorActive,
+            id,
+          ],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    updateProfileImage(imgUrl, id) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "UPDATE users SET profile_picture_url = ? WHERE userId = ?",
+          [imgUrl, id],
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));

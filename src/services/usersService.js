@@ -30,6 +30,14 @@ class UsersService {
     return response;
   }
 
+  async updateInvitationByUserInvited(userInvitation) {
+    const createdBy = userInvitation.createdBy;
+    const response = await this.mysqlLib.updateInvitationByUserInvited(
+      createdBy
+    );
+    return response;
+  }
+
   async addUser({ user }) {
     const {
       email,
@@ -152,7 +160,7 @@ class UsersService {
       subject: "Sifap Invite",
       text: `You're invite to join in SIFAP system. Please create an account in the following link
         Please click on the following link, or paste this into your browser to complete the process:
-        http://${request.host}/#/Register 
+        https://sifap.netlify.app/#/Register 
         If you did not request this, please ignore this email.`,
     };
 
@@ -219,6 +227,13 @@ class UsersService {
     return users;
   }
 
+  async getActiveInvitesUsersByCreatedUser(userToken) {
+    const users = await this.mysqlLib.getActiveInvitesUsersByCreatedUser(
+      userToken.email
+    );
+    return users;
+  }
+
   async getInvitedUserById(id) {
     const user = await this.mysqlLib.getInvitedUserById(id);
     return user;
@@ -259,8 +274,13 @@ class UsersService {
   }
 
   async updateUserProfile(user, id) {
-    const active = await this.mysqlLib.updateUserProfile(user, id);
-    return active.affectedRows;
+    const updatedProfile = await this.mysqlLib.updateUserProfile(user, id);
+    return updatedProfile.affectedRows;
+  }
+
+  async insertUserProfileUrl(url, userId) {
+    const changedImgProfile = await this.mysqlLib.updateProfileImage(url, userId);
+    return changedImgProfile;
   }
 }
 
