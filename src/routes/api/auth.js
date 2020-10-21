@@ -73,7 +73,9 @@ function authApi(app) {
     passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
       try {
         if (error || !user) {
-          next(boom.unauthorized());
+          res.status(500).json({
+            message: "Invalid Token",
+          });
         } else {
           const secret = config.twoFactorSecret;
           const { token } = req.body;
@@ -81,7 +83,9 @@ function authApi(app) {
           if (authorizedUser) {
             generateToken(req, res, next, user);
           } else {
-            next(boom.unauthorized());
+            res.status(500).json({
+              message: "Invalid code",
+            });
           }
         }
       } catch (error) {
@@ -114,7 +118,9 @@ function authApi(app) {
     passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
       try {
         if (error || !user) {
-          next(boom.unauthorized());
+          res.status(500).json({
+            message: "Invalid Token",
+          });
         } else {
           const { token } = req.body;
           const secret = config.twoFactorSecret;
@@ -122,7 +128,9 @@ function authApi(app) {
           if (authorizedUser) {
             generateToken(req, res, next, user);
           } else {
-            next(boom.unauthorized());
+            res.status(500).json({
+              message: "Invalid code",
+            });
           }
         }
       } catch (error) {
