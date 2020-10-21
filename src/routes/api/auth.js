@@ -142,16 +142,20 @@ function authApi(app) {
 
   router.post("/two-factor-activate", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
-      const { isActive } = req.body;
+      const { twoFactorActive } = req.body;
       if (error || !user) {
         next(boom.unauthorized());
       } else {
         try {
           if (
-            !(isActive === null || isActive === "" || isActive === undefined)
+            !(
+              twoFactorActive === null ||
+              twoFactorActive === "" ||
+              twoFactorActive === undefined
+            )
           ) {
             const active = await usersService.activeTwoFactorUserByID(
-              isActive,
+              twoFactorActive,
               user
             );
 
@@ -177,16 +181,20 @@ function authApi(app) {
 
   router.post("/two-factor-activate-users", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
-      const { isActive } = req.body;
+      const { twoFactorActive } = req.body;
       if (error || !user) {
         next(boom.unauthorized());
       } else {
         try {
           if (
-            !(isActive === null || isActive === "" || isActive === undefined)
+            !(
+              twoFactorActive === null ||
+              twoFactorActive === "" ||
+              twoFactorActive === undefined
+            )
           ) {
             const active = await usersService.activeTwoFactorAllUsersByCreated(
-              isActive,
+              twoFactorActive,
               user
             );
 
