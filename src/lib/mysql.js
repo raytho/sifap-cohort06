@@ -475,6 +475,23 @@ function MysqlLib() {
         );
       });
     },
+
+    updateProfileImage(imgUrl, id) {
+      console.log(imgUrl, id);
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "UPDATE users SET profile_picture_url = ? WHERE userId = ?",
+          [imgUrl, id],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
   };
 }
 

@@ -1,6 +1,8 @@
 const express = require("express");
 const passport = require("passport");
 const UsersService = require("../../services/usersService");
+const upload = require("../../services/storage/profilePicturesUpload");
+const multer = require("multer");
 
 // jwt stategy
 require("../../utils/auth/strategies/jwt");
@@ -71,28 +73,33 @@ function userView(app) {
           res.status(500).json({
             message: "No autorizado",
           });
-        }
-        else {
-          const updateUser = await usersService.updateUserProfile(userData, user.userId);
+        } else {
+          const updateUser = await usersService.updateUserProfile(
+            userData,
+            user.userId
+          );
 
           if (updateUser) {
             const userData = await usersService.getUserByMail(user);
-            const twoFactorToNumber = user.twoFactorActive == 1 ? true : false; 
-            const formatTime = formatUTCTime(userData.dateOfBirth);   
+            const twoFactorToNumber = user.twoFactorActive == 1 ? true : false;
+            const formatTime = formatUTCTime(userData.dateOfBirth);
 
             res.status(200).json({
-              data: { message: {
-                status: "Saved",
-                phoneNumber: userData.phoneNumber,
-                firstName: userData.firstName,
-                city: userData.city,
-                state: userData.state,
-                country: userData.country,
-                fiscalId: userData.fiscalId,
-                dateOfBirth: formatTime,
-                FiscalAct: userData.fiscalAct,
-                twoFactorActive: twoFactorToNumber,
-              } },
+              data: {
+                message: {
+                  status: "Saved",
+                  phoneNumber: userData.phoneNumber,
+                  firstName: userData.firstName,
+                  city: userData.city,
+                  state: userData.state,
+                  country: userData.country,
+                  fiscalId: userData.fiscalId,
+                  dateOfBirth: formatTime,
+                  FiscalAct: userData.fiscalAct,
+                  twoFactorActive: twoFactorToNumber,
+                  profile_picture_url: userData.profile_picture_url,
+                },
+              },
               error: null,
             });
           } else {
@@ -101,7 +108,60 @@ function userView(app) {
             });
           }
         }
-        
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.post("/data/profile-image", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+
+          const singleUpload = upload.single("image");
+
+          singleUpload(req, res, async function (err) {
+
+            if (req.fileValidationError) {
+              return res.status(500).json({
+                error: req.fileValidationError
+              });
+            } else if (!req.file) {
+              return res.status(500).json({
+                error: "No se especificó ningun archivo"
+              });
+            } else if (err instanceof multer.MulterError) {
+              return res.status(500).json({
+                error: err
+              });
+            } else if (err) {
+              return res.status(500).json({
+                error: err
+              });
+            }
+
+            const imgUrl = req.file.location;
+            const updatedProfileImgUrl = await usersService.insertUserProfileUrl(imgUrl, user.userId);
+            if (updatedProfileImgUrl) {
+              res.status(201).json(
+                {
+                  message: "Imagen publicada correctamente",
+                  "profile-picture-url": imgUrl,
+                }
+              );
+            } else {
+              res.status(500).json({
+                message: "No fue posible actualizar",
+              });
+            }
+           
+          });
+        }
       } catch (error) {
         next(error);
       }
@@ -110,8 +170,8 @@ function userView(app) {
 }
 
 const formatUTCTime = (date) => {
-  const day = date.getUTCDate(); // Hours
-  let month =date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  let month = date.getUTCMonth() + 1;
   month = month < 10 ? `0${month}` : month;
   const years = date.getUTCFullYear();
   const newDate = `${years}-${month}-${day}`;

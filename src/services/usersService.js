@@ -259,8 +259,13 @@ class UsersService {
   }
 
   async updateUserProfile(user, id) {
-    const active = await this.mysqlLib.updateUserProfile(user, id);
-    return active.affectedRows;
+    const updatedProfile = await this.mysqlLib.updateUserProfile(user, id);
+    return updatedProfile.affectedRows;
+  }
+
+  async insertUserProfileUrl(url, userId) {
+    const changedImgProfile = await this.mysqlLib.updateProfileImage(url, userId);
+    return changedImgProfile;
   }
 }
 

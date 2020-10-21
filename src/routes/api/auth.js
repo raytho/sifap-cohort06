@@ -304,6 +304,7 @@ const generateToken = (req, res, next, user) => {
         phoneNumber,
         twoFactorActive,
         role,
+        profile_picture_url,
       } = user;
       const twoFactorToNumber = twoFactorActive == 1 ? true : false;
       const payload = {
@@ -331,6 +332,7 @@ const generateToken = (req, res, next, user) => {
           phoneNumber,
           twoFactorActive: twoFactorToNumber,
           role,
+          profile_picture_url,
           permissions,
         },
       });

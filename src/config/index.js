@@ -18,6 +18,8 @@ const config = {
   mailPassword: process.env.MAIL_PASSWORD,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  s3AccessKey: process.env.S3_ACCESS_KEY,
+  s3AccessSecret: process.env.S3_ACCESS_SECRET,
 };
 
 module.exports = config;
