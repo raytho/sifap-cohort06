@@ -272,6 +272,14 @@ class UsersService {
     return active.affectedRows;
   }
 
+  async activeTwoFactorAllUsersByCreated(isActive, user) {
+    const active = await this.mysqlLib.activeTwoFactorAllUsersByCreated(
+      isActive,
+      user
+    );
+    return active.affectedRows;
+  }
+
   async updateUserProfile(user, id) {
     const updatedProfile = await this.mysqlLib.updateUserProfile(user, id);
     return updatedProfile.affectedRows;
@@ -283,6 +291,11 @@ class UsersService {
       userId
     );
     return changedImgProfile;
+  }
+
+  async updateRolByUserId(id, data) {
+    const updatedRol = await this.mysqlLib.updateRolByUserId(id, data);
+    return updatedRol;
   }
 }
 

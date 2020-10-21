@@ -491,6 +491,22 @@ function MysqlLib() {
       });
     },
 
+    activeTwoFactorAllUsersByCreated(isActive, user) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "UPDATE users SET twoFactorActive = ? WHERE createdBy = ?",
+          [isActive, user.email],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
     updateUserProfile(data, id) {
       return new Promise(function (resolve, reject) {
         connection.query(
@@ -522,6 +538,22 @@ function MysqlLib() {
         connection.query(
           "UPDATE users SET profile_picture_url = ? WHERE userId = ?",
           [imgUrl, id],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+    updateRolByUserId(id, data) {
+      return new Promise(function (resolve, reject) {
+        console.log(data.rol);
+        connection.query(
+          "UPDATE users SET role = ? WHERE userId = ?",
+          [data.rol, id],
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));
