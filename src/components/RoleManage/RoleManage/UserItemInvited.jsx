@@ -7,8 +7,8 @@ import '../../../assets/styles/components/RoleManage/ItemUser.scss';
 
 
 const UserItemInvited = () =>{
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
 
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
    const [modal, setModal] = useState(false);
    const [userId, setUserId] = useState('');
    const token = window.sessionStorage.getItem('token');
@@ -20,8 +20,9 @@ const UserItemInvited = () =>{
    const handleModalClose = () => {
       setModal(false)
    }
+
    return (
-      <GetData api={`${API}superAdmin/getInvitedUsersFilter`} token={token}>
+      <GetData api={`${API}superAdmin/getInvitedUsers`} token={token}>
          {
             ({ loading, error, data }) => {
                if (loading) return <p>Cargando...</p>

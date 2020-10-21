@@ -5,7 +5,8 @@ import GetData from '../../../containers/GetData'
 
 const RoleManageContainer = () => {
 
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
+   const token = window.sessionStorage.getItem('token');
    const [modal, setModal] = useState(false);
 
    // Save data in sessionStorage, after send all data with button save of section Roles
@@ -30,7 +31,7 @@ const RoleManageContainer = () => {
 
 
    return (
-      <GetData api={`${API}superAdmin/get-users`}>
+      <GetData api={`${API}superAdmin/getInvitedUsersFilter`} token={token}>
          {
             ({ loading, error, data }) => {
                if(error) return <p>¡Error!</p>
