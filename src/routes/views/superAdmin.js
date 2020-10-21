@@ -214,21 +214,28 @@ const inviteNewUser = (app) => {
 
   //Pendiente
   // eslint-disable-next-line no-unused-vars
-  router.put("/user/:id", async (req, res) => {
-    const id = req.params.id;
-    const userService = new usersService();
-    try {
-      const updatedUser = await userService.updateUserById(id);
-      if (updatedUser) {
-        res.status(200).send({
-          data: updatedUser,
-          message: "User updated",
-        });
+  router.put("/userEditRol/:id", async (req, res, next) => {
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (error, userToken) => {
+        const id = req.params.id;
+        const data = req.body;
+        const userService = new usersService();
+        try {
+          const updatedUser = await userService.updateRolByUserId(id, data);
+          if (updatedUser) {
+            res.status(200).send({
+              data: updatedUser,
+              message: "User updated",
+            });
+          }
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ message: "Error to get user" });
+        }
       }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Error to get user" });
-    }
+    )(req, res, next);
   });
 };
 

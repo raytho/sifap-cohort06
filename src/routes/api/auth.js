@@ -74,7 +74,9 @@ function authApi(app) {
     passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
       try {
         if (error || !user) {
-          next(boom.unauthorized());
+          res.status(500).json({
+            message: "Invalid Token",
+          });
         } else {
           const secret = config.twoFactorSecret;
           const { token } = req.body;
@@ -82,7 +84,9 @@ function authApi(app) {
           if (authorizedUser) {
             generateToken(req, res, next, user);
           } else {
-            next(boom.unauthorized());
+            res.status(500).json({
+              message: "Invalid code",
+            });
           }
         }
       } catch (error) {
@@ -115,7 +119,9 @@ function authApi(app) {
     passport.authenticate("jwtTwoFactor", { session: false }, (error, user) => {
       try {
         if (error || !user) {
-          next(boom.unauthorized());
+          res.status(500).json({
+            message: "Invalid Token",
+          });
         } else {
           const { token } = req.body;
           const secret = config.twoFactorSecret;
@@ -123,7 +129,9 @@ function authApi(app) {
           if (authorizedUser) {
             generateToken(req, res, next, user);
           } else {
-            next(boom.unauthorized());
+            res.status(500).json({
+              message: "Invalid code",
+            });
           }
         }
       } catch (error) {
@@ -134,16 +142,59 @@ function authApi(app) {
 
   router.post("/two-factor-activate", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
-      const { isActive } = req.body;
+      const { twoFactorActive } = req.body;
       if (error || !user) {
         next(boom.unauthorized());
       } else {
         try {
           if (
-            !(isActive === null || isActive === "" || isActive === undefined)
+            !(
+              twoFactorActive === null ||
+              twoFactorActive === "" ||
+              twoFactorActive === undefined
+            )
           ) {
             const active = await usersService.activeTwoFactorUserByID(
-              isActive,
+              twoFactorActive,
+              user
+            );
+
+            if (active) {
+              res.status(200).json({
+                data: { message: "2FA value has change" },
+                error: null,
+              });
+            } else {
+              res.status(500).json({
+                message: "No autorizado",
+              });
+            }
+          } else {
+            res.status(200).json({ data: null, error: "Needed value" });
+          }
+        } catch (error) {
+          next(error);
+        }
+      }
+    })(req, res, next);
+  });
+
+  router.post("/two-factor-activate-users", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      const { twoFactorActive } = req.body;
+      if (error || !user) {
+        next(boom.unauthorized());
+      } else {
+        try {
+          if (
+            !(
+              twoFactorActive === null ||
+              twoFactorActive === "" ||
+              twoFactorActive === undefined
+            )
+          ) {
+            const active = await usersService.activeTwoFactorAllUsersByCreated(
+              twoFactorActive,
               user
             );
 

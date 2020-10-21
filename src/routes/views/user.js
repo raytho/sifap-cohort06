@@ -125,16 +125,18 @@ function userView(app) {
             message: "No autorizado",
           });
         } else {
+          console.log(req.headers);
           const singleUpload = upload.single("image");
 
           singleUpload(req, res, async function (err) {
+            console.log(req.file);
             if (req.fileValidationError) {
               return res.status(500).json({
                 error: req.fileValidationError,
               });
             } else if (!req.file) {
               return res.status(500).json({
-                error: "No se especificó ningun archivo",
+                error: "Error al subir el archivo",
                 uploaded: false,
               });
             } else if (err instanceof multer.MulterError) {
@@ -148,7 +150,7 @@ function userView(app) {
             }
             const DEFAULT_IMG_URL =
               "https://sifap-profile-pictures.s3.us-east-2.amazonaws.com/default-user.png";
-              
+
             const lastImgUrl = user.profile_picture_url;
 
             if (lastImgUrl !== DEFAULT_IMG_URL) {
@@ -156,7 +158,7 @@ function userView(app) {
               deleteLastImg(fileNameToDelete, function (err) {
                 if (err) {
                   return next(err);
-                } 
+                }
               });
             }
             const imgUrl = req.file.location;
@@ -173,6 +175,7 @@ function userView(app) {
             } else {
               res.status(500).json({
                 message: "No fue posible actualizar",
+                uploaded: true,
               });
             }
           });

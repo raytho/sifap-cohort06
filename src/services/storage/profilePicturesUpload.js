@@ -6,6 +6,8 @@ const path = require("path");
 
 const { s3AccessKey, s3AccessSecret } = require("../../config");
 
+const LIMIT_SIZE = 5 * 1024 * 1024;
+
 aws.config.update({
   secretAccessKey: s3AccessSecret,
   accessKeyId: s3AccessKey,
@@ -13,6 +15,7 @@ aws.config.update({
 });
 
 const fileFilter = (req, file, cb) => {
+  console.log(file);
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {
@@ -22,6 +25,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
   fileFilter,
+  limits: { fileSize: LIMIT_SIZE },
   storage: multerS3({
     acl: "public-read",
     s3,
