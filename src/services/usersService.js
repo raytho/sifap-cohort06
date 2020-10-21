@@ -284,6 +284,11 @@ class UsersService {
     );
     return changedImgProfile;
   }
+
+  async updateRolByUserId(id, data) {
+    const updatedRol = await this.mysqlLib.updateRolByUserId(id, data);
+    return updatedRol;
+  }
 }
 
 module.exports = UsersService;

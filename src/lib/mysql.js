@@ -532,6 +532,22 @@ function MysqlLib() {
         );
       });
     },
+    updateRolByUserId(id, data) {
+      return new Promise(function (resolve, reject) {
+        console.log(data.rol);
+        connection.query(
+          "UPDATE users SET role = ? WHERE userId = ?",
+          [data.rol, id],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
   };
 }
 
