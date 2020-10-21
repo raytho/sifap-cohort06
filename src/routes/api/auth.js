@@ -59,6 +59,7 @@ function authApi(app) {
           });
         } else {
           await usersService.createSuperAdminUser({ user }, hasInvited);
+          await usersService.updateInvitationByUserInvited(hasInvited);
           res.status(201).json({
             message: "User created",
           });
@@ -372,7 +373,7 @@ const generateTempToken = (req, res, next, user) => {
 
 const formatUTCTime = (date) => {
   const day = date.getUTCDate(); // Hours
-  let month =date.getUTCMonth() + 1;
+  let month = date.getUTCMonth() + 1;
   month = month < 10 ? `0${month}` : month;
   const years = date.getUTCFullYear();
   const newDate = `${years}-${month}-${day}`;

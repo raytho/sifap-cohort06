@@ -30,6 +30,14 @@ class UsersService {
     return response;
   }
 
+  async updateInvitationByUserInvited(userInvitation) {
+    const createdBy = userInvitation.createdBy;
+    const response = await this.mysqlLib.updateInvitationByUserInvited(
+      createdBy
+    );
+    return response;
+  }
+
   async addUser({ user }) {
     const {
       email,
@@ -216,6 +224,13 @@ class UsersService {
 
   async getAllInvitedUsers() {
     const users = await this.mysqlLib.getInvitedUsers();
+    return users;
+  }
+
+  async getActiveInvitesUsersByCreatedUser(userToken) {
+    const users = await this.mysqlLib.getActiveInvitesUsersByCreatedUser(
+      userToken.email
+    );
     return users;
   }
 
