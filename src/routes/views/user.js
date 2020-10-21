@@ -125,6 +125,8 @@ function userView(app) {
             message: "No autorizado",
           });
         } else {
+          console.log(req.headers);
+          console.log(req.body);
           const singleUpload = upload.single("image");
 
           singleUpload(req, res, async function (err) {
