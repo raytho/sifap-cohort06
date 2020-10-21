@@ -10,6 +10,7 @@ const RoleDetailContainer = (props) => {
       match,
    } = props;
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
+   const TFAToken = window.sessionStorage.getItem('TFAToken');
    const idUser = match.params.id;
    const [modal, setModal] = useState(false);
    const [editRole, setEditRole] = useState(false);
@@ -37,6 +38,24 @@ const RoleDetailContainer = (props) => {
       }
    }
    window.console.log(form);
+   const handleSubmit = e => {
+      e.preventDefault();
+      const putData = async () => {
+         try {
+            const response = await fetch(`${API}superAdmin/userEditRol/${idUser}`, {
+               method: 'PUT',
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+               'Authorization': `Basic ${TFAToken}`,
+               body: JSON.stringify(form)
+            });
+            window.console.log(response);
+         } catch(error) {
+            window.console.log(error)
+         }
+      }
+      putData();
+   }
 
    const handleModalOpen = () => {
       setModal(true);
@@ -65,6 +84,7 @@ const RoleDetailContainer = (props) => {
                   goBack={goBack}
                   handleClickEdit={handleClickEdit}
                   editRole={editRole}
+                  handleSubmit={handleSubmit}
                />
                )
             }

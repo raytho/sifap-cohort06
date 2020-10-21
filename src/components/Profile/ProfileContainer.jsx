@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, createRef } from 'react';
 import { Context } from '../../Context';
 import Profile from './Profile';
 
@@ -8,6 +8,7 @@ const ProfileContainer = () => {
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    const token = window.sessionStorage.getItem('token');
    const controller = new AbortController();
+   const inputFile = createRef()
    const { setUser } = useContext(Context);
    const [qr, setQr] = useState();
    const [loader, setLoader] = useState(false);
@@ -57,7 +58,7 @@ const ProfileContainer = () => {
                method: 'PUT',
                headers: {
                   'Accept': 'application/json',
-                 'Content-Type': 'application/json',
+                  'Content-Type': 'application/json',
                   'Authorization': `Bearer ${token}`,
                },
                body: JSON.stringify(form)
@@ -76,33 +77,40 @@ const ProfileContainer = () => {
             window.console.log(error);
             setLoader(false);
          }
-         // try {
-         //    setLoader(true);
-         //    await fetch(`${API}auth/two-factor-activate`, {
-         //       method: 'POST',
-         //       headers: {
-         //          'Accept': 'application/json',
-         //          'Content-Type': 'application/json',
-         //          'Authorization': `Bearer ${token}`,
-         //       },
-         //       body: JSON.stringify(form),
-         //    })
-         //    .then(async response => {
-         //       const { data: { message } } = await response.json();
-         //       if (message === '2FA value has change') {
-         //          setSaved(true);
-         //          setLoader(false);
-         //       } else {
-         //          setNotSaved(true);
-         //          setLoader(false);
-         //       }
-         //    })
-         // } catch(error) {
-         //    window.console.log(error);
-         //    setLoader(false);
-         // }
+
       }
-      putData()
+      putData();
+   }
+   const [image, setImage] = useState();
+   const handleInputImg = ()=> {
+      setImage(inputFile.current.files[0]);
+   }
+
+   const handleSubmitImg = e => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('image', image);
+      window.console.log(formData.get('image'));
+      window.console.log(image);
+      // debugger
+      const postImg = async () => {
+         try {
+            await fetch(`${API}user/data/profile-image`, {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'multipart/form-data',
+                  'Authorization': `Bearer ${token}`,
+               },
+               body: formData,
+            })
+            .then(response => {
+               window.console.log(response);
+            })
+         } catch(error) {
+            window.console.log(error);
+         }
+      }
+      postImg();
    }
 
    useEffect(() => {
@@ -130,11 +138,14 @@ const ProfileContainer = () => {
       <Profile
          handleChangeInput={handleChangeInput}
          handleSubmit={handleSubmit}
+         handleSubmitImg={handleSubmitImg}
+         handleInputImg={handleInputImg}
          form={form}
          qr={qr}
          loader={loader}
          saved={saved}
          notSaved={notSaved}
+         inputFile={inputFile}
       />
    );
 }

@@ -71,10 +71,10 @@
       border: none;
       @extend %reset-btn;
       img {
-      width: 16px;
-      height: 16px;
-      opacity: .5;
-   }
+         width: 16px;
+         height: 16px;
+         opacity: .5;
+      }
    }
    select {
       width: 200px;
@@ -87,19 +87,14 @@
       border: 1px solid  rgba(3, 36, 35, .25);
       outline-color: var(--secundary-color);
    }
-   & > p {
+   form p {
       margin: 20px 0 10px 0;
       font-size: var(--font-small);
       span {
          font-weight: 600;
       }
    }
-   // form:nth-of-type(1) {
-   //    margin: 0 0 20px 0;
-   //    display: flex;
-   //    flex-wrap: wrap;
-   // }
-   form {
+   form div {
       margin: 20px 0 0 0;
       padding: 20px;
       border-radius: 5px;
@@ -117,7 +112,7 @@
    }
 }
 .Role__detail-btn {
-   margin: 0 0 30px 0;
+   margin: 30px 0 30px 0;
    position: relative;
    right: calc( -100% + 150px);
    @include btn(150px, 50px, --font-small);
