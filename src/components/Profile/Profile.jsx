@@ -205,7 +205,7 @@ const Profile = (props) => {
                      </div>
                   </div>
                   <div className='Profile__item'>
-                     <p>Páis: </p>
+                     <p>País: </p>
                      <div>
                         {
                            country

@@ -76,7 +76,7 @@ const FormLogin = (props) => {
             {!loader && <p>Cargando...</p>}
             <div className='Login__forgot'>
                <p className='Login__redirect'> <Link to='/resetpassword'>¿Olvidaste tu contraseña? </Link></p>
-            <p className='Login__redirect'>¿Aún no tienes cuenta? <span> <Link to='/Register'>Crear cuenta</Link> </span> </p>
+            {/* <p className='Login__redirect'>¿Aún no tienes cuenta? <span> <Link to='/Register'>Crear cuenta</Link> </span> </p> */}
             </div>
          </form>
          <FormModalTFA

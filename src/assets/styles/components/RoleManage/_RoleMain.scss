@@ -8,12 +8,17 @@
    box-shadow: 0 0 50px 0 rgba(3, 36, 35, .25);
 }
 .Role__btn-users {
-   width: 220px;
+   width: 400px;
    margin: 0 0 10px 0;
    display: flex;
-   justify-content: space-between;
    button {
+      margin: 0 10px 0 0;
       @include btn(100px, 35px, --font-smallest);
+   }
+   p {
+      margin: 5px 0 0 0;
+      font-family: var(--font-title);
+      font-size: var(--font-small);
    }
 }
 .Role__item-container {
@@ -41,10 +46,10 @@
       width: 130px;
       font-weight: 600;
       & > span {
+         width: 300px;
+         margin: 10px 0 0 10px;
          display: flex;
-         justify-content: space-around;
          align-items: center;
-         margin: 10px 0 0 0;
          span {
             width: 35px;
             height: 30px;
@@ -55,6 +60,7 @@
             border-radius: 5px;
          }
          button {
+            margin: 0 15px 0 15px;
             @include btn(40px, 40px, --font-big);
             border-radius: 50%;
          }

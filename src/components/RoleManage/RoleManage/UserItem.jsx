@@ -13,9 +13,9 @@ const UserItem = (props) => {
    const {
       data,
    } = props;
-
    const [modal, setModal] = useState(false);
    const [userId, setUserId] = useState('');
+   const type = 'user';
 
    const handleModalOpen = id => {
       setModal(true);
@@ -49,6 +49,7 @@ const UserItem = (props) => {
          handleModalClose={handleModalClose}
          modalIsOpen={modal}
          endpoint={`superAdmin/user/${userId}`}
+         type={type}
       />
     </ul>
    );

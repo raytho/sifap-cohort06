@@ -1,13 +1,11 @@
 .isModalAddRole {
-   width: 500px;
-   height: 550px;
+   width: 400px;
+   height: 450px;
    padding: 50px;
    display: flex;
    flex-direction: column;
    align-items: center;
    position: absolute;
-   // top: -1150px;
-   // left: 400px;
    font-family: var(--font-title);
    background-color: white;
    border-radius: 5px 100px 5px 5px;
@@ -39,9 +37,6 @@
       input {
          width: 302px;
          height: 40px;
-      }
-      label:nth-of-type(3) {
-         position: relative;
       }
       select {
          width: 302px;

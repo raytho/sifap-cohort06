@@ -10,12 +10,13 @@ const RoleAddContainer = ({ dataLength }) => {
    const token = window.sessionStorage.getItem('token');
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
    const [modal, setModal] = useState(false);
-   const [nameValidate, setNameValidate] = useState(false);
    const [emailValidate, setEmailValidate] = useState(false);
    const [roleValidate, setRoleValidate] = useState(false);
+   const [invited, setInvited] = useState(false);
+   const [errorInvited, setErrorInvited] = useState(false);
+   const [sent, setSent] = useState(false);
    const [form, setValues] = useState({
       email: '',
-      firstName: '',
    });
    // Manage input
    const handleChangeInput = e => {
@@ -31,19 +32,15 @@ const RoleAddContainer = ({ dataLength }) => {
    const handleModalClose = () => {
       setModal(false);
    }
+   const handleModalCloseConfirm = () => {
+      setSent(false);
+   }
 
    // Validate forms
    const validateForm = () => {
-      let name;
       let email;
       let role;
 
-      if (Object.keys(form.firstName).length > 2) {
-         name = true;
-         setNameValidate(false);
-      } else {
-         setNameValidate(true);
-      }
       if(RegExEmail.test(form.email)) {
          email = true;
          setEmailValidate(false);
@@ -59,8 +56,7 @@ const RoleAddContainer = ({ dataLength }) => {
          setRoleValidate(true);
 
       }
-
-      if(email && name && role) {
+      if(email && role) {
          return true
       }
    }
@@ -80,9 +76,14 @@ const RoleAddContainer = ({ dataLength }) => {
                   },
                   body: JSON.stringify(form)
                }).then(async response => {
-                  window.console.log(response)
-                  const { data } = await response;
-                  window.console.log(data)
+                  const { message } = await response.json();
+                  if (message === 'Invitation sent') {
+                     setInvited(true)
+                     setSent(true)
+                  } else {
+                     setErrorInvited(true);
+                     setSent(true)
+                  }
                });
             } catch (error) {
                window.console.log(error.message);
@@ -100,10 +101,13 @@ const RoleAddContainer = ({ dataLength }) => {
          handleChangeInput={handleChangeInput}
          form={form}
          modalIsOpen={modal}
-         nameValidate={nameValidate}
          emailValidate={emailValidate}
          roleValidate={roleValidate}
          dataLength={dataLength}
+         invited={invited}
+         errorInvited={errorInvited}
+         sent={sent}
+         handleModalCloseConfirm={handleModalCloseConfirm}
       />
    )
 

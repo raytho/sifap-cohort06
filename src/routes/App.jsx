@@ -24,10 +24,8 @@ import Chatbot from '../components/Chatbot/Chatbot';
 
 
 
-
 const App = () => {
-   const { isAuth } = useContext(Context);
-
+   const { isAuth, TFAToken } = useContext(Context);
    return (
       <>
       <Chatbot />
@@ -48,17 +46,19 @@ const App = () => {
                            <Route exact path='/profile' component={ProfileContainer} />
                            {/* <Route exact path='/delegate-super' component={DelegateSuperContainer} /> */}
                         </Layout>
-                        {/* Problema con este redirect, lo hace desde cualquiera ruta */}
-                        {/* <Redirect from='/register' to='/' push/> */}
                      </>
                   ) : (
                      <>
-                        <Redirect from='/' to='/login' />
-                        <Route exact path='/register' component={Register} />
+                        <Redirect from='/' to='/login' component={Login} />
                         <Route exact path='/login' component={Login} />
-                        <Route exact path='/tfauthentication' component={TFAuthentication} />
+                        <Route exact path='/register' component={Register} />
                         <Route exact path='/resetpassword' component={ResetPassword} />
                         <Route exact path='/newpassword' component={NewPassword} />
+                        {
+                           TFAToken === null || undefined
+                           ? <Redirect from='/tfauthentication' to='/login' />
+                           : <Route exact path='/tfauthentication' component={TFAuthentication} />
+                        }
                      </>
                   )
             }

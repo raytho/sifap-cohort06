@@ -3,23 +3,27 @@ import React, { useState } from 'react';
 import RoleDetail from './RoleDetail';
 import GetData from '../../../containers/GetData';
 
-// import mockRoles from '../../../../mockRoles';
-
-// Aquí vamos a hacer las peticiones de los detalles de cada rol
-
 const RoleDetailContainer = (props) => {
 
    const {
       history,
       match,
    } = props;
-   const [modal, setModal] = useState(false)
-   const [form, setValues] = useState({});
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
    const idUser = match.params.id;
+   const [modal, setModal] = useState(false);
+   const [editRole, setEditRole] = useState(false);
+   const [form, setValues] = useState({});
+
+   const handleClickEdit = () => {
+      if (editRole) {
+         setEditRole(false)
+      } else {
+         setEditRole(true)
+      }
+   }
 
    const handleChangeInput = (e) => {
-
       if(e.target.name === 'role') {
          setValues({
             ...form,
@@ -34,21 +38,16 @@ const RoleDetailContainer = (props) => {
    }
    window.console.log(form);
 
-   window.console.log(match.params.id)
-
    const handleModalOpen = () => {
       setModal(true);
    }
-
    const handleModalClose = () => {
       setModal(false)
    }
-
    const goBack = () => {
       history.goBack()
    }
 
-   // const { roles } = mockRoles;
    return (
       <GetData api={`${API}superAdmin/get-user/${idUser}`}>
          {
@@ -64,6 +63,8 @@ const RoleDetailContainer = (props) => {
                   modalIsOpen={modal}
                   form={form}
                   goBack={goBack}
+                  handleClickEdit={handleClickEdit}
+                  editRole={editRole}
                />
                )
             }

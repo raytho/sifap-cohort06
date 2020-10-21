@@ -10,15 +10,18 @@
 }
 .Role__header--detail {
    font-family: var(--font-text);
+   display: flex;
+   justify-content: flex-start;
    button {
-      width: 70px;
-      height:  50px;
-      position: relative;
+      height: 30px;
+      margin: 10px 0 0 0;
+      display: flex;
+      justify-content: flex-start;
       font-size: var(--font-big);
       background-color: transparent;
       @extend %reset-btn;
       &::after {
-         @include icon-arrow(absolute, 13px, 40px, 13px, var(--white-color), -90deg);
+         @include icon-arrow(static, 0, 0, 13px, var(--white-color), -90deg);
          z-index: 10;
       }
    }
@@ -57,15 +60,21 @@
       font-weight: 600;
    }
    & > label {
-      position: relative;
-      font-family: var(--font-text);
-      font-size: var(--font-small);
-      font-weight: 600;
       p {
          margin: 10px 0 0 0;
          font-size: var(--font-smallest);
-         font-weight: 400;
+         font-weight: 600;
       }
+   }
+   p button {
+      background-color: transparent;
+      border: none;
+      @extend %reset-btn;
+      img {
+      width: 16px;
+      height: 16px;
+      opacity: .5;
+   }
    }
    select {
       width: 200px;
@@ -81,14 +90,16 @@
    & > p {
       margin: 20px 0 10px 0;
       font-size: var(--font-small);
-      font-weight: 600;
+      span {
+         font-weight: 600;
+      }
    }
-   form:nth-of-type(1) {
-      margin: 0 0 20px 0;
-      display: flex;
-      flex-wrap: wrap;
-   }
-   form:nth-of-type(2) {
+   // form:nth-of-type(1) {
+   //    margin: 0 0 20px 0;
+   //    display: flex;
+   //    flex-wrap: wrap;
+   // }
+   form {
       margin: 20px 0 0 0;
       padding: 20px;
       border-radius: 5px;

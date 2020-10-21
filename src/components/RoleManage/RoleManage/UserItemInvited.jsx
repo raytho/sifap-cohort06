@@ -12,6 +12,7 @@ const UserItemInvited = () =>{
    const [modal, setModal] = useState(false);
    const [userId, setUserId] = useState('');
    const token = window.sessionStorage.getItem('token');
+   const type = 'invite';
 
    const handleModalOpen = id => {
       setModal(true)
@@ -48,6 +49,7 @@ const UserItemInvited = () =>{
                      handleModalClose={handleModalClose}
                      modalIsOpen={modal}
                      endpoint={`superAdmin/users-invitation/${userId}`}
+                     type={type}
                   />
                 </ul>
                )

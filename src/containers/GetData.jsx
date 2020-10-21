@@ -17,7 +17,7 @@ const GetData = ({ api, children, change, token }) => {
                'Authorization': `Bearer ${token}`
             },
             signal: controller.signal
-         });
+         })
          const result = await response.json();
          setData(result);
          setLoading(false);

@@ -33,9 +33,10 @@ const Provider = ({ children }) => {
       TFAToken,
       activeTFAToken: token => {
          window.sessionStorage.setItem('TFAToken', token);
+         setTFAToken(token);
       },
       removeTFAToken: () => {
-         window.sessionStorage.removeItem('authToken');
+         window.sessionStorage.removeItem('TFAToken');
       },
       setTypeTFA: type => {
          window.sessionStorage.setItem('typeTFA', type)

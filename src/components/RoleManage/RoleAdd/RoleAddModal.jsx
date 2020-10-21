@@ -13,12 +13,16 @@ const RoleAddModal = (props) => {
       handleModalClose,
       modalIsOpen,
       form,
-      nameValidate,
       emailValidate,
       roleValidate,
+      sent,
+      invited,
+      errorInvited,
+      handleModalCloseConfirm,
    } = props;
-
-      return (
+   const user = JSON.parse(window.sessionStorage.getItem('user'));
+   return (
+      <>
          <Modal
          isOpen={modalIsOpen}
          handleModalClose={handleModalClose}
@@ -41,23 +45,15 @@ const RoleAddModal = (props) => {
                   />
                   {emailValidate && <p className='alert-form'>Formato de correo ejemplo@correo.com.</p>}
                </label>
-               <label htmlFor='firstName'>Nombre: <i>*</i>
-                  <input
-                     type='text'
-                     name='firstName'
-                     value={form.firstName}
-                     placeholder='Nombre'
-                     onChange={handleChangeInput}
-                  />
-                  {nameValidate &&
-                        <p className='alert-form'>Debe tener el primer nombre.</p>}
-               </label>
                <label htmlFor='role'>
                   Rol: <i>*</i>
                   <select  name='role' value={form.role} onChange={handleChangeInput}>
                      <option value='role'>Rol</option>
                      <option value='empleado'>Empleado</option>
-                     <option value='administrador'>Administrador</option>
+                     {user.role === 'SuperAdministrador'
+                        ? <option value='administrador'>Administrador</option>
+                        : null
+                     }
                   </select>
                   <i className='Arrow'> </i>
                {roleValidate &&
@@ -68,7 +64,19 @@ const RoleAddModal = (props) => {
                </div>
             </form>
          </Modal>
-      );
+         <Modal
+            isOpen={sent}
+            isConfirmation
+         >
+            <button type='button' onClick={handleModalCloseConfirm}>X</button>
+               {invited && <p>Invitación enviada.</p>}
+               {errorInvited && <p>Hubo error al enviar la invitación, intenta de nuevo.</p>}
+            <div>
+               <button type='button' onClick={handleModalCloseConfirm}>Aceptar</button>
+            </div>
+         </Modal>
+      </>
+   );
 
 }
 export default RoleAddModal;

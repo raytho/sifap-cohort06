@@ -118,8 +118,14 @@ const RoleManage = (props) => {
                   </span>
                </div>
                <div className='Role__main'>
-                  <button type='button' onClick={() => setUsers(true)}>Usuarios</button>
-                  <button type='button' onClick={() => setUsers(false)}>Usuarios invitados</button>
+                  <button
+                     type='button'
+                     onClick={() => setUsers(true)}
+                  >Usuarios</button>
+                  <button
+                     type='button'
+                     onClick={() => setUsers(false)}
+                  >Usuarios invitados</button>
                   <div className='Role__item-container'>
                   {loading && <p>Cargando...</p>}
                   {users
@@ -173,7 +179,6 @@ const RoleManage = (props) => {
                            <option value='Administrador'>Administrador</option>
                            <option value='SuperAdministrador'>Super Admin</option>
                         </select>
-                        <i className='Arrow'> </i>
                      </label>
                      <input placeholder='ID' onChange={handleChangeFilterId} />
                      <input placeholder='Nombre' onChange={handleChangeFilterName}/>
@@ -211,7 +216,7 @@ const RoleManage = (props) => {
                   </div>
                   <div className='Role__panel-ctrl'>
                      <RoleAddContainer dataLength={resultId.length} />
-                     <button type='button' onClick={handleModalOpen}>Guardar</button>
+                     {/* <button type='button' onClick={handleModalOpen}>Guardar</button> */}
                      <RoleManageModal
                         handleModalClose={handleModalClose}
                         modalIsOpen={modalIsOpen}
