@@ -28,13 +28,28 @@ const upload = multer({
     bucket: "sifap-profile-pictures",
     contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function (req, file, cb) {
-      cb(null, { fieldName: "TESTING_METADATA" });
+      cb(null, { fieldName: "sifap user profile" });
     },
     key: function (req, file, cb) {
-      console.log(file.mimetype);
       cb(null, Date.now().toString()+ path.extname(file.originalname));
     },
   }),
 });
 
-module.exports = upload;
+const deleteLastImg = function(filename, callback) {
+  var s3 = new aws.S3();
+  var params = {
+    Bucket: "sifap-profile-pictures",
+    Key: filename
+  };
+  s3.deleteObject(params, function(err) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+};
+
+module.exports = {upload, deleteLastImg};

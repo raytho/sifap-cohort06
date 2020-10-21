@@ -477,7 +477,6 @@ function MysqlLib() {
     },
 
     updateProfileImage(imgUrl, id) {
-      console.log(imgUrl, id);
       return new Promise(function (resolve, reject) {
         connection.query(
           "UPDATE users SET profile_picture_url = ? WHERE userId = ?",

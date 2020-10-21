@@ -1,7 +1,10 @@
 const express = require("express");
 const passport = require("passport");
 const UsersService = require("../../services/usersService");
-const upload = require("../../services/storage/profilePicturesUpload");
+const {
+  upload,
+  deleteLastImg,
+} = require("../../services/storage/profilePicturesUpload");
 const multer = require("multer");
 
 // jwt stategy
@@ -122,44 +125,56 @@ function userView(app) {
             message: "No autorizado",
           });
         } else {
-
           const singleUpload = upload.single("image");
 
           singleUpload(req, res, async function (err) {
-
             if (req.fileValidationError) {
               return res.status(500).json({
-                error: req.fileValidationError
+                error: req.fileValidationError,
               });
             } else if (!req.file) {
               return res.status(500).json({
-                error: "No se especificó ningun archivo"
+                error: "No se especificó ningun archivo",
+                uploaded: false,
               });
             } else if (err instanceof multer.MulterError) {
               return res.status(500).json({
-                error: err
+                error: err,
               });
             } else if (err) {
               return res.status(500).json({
-                error: err
+                error: err,
               });
             }
+            const DEFAULT_IMG_URL =
+              "https://sifap-profile-pictures.s3.us-east-2.amazonaws.com/default-user.png";
+              
+            const lastImgUrl = user.profile_picture_url;
 
+            if (lastImgUrl !== DEFAULT_IMG_URL) {
+              const fileNameToDelete = lastImgUrl.split("/").slice(-1)[0];
+              deleteLastImg(fileNameToDelete, function (err) {
+                if (err) {
+                  return next(err);
+                } 
+              });
+            }
             const imgUrl = req.file.location;
-            const updatedProfileImgUrl = await usersService.insertUserProfileUrl(imgUrl, user.userId);
+            const updatedProfileImgUrl = await usersService.insertUserProfileUrl(
+              imgUrl,
+              user.userId
+            );
             if (updatedProfileImgUrl) {
-              res.status(201).json(
-                {
-                  message: "Imagen publicada correctamente",
-                  "profile-picture-url": imgUrl,
-                }
-              );
+              res.status(201).json({
+                message: "Imagen publicada correctamente",
+                profile_picture_url: imgUrl,
+                uploaded: true,
+              });
             } else {
               res.status(500).json({
                 message: "No fue posible actualizar",
               });
             }
-           
           });
         }
       } catch (error) {
