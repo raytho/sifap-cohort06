@@ -175,6 +175,41 @@ function authApi(app) {
     })(req, res, next);
   });
 
+  router.post("/two-factor-activate-users", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      const { isActive } = req.body;
+      if (error || !user) {
+        next(boom.unauthorized());
+      } else {
+        try {
+          if (
+            !(isActive === null || isActive === "" || isActive === undefined)
+          ) {
+            const active = await usersService.activeTwoFactorAllUsersByCreated(
+              isActive,
+              user
+            );
+
+            if (active) {
+              res.status(200).json({
+                data: { message: "2FA value has change" },
+                error: null,
+              });
+            } else {
+              res.status(500).json({
+                message: "No autorizado",
+              });
+            }
+          } else {
+            res.status(200).json({ data: null, error: "Needed value" });
+          }
+        } catch (error) {
+          next(error);
+        }
+      }
+    })(req, res, next);
+  });
+
   router.get("/token", async (req, res) => {
     const secret = config.twoFactorSecret;
     const token = twoFactorAuth.generateTotpToken(secret);

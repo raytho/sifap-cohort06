@@ -272,6 +272,14 @@ class UsersService {
     return active.affectedRows;
   }
 
+  async activeTwoFactorAllUsersByCreated(isActive, user) {
+    const active = await this.mysqlLib.activeTwoFactorAllUsersByCreated(
+      isActive,
+      user
+    );
+    return active.affectedRows;
+  }
+
   async updateUserProfile(user, id) {
     const updatedProfile = await this.mysqlLib.updateUserProfile(user, id);
     return updatedProfile.affectedRows;

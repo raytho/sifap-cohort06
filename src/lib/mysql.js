@@ -491,6 +491,22 @@ function MysqlLib() {
       });
     },
 
+    activeTwoFactorAllUsersByCreated(isActive, user) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "UPDATE users SET twoFactorActive = ? WHERE createdBy = ?",
+          [isActive, user.email],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
     updateUserProfile(data, id) {
       return new Promise(function (resolve, reject) {
         connection.query(
