@@ -134,7 +134,7 @@ function userView(app) {
               });
             } else if (!req.file) {
               return res.status(500).json({
-                error: "No se especificó ningun archivo",
+                error: "Error al subir el archivo",
                 uploaded: false,
               });
             } else if (err instanceof multer.MulterError) {
@@ -148,7 +148,7 @@ function userView(app) {
             }
             const DEFAULT_IMG_URL =
               "https://sifap-profile-pictures.s3.us-east-2.amazonaws.com/default-user.png";
-              
+
             const lastImgUrl = user.profile_picture_url;
 
             if (lastImgUrl !== DEFAULT_IMG_URL) {
@@ -173,6 +173,7 @@ function userView(app) {
             } else {
               res.status(500).json({
                 message: "No fue posible actualizar",
+                uploaded: true,
               });
             }
           });
