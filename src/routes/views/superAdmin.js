@@ -223,6 +223,7 @@ const inviteNewUser = (app) => {
         const data = req.body;
         const userService = new usersService();
         try {
+          consolelog("Data de userEditRol => ", data);
           if (data.rol) {
             const updatedUser = await userService.updateRolByUserId(id, data);
             if (updatedUser) {
