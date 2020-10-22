@@ -14,7 +14,6 @@ const RoleDetail = (props) =>  {
       loading,
       user,
       handleChangeInput,
-      handleModalOpen,
       handleModalClose,
       modalIsOpen,
       form,
@@ -53,7 +52,8 @@ const RoleDetail = (props) =>  {
                               name='role'
                               onChange={handleChangeInput}
                            >
-                              <option value='employee'>Empleado</option>
+                              <option value={user.role}>Role</option>
+                              <option value='empleado'>Empleado</option>
                               <option value='administrador'>Administrador</option>
                            </select>
                         </label>

@@ -13,21 +13,23 @@ import iconEdit from '../../assets/static/icon/edit.png';
 import iconSave from '../../assets/static/icon/save.png';
 import userProfile from '../../assets/static/icon/user-profile.png';
 
-const DEFAULT_IMG_USER = 'https://i.imgur.com/JlR3iZD.png';
-
 const Profile = (props) => {
 
    const {
       handleChangeInput,
       handleSubmit,
       handleSubmitImg,
+      handleClickAdd,
       form,
       qr,
       loader,
       saved,
       notSaved,
       inputFile,
-      handleInputImg
+      image,
+      addImage,
+      uploadedImg,
+      loaderImg
    } = props;
    const [name, setName] = useState(false);
    const [dateOfBirth, setDateOfBirth] = useState(false);
@@ -78,7 +80,6 @@ const Profile = (props) => {
          }
       })
    }, []);
-
    return (
       <>
          <Title icon={userProfile} />
@@ -89,21 +90,34 @@ const Profile = (props) => {
             <div className='Profile__main' >
                <form onSubmit={handleSubmitImg}>
                   <div className='Profile__img'>
-                     <img src={DEFAULT_IMG_USER} alt='Foto de perfil'/>
-                     <button type='button'>+</button>
-                     <div>
-                        <input
-                           className='Profile__input-img'
-                           type='file'
-                           formEncType='multipart/form-data'
-                           accept='image/png, .jpeg, .jpg'
-                           ref={inputFile}
-                           onChange={handleInputImg}
-                        />
-                        <button type='submit'>
-                           <img src={iconSave} alt='icono de editar'/>
-                        </button>
-                     </div>
+                     <img
+                        src={
+                           image === undefined
+                           ? user.profile_picture_url
+                           : image
+                        }
+                        alt='Foto de perfil'
+                     />
+                     <button type='button' onClick={handleClickAdd}>+</button>
+                     {loaderImg && <p>Cargando...</p>}
+                     {
+                        addImage &&
+                        <>
+                           <div>
+                              <input
+                                 className='Profile__input-img'
+                                 type='file'
+                                 formEncType='multipart/form-data'
+                                 accept='image/png, .jpeg, .jpg'
+                                 ref={inputFile}
+                              />
+                              <button type='submit'>
+                                 <img src={iconSave} alt='icono de editar'/>
+                              </button>
+                           </div>
+                           {uploadedImg === false && <p>Error al subir la imagen, intenta de nuevo.</p>}
+                        </>
+                     }
                   </div>
                </form>
                <form  onSubmit={handleSubmit} id='form'>
@@ -137,7 +151,6 @@ const Profile = (props) => {
                                     setPhoneNumber
                                  )
                               }
-
                            >
                               {
                                  name
@@ -411,13 +424,17 @@ Profile.propTypes = {
    handleChangeInput: PropTypes.func.isRequired,
    handleSubmit: PropTypes.func.isRequired,
    handleSubmitImg: PropTypes.func.isRequired,
+   handleClickAdd: PropTypes.func.isRequired,
    form: PropTypes.object.isRequired,
-   handleInputImg: PropTypes.func.isRequired,
+   inputFile: PropTypes.object,
+   image: PropTypes.string || undefined.isRequired,
    qr: PropTypes.string,
    loader: PropTypes.bool,
    saved: PropTypes.bool,
    notSaved: PropTypes.bool,
-   inputFile: PropTypes.object,
+   addImage: PropTypes.bool,
+   uploadedImg: PropTypes.bool,
+   loaderImg: PropTypes.bool
 
 }
 

@@ -44,7 +44,7 @@
 }
 .Profile__img {
    width: 250px;
-   height: 190px;
+   height: auto;
    margin: 0 0 30px 0;
    position: relative;
    & > img {
@@ -86,7 +86,10 @@
             // opacity: .5;
          }
       }
-
+   }
+   p {
+      width: 300px;
+      font-family: var(--font-title);
    }
 }
 .Profile__item {

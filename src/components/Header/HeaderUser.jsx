@@ -17,13 +17,14 @@ const HeaderUser = (props) => {
       // handleModalClose
    } = props;
    const user = JSON.parse(window.sessionStorage.getItem('user'));
+   const { userImg } = useContext(Context);
 
    return (
       <>
          <div className='Header__user-container'>
             <p>{user.firstName}</p>
             <div>
-               <img src={img} alt='Foto usuario'/>
+               <img src={user.profile_picture_url || userImg } alt='Foto usuario'/>
             </div>
             <ul className='Header__menu'>
                <li>
@@ -47,10 +48,7 @@ const HeaderUser = (props) => {
 }
 
 HeaderUser.propTypes = {
-   name: PropTypes.string,
    img:  PropTypes.string,
-   email:   PropTypes.string,
-   rol:  PropTypes.string,
    logOut: PropTypes.func,
    modal: PropTypes.bool,
    // handleModalClose: PropTypes.func,

@@ -23,7 +23,6 @@ const RoleDetailContainer = (props) => {
          setEditRole(true)
       }
    }
-
    const handleChangeInput = (e) => {
       if(e.target.name === 'role') {
          setValues({
@@ -42,6 +41,7 @@ const RoleDetailContainer = (props) => {
       e.preventDefault();
       const putData = async () => {
          try {
+            window.console.log(form);
             const response = await fetch(`${API}superAdmin/userEditRol/${idUser}`, {
                method: 'PUT',
                'Accept': 'application/json',

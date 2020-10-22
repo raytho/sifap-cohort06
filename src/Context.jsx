@@ -12,7 +12,7 @@ const Provider = ({ children }) => {
    const [TFAToken, setTFAToken] = useState(() => {
       return window.sessionStorage.getItem('TFAToken');
    });
-   // const [user, setUser] = useState();
+   const [userImg, setUserImg] = useState();
    // Value va a ser le objeto que vamos a poder acceder en toda la app
    const value = {
       isAuth,
@@ -40,6 +40,10 @@ const Provider = ({ children }) => {
       },
       setTypeTFA: type => {
          window.sessionStorage.setItem('typeTFA', type)
+      },
+      userImg,
+      setUserImg: img => {
+         setUserImg(img)
       }
    }
 
