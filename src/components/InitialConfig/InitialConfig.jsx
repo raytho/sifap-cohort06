@@ -1,5 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/require-default-props */
 import React from 'react';
+import PropTypes, { arrayOf } from 'prop-types';
 
+import InitialConfigForm from './InitialConfigForm';
+import InitialConfigFirst from './InitialConfigFirst';
 import Header from '../Header/Header';
 
 import '../../assets/styles/components/InitialConfig/InitialConfig.scss';
@@ -9,201 +14,76 @@ const InitialConfig = (props) => {
    const {
       handleChangeInput,
       handleChangeInputCf,
-      form,
-      comprobanteFiscal,
+      formCF,
+      comprobanteFiscalJoin,
+      handleChangeInputConfig,
+      slide,
+      type,
+      handleClickNext,
+      handleClickPrev,
+      choiseOne,
+      formFirst
    } = props;
 
+   const user = JSON.parse(window.sessionStorage.getItem('user'));
+   window.console.log(user)
    return (
       <>
       <Header />
          <div className='InitialConfig'>
             <div className='InitialConfig__header'>
+               <span>
+                  <p>
+                     {user.firstName}
+                  </p>
+                  <p>
+                     {user.userId}
+                  </p>
+                  <p>
+                     {user.email}
+                  </p>
+                  <p>
+                     {user.country}
+                  </p>
+               </span>
             </div>
             <div className='InitialConfig__main'>
-               <form>
-                  <div className='InitialConfig__persona-data'>
-                     <h2>Datos generales</h2>
-                     <div>
-                        <p>
-                           <span>Con tu identificador fiscal se emitirán las facturas con validez fiscal.</span>
-                        </p>
-                        <div className='InitialConfig__persona-input'>
-                           <div >
-                              <label>Nombres:
-                                 <input 
-                                    type='text'
-                                    value={form.firstName}
-                                    name='firstName'
-                                    placeholder='Nombre'
-                                    onChange={handleChangeInput}
-                                 />
-                              </label>
-                              <label>Apellidos:
-                                 <input 
-                                    type='text'
-                                    value={form.firstName}
-                                    name='firstName'
-                                    placeholder='Nombre'
-                                    onChange={handleChangeInput}
-                                 />
-                              </label>
-                              <label>Fecha de nacimiento:
-                                 <input 
-                                    type='text'
-                                    value={form.firstName}
-                                    name='firstName'
-                                    placeholder='Nombre'
-                                    onChange={handleChangeInput}
-                                 />
-                              </label>
-                              <label>País:
-                                 <input 
-                                    type='text'
-                                    value={form.firstName}
-                                    name='firstName'
-                                    placeholder='Nombre'
-                                    onChange={handleChangeInput}
-                                 />
-                              </label>
-                           </div>
 
-
-                           <div>
-                              <label>Nombre de la empresa:
-                                 <input 
-                                    type='text'
-                                    value={form.firstName}
-                                    name='firstName'
-                                    placeholder='Nombre'
-                                    onChange={handleChangeInput}
-                                 />
-                              </label>
-                              <label>Identificador fiscal:
-                                 <input 
-                                    type='text'
-                                    value={form.firstName}
-                                    name='firstName'
-                                    placeholder='Nombre'
-                                    onChange={handleChangeInput}
-                                 />
-                              </label>
-                              <label>
-                                 <p>Nombre del identificador fiscal en tu país:</p>
-                                 <input 
-                                    type='text'
-                                    value={form.firstName}
-                                    name='firstName'
-                                    placeholder='Nombre'
-                                    onChange={handleChangeInput}
-                                 />
-                              </label>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div className='InitialConfig__cf-panel'>
-                     <div>
-                        <h2>
-                           Estructura de comprobantes fiscales:
-                        </h2>
-                        <p>
-                           Configura la estructura de tu comprobante fiscal
-                        </p>
-                        <div className='InitialConfig__cf-input'>
-                           <p>
-                              <span>
-                                 Comprobantes fiscales:
-                              </span>
-                           </p>
-                           <div>
-                              <p></p>
-                           </div>
-                           <label>
-                              Fracción:
-                              <input
-                                 type='text'
-                                 value={comprobanteFiscal.cf}
-                                 name='cf'
-                                 placeholder='Fracción'
-                                 onChange={handleChangeInputCf}
-                              />
-                              <button type='button' >+</button>
-                           </label>
-                           <div>
-                              {/* Aquí vamos poniendo los que nuevo Fracción */}
-                           </div>
-                        </div>
-                     </div>
-                     <div>
-                        <h2>
-                           Estructura de comprobantes fiscales:
-                        </h2>
-                        <p>
-                           Configura la estructura de tu comprobante fiscal
-                        </p>
-                        <div className='InitialConfig__cf-input'>
-                           <p>
-                              <span>
-                                 Comprobantes fiscales:
-                              </span>
-                           </p>
-                           <div>
-                              <p></p>
-                           </div>
-                           <label>
-                              Fracción:
-                              <input
-                                 type='text'
-                                 value={comprobanteFiscal.cf}
-                                 name='cf'
-                                 placeholder='Fracción'
-                                 onChange={handleChangeInputCf}
-                              />
-                              <button type='button' >+</button>
-                           </label>
-                           <div>
-                              <label>
-                                 Fracción:
-                                 <input
-                                    type='text'
-                                    value={comprobanteFiscal.cf}
-                                    name='cf'
-                                    placeholder='Fracción'
-                                    onChange={handleChangeInputCf}
-                                 />
-                                 <button type='button' >+</button>
-                              </label>
-                              <label>
-                                 Fracción:
-                                 <input
-                                    type='text'
-                                    value={comprobanteFiscal.cf}
-                                    name='cf'
-                                    placeholder='Fracción'
-                                    onChange={handleChangeInputCf}
-                                 />
-                                 <button type='button' >+</button>
-                              </label>
-                              <label>
-                                 Fracción:
-                                 <input
-                                    type='text'
-                                    value={comprobanteFiscal.cf}
-                                    name='cf'
-                                    placeholder='Fracción'
-                                    onChange={handleChangeInputCf}
-                                 />
-                                 <button type='button' >+</button>
-                              </label>
-                           </div>
-                        </div>
-                     </div>
-                  </div>   
-               </form>
+            {slide
+               ? <InitialConfigFirst
+                  handleChangeInputConfig={handleChangeInputConfig}
+                  handleClickNext={handleClickNext}
+                  choiseOne={choiseOne}
+                  formFirst={formFirst}
+               />
+               : <InitialConfigForm
+                  handleChangeInput={handleChangeInput}
+                  handleChangeInputCf={handleChangeInputCf}
+                  formCF={formCF}
+                  comprobanteFiscalJoin={comprobanteFiscalJoin}
+                  handleClickNext={handleClickNext}
+                  handleClickPrev={handleClickPrev}
+                  type={type}
+               />
+            }
             </div>
          </div>
       </>
    );
+}
+
+InitialConfig.propTypes = {
+   handleChangeInput: PropTypes.func.isRequired,
+   handleChangeInputCf: PropTypes.func.isRequired,
+   handleChangeInputConfig: PropTypes.func.isRequired,
+   handleClickNext: PropTypes.func.isRequired,
+   handleClickPrev: PropTypes.func.isRequired,
+   formCF: PropTypes.objectOf(arrayOf),
+   formFirst: PropTypes.objectOf(arrayOf),
+   comprobanteFiscalJoin: PropTypes.string,
+   type: PropTypes.string,
+   slide: PropTypes.bool,
+   choiseOne: PropTypes.bool
 }
 
 export default InitialConfig;

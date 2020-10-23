@@ -49,7 +49,6 @@ const App = () => {
                               <Route exact path='/profile' component={ProfileContainer} />
                            </Layout>
                         }
-                       
                      </>
                   ) : (
                      <>

@@ -37,8 +37,11 @@
          outline-color: var(--detail-color);
       }
       div {
-         width: 88%;
+         width: 94%;
          margin: 0 auto;
+      }
+      & > div:nth-of-type(1) {
+         width: 80%;
       }
    }
 
@@ -129,7 +132,7 @@
    margin: 0 0 0px 0;
    // left: calc(100% - 500px);
    & > div:nth-of-type(1) {
-      width: 420px;
+      width: 100%;
       padding: 20px;
       box-shadow: 0 2px 15px 0  rgba(3, 36, 35, .3);
       border-radius: 5px 40px 5px 5px;
@@ -156,7 +159,7 @@
    justify-content: space-between;
    align-items: center;
    button {
-      margin: 10px 0 0 0;
+      margin: 50px 0 0 0;
       @include btn(120px, 50px, --font-small);
    }
 }

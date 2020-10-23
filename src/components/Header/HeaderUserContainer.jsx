@@ -30,7 +30,7 @@ const HeaderuserContainer = () => {
             window.console.log(response);
             removeAuth();
             removeUser();
-            history.push('/login');
+            history.push('/');
          });
       } catch(error) {
          window.console.log(error);

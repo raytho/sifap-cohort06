@@ -32,12 +32,12 @@ const RoleManage = (props) => {
    const [filterOpen, setFilterOpen] = useState(false)
 
    const handleFilter = () => {
-      document.getElementById('form-filter').classList.toggle('isVisible');
-      if (filterOpen) {
-         setFilterOpen(false)
-      } else {
-         setFilterOpen(true)
-      }
+      // document.getElementById('form-filter').classList.toggle('isVisible');
+      // if (filterOpen) {
+      //    setFilterOpen(false)
+      // } else {
+      //    setFilterOpen(true)
+      // }
       // Limpieando filtros cuando se cierran
       setFilterId('')
       setFilterName('')
@@ -108,7 +108,7 @@ const RoleManage = (props) => {
                      <input placeholder='ID' onChange={handleChangeFilterId} />
                      <input placeholder='Nombre' onChange={handleChangeFilterName}/>
                   </form>
-                  <button type='button' onClick={handleFilter} >Filtrar</button>
+                  <button type='button'>Filtros</button>
                </div>
                <div className='Role__header'>
                   <span>
@@ -183,7 +183,7 @@ const RoleManage = (props) => {
                      <input placeholder='ID' onChange={handleChangeFilterId} />
                      <input placeholder='Nombre' onChange={handleChangeFilterName}/>
                   </form>
-                  <button type='button' onClick={handleFilter} >Filtrar</button>
+                  <button type='button'>Filtros</button>
                </div>
                <div className='Role__header'>
                   <span>

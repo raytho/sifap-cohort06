@@ -45,13 +45,15 @@
       font-weight: 600;
       background-color: var(--detail-color);
       border-radius: 5px 100px 0 0;
-      @extend %reset-btn;
+      border: none;
+      outline: none;
+      // @extend %reset-btn;
       &::after {
          @include icon-arrow(relative, -2px, 75px, 9px, var(--secundary-color), -90deg)
       }
    }
 }
 
-.isVisible {
-   visibility: hidden;
-}
+// .isVisible {
+//    visibility: hidden;
+// }

@@ -43,6 +43,8 @@ const ProfileContainer = () => {
       }
    }
 
+   const regExpDate = (/^(\d{4})-(\d{2})-(\d{2})$/).test(form.dateOfBirth)
+   window.console.log(regExpDate)
    const handleSubmit = e => {
       e.preventDefault();
       const putData = async () => {
@@ -75,7 +77,9 @@ const ProfileContainer = () => {
          }
 
       }
-      putData();
+      if (regExpDate) {
+         putData();
+      }
    }
    const handleInputImg = () => {
       const formData = new FormData();
@@ -85,12 +89,13 @@ const ProfileContainer = () => {
       window.console.log(img)
       setUserImg(img);
    }
+
    const handleSubmitImg = e => {
       e.preventDefault();
       const formDataSubmit = new FormData();
-      formDataSubmit.append('image', inputFile.current.files[0])
+      formDataSubmit.append('image', inputFile.current.files[0]);
       const postImg = async () => {
-            try {
+         try {
             setLoaderImg(true);
             await fetch(`${API}user/data/profile-image`, {
                method: 'POST',
@@ -116,7 +121,7 @@ const ProfileContainer = () => {
             window.console.log(error);
          }
       }
-      postImg();
+         postImg();
    }
    useEffect(() => {
       user.firstName = form.firstName;
