@@ -28,7 +28,8 @@ const SignUpContainer = () => {
    const [fiscalIdValidate, setFiscalIdValidate] = useState(false);
    const [passwordVerifyValidate, setPasswordVerifyValidate] = useState(false);
    const [emailUsed, setEmailUsed] = useState(false);
-   const [modalConfirm, setModalConfirm] = useState(false)
+   const [modalConfirm, setModalConfirm] = useState(false);
+   const [invited, setInvited] = useState(false);
    const handleChangeInput = e => {
       setValues({
          ...form,
@@ -97,6 +98,13 @@ const SignUpContainer = () => {
                   },
                   body: JSON.stringify(form)
                }).then(async response => {
+                  const { message } = await response.json();
+                  window.console.log(message)
+                  if(message === 'No se puede registrar un usuario sin invitacion, favor de validar') {
+                     setInvited(true);
+                  } else {
+                     setInvited(false);
+                  }
                   if (response.status === 200) {
                      setEmailUsed(true)
                   } else if (response.status === 201) {
@@ -135,7 +143,9 @@ const SignUpContainer = () => {
       <FormRegister
          handleSubmit={handleSubmit}
          handleChangeInput={handleChangeInput}
+         handleModalClose={handleModalClose}
          form={form}
+         invited={invited}
          emailValidate={emailValidate}
          passwordValidate={passwordValidate}
          countryValidate={countryValidate}
@@ -145,7 +155,6 @@ const SignUpContainer = () => {
          countries={countries}
          emailUsed={emailUsed}
          modalConfirm={modalConfirm}
-         handleModalClose={handleModalClose}
        />
    )
 }

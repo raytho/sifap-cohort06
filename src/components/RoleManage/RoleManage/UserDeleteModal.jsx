@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Context } from '../../../Context';
 
 import Modal from '../../Modal';
 import '../../../assets/styles/utils/ConfirmateModal.scss'
@@ -13,6 +14,7 @@ const UserDeleteModal = (props) => {
       endpoint,
       type
    } = props;
+   const { setUserDeleted } = useContext(Context);
    const [request, setRequest] = useState(false)
    const [deleted, setDeleted] = useState(false);
    const [errorDeleted, setErrorDeleted] = useState(false);
@@ -32,6 +34,7 @@ const UserDeleteModal = (props) => {
             if(result.message === 'User deleted') {
                setRequest(true);
                setDeleted(true)
+               setUserDeleted(true)
             } else {
                setRequest(true);
                setErrorDeleted(true);

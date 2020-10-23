@@ -45,20 +45,20 @@ const RoleAddModal = (props) => {
                   />
                   {emailValidate && <p className='alert-form'>Formato de correo ejemplo@correo.com.</p>}
                </label>
-               <label htmlFor='role'>
-                  Rol: <i>*</i>
-                  <select  name='role' value={form.role} onChange={handleChangeInput}>
-                     <option value='role'>Rol</option>
-                     <option value='empleado'>Empleado</option>
-                     {user.role === 'SuperAdministrador'
-                        ? <option value='administrador'>Administrador</option>
-                        : null
-                     }
-                  </select>
-                  <i className='Arrow'> </i>
-               {roleValidate &&
-                        <p className='alert-form'>Seleccione el rol de la cuenta a crear.</p>}
-               </label>
+               {user.role === 'SuperAdministrador'
+                  ? <label htmlFor='role'>
+                     Rol: <i>*</i>
+                     <select  name='role' value={form.role} onChange={handleChangeInput}>
+                        <option value='role'>Rol</option>
+                        <option value='empleado'>Empleado</option>
+                        <option value='administrador'>Administrador</option>
+                     </select>
+                     <i className='Arrow'> </i>
+                  {roleValidate &&
+                           <p className='alert-form'>Seleccione el rol de la cuenta a crear.</p>}
+                  </label>
+                  : null
+               }
                <div>
                   <button type='submit' className='btn'>Invitar</button>
                </div>

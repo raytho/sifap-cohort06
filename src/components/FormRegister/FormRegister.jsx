@@ -2,7 +2,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import PropTypes, { shape } from 'prop-types';
 import RegisterConfirmModal from './RegisterConfirmtionModal';
 
@@ -12,6 +12,7 @@ const FormRegister = (props) => {
    const {
       form,
       handleChangeInput,
+      handleModalClose,
       handleSubmit,
       emailValidate,
       passwordValidate,
@@ -22,13 +23,14 @@ const FormRegister = (props) => {
       countries,
       emailUsed,
       modalConfirm,
-      handleModalClose
+      invited
    } = props;
    const [showPassword, setShowPassword] = useState(false);
    return (
       <div className='SignUp__form'>
       <form onSubmit={handleSubmit}>
          <h2>Crear Cuenta</h2>
+         {invited && <p className='alert-form'>No puedes registrarte sin invitación</p>}
          <label htmlFor='email'> Primer nombre personal o empresarial: <i>*</i>
             <input
                type='text'
@@ -137,6 +139,7 @@ FormRegister.propTypes = {
    handleChangeInput: PropTypes.func.isRequired,
    handleModalClose: PropTypes.func.isRequired,
    handleSubmit: PropTypes.func.isRequired,
+   countries: PropTypes.arrayOf(shape()).isRequired,
    emailValidate: PropTypes.bool.isRequired,
    passwordValidate: PropTypes.bool.isRequired,
    countryValidate: PropTypes.bool.isRequired,
@@ -144,9 +147,9 @@ FormRegister.propTypes = {
    nameValidate: PropTypes.bool.isRequired,
    fiscalIdValidate: PropTypes.bool.isRequired,
    passwordVerify: PropTypes.bool.isRequired,
-   countries: PropTypes.arrayOf(shape()).isRequired,
    emailUsed: PropTypes.bool.isRequired,
-   modalConfirm: PropTypes.bool.isRequired
+   modalConfirm: PropTypes.bool.isRequired,
+   invited: PropTypes.bool.isRequired
 }
 
 export default FormRegister;

@@ -13,6 +13,7 @@ const Provider = ({ children }) => {
       return window.sessionStorage.getItem('TFAToken');
    });
    const [userImg, setUserImg] = useState();
+   const [userDeleted, setUserDeleted] = useState();
    // Value va a ser le objeto que vamos a poder acceder en toda la app
    const value = {
       isAuth,
@@ -44,6 +45,14 @@ const Provider = ({ children }) => {
       userImg,
       setUserImg: img => {
          setUserImg(img)
+      },
+      userDeleted,
+      setUserDeleted: () => {
+         if(userDeleted) {
+            setUserDeleted(false)
+         } else {
+            setUserDeleted(true);
+         }
       }
    }
 

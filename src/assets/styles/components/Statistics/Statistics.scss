@@ -1,0 +1,23 @@
+.Statistics {
+   margin: 100px 0 50px 0;
+   .Statistics__header {
+      height: 200px;
+      position: relative;
+      background-color: var(--secundary-color);
+      border-radius: 5px 100px 0 0 ;
+      z-index: 0;
+   }
+}
+.Statistics__iframe {
+   position: relative;
+   top: -160px;
+   background-color: var(--white-color);
+   border-radius: 5px 100px 5px 5px;
+   box-shadow: 0 0 50px 0 rgba(3, 36, 35, .25);
+   z-index: 2500;
+   iframe {
+      width: 100%;
+      height: 500px;
+      border-radius: 5px 100px 5px 5px;
+   }
+}

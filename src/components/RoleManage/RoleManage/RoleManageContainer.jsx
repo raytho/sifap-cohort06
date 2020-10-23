@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import RoleManage from './RoleManage';
 import GetData from '../../../containers/GetData'
+import { Context } from '../../../Context';
 
 const RoleManageContainer = () => {
 
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
    const token = window.sessionStorage.getItem('token');
    const [modal, setModal] = useState(false);
-
+   const { userDeleted } = useContext(Context);
    // Save data in sessionStorage, after send all data with button save of section Roles
    const setSessionStorage = value => {
       try {
@@ -31,7 +32,7 @@ const RoleManageContainer = () => {
 
 
    return (
-      <GetData api={`${API}superAdmin/getInvitedUsersFilter`} token={token}>
+      <GetData api={`${API}superAdmin/getInvitedUsersFilter`} token={token} change={userDeleted}>
          {
             ({ loading, error, data }) => {
                if(error) return <p>¡Error!</p>

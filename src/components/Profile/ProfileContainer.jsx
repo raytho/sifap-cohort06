@@ -9,7 +9,7 @@ const ProfileContainer = () => {
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    const token = window.sessionStorage.getItem('token');
    const controller = new AbortController();
-   const inputFile = createRef()
+   const inputFile = createRef();
    const { setUser, setUserImg } = useContext(Context);
    const [qr, setQr] = useState();
    const [loader, setLoader] = useState(false);
@@ -77,25 +77,33 @@ const ProfileContainer = () => {
       }
       putData();
    }
-   const handleSubmitImg = e => {
-      e.preventDefault();
+   const handleInputImg = () => {
       const formData = new FormData();
       formData.append('image', inputFile.current.files[0]);
+      const file = formData.get('image')
+      const img = URL.createObjectURL(file);
+      window.console.log(img)
+      setUserImg(img);
+   }
+   const handleSubmitImg = e => {
+      e.preventDefault();
+      const formDataSubmit = new FormData();
+      formDataSubmit.append('image', inputFile.current.files[0])
       const postImg = async () => {
-         try {
+            try {
             setLoaderImg(true);
             await fetch(`${API}user/data/profile-image`, {
                method: 'POST',
                headers: {
                   'Authorization': `Bearer ${token}`,
                },
-               body: formData,
+               body: formDataSubmit,
             })
             .then(async response => {
                const { profile_picture_url, uploaded } = await response.json();
                user.profile_picture_url = profile_picture_url;
                if (uploaded) {
-                  setAddImg(false);
+                  // setAddImg(false);
                   setLoaderImg(false);
                } else {
                   setLoaderImg(false);
@@ -144,6 +152,7 @@ const ProfileContainer = () => {
    const handleClickAdd = () => {
       if(addImage) {
          setAddImg(false);
+         setUploadImg(undefined);
       } else {
          setAddImg(true);
       }
@@ -154,6 +163,7 @@ const ProfileContainer = () => {
          handleSubmit={handleSubmit}
          handleSubmitImg={handleSubmitImg}
          handleClickAdd={handleClickAdd}
+         handleInputImg={handleInputImg}
          addImage={addImage}
          form={form}
          qr={qr}

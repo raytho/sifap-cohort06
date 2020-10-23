@@ -7,9 +7,11 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Title from '../Title';
+import ProfileImgModal from './ProfileImgModal';
 
 import '../../assets/styles/components/Profile/Profile.scss';
 import iconEdit from '../../assets/static/icon/edit.png';
+import iconSaveDos from '../../assets/static/icon/save-dos.png';
 import iconSave from '../../assets/static/icon/save.png';
 import userProfile from '../../assets/static/icon/user-profile.png';
 
@@ -20,6 +22,7 @@ const Profile = (props) => {
       handleSubmit,
       handleSubmitImg,
       handleClickAdd,
+      handleInputImg,
       form,
       qr,
       loader,
@@ -82,48 +85,41 @@ const Profile = (props) => {
    }, []);
    return (
       <>
-         <Title icon={userProfile} />
+         <Title icon={userProfile} title='Perfil' />
          <div className='Profile__panel'>
             <div className='Profile__header'>
                <p>{user.role}</p>
             </div>
             <div className='Profile__main' >
-               <form onSubmit={handleSubmitImg}>
-                  <div className='Profile__img'>
-                     <img
-                        src={
-                           image === undefined
-                           ? user.profile_picture_url
-                           : image
-                        }
-                        alt='Foto de perfil'
-                     />
-                     <button type='button' onClick={handleClickAdd}>+</button>
-                     {loaderImg && <p>Cargando...</p>}
-                     {
-                        addImage &&
-                        <>
-                           <div>
-                              <input
-                                 className='Profile__input-img'
-                                 type='file'
-                                 formEncType='multipart/form-data'
-                                 accept='image/png, .jpeg, .jpg'
-                                 ref={inputFile}
-                              />
-                              <button type='submit'>
-                                 <img src={iconSave} alt='icono de editar'/>
-                              </button>
-                           </div>
-                           {uploadedImg === false && <p>Error al subir la imagen, intenta de nuevo.</p>}
-                        </>
-                     }
-                  </div>
-               </form>
+               <ProfileImgModal
+                  handleSubmitImg={handleSubmitImg}
+                  handleClickAdd={handleClickAdd}
+                  handleInputImg={handleInputImg}
+                  image={image}
+                  user={user}
+                  addImage={addImage}
+                  iconSaveDos={iconSaveDos}
+                  loaderImg={loaderImg}
+                  inputFile={inputFile}
+                  uploadedImg={uploadedImg}
+               />
+               <div className='Profile__img'>
+               <img
+                  src={
+                     image === undefined
+                     ? user.profile_picture_url
+                     : image
+                  }
+                  alt='Foto de perfil'
+               />
+               <button type='button' onClick={handleClickAdd}>+</button>
+               </div>
                <form  onSubmit={handleSubmit} id='form'>
                   <div>
                      <div className='Profile__item'>
-                        <p>Nombre: </p>
+                        <div>
+                           <p>Nombre: </p>
+                        </div>
                         <div>
                            {
                               name
@@ -161,7 +157,9 @@ const Profile = (props) => {
                         </div>
                      </div>
                      <div className='Profile__item'>
-                        <p>Identificador: </p>
+                        <div>
+                           <p>Identificador: </p>
+                        </div>
                         <div>
                            {
                               fiscalId
@@ -199,7 +197,9 @@ const Profile = (props) => {
                         </div>
                      </div>
                      <div className='Profile__item'>
-                        <p>Fecha de nacimiento: </p>
+                        <div>
+                           <p>Fecha de nacimiento: </p>
+                        </div>
                         <div>
                            {
                               dateOfBirth
@@ -237,7 +237,9 @@ const Profile = (props) => {
                         </div>
                      </div>
                      <div className='Profile__item'>
-                        <p>País: </p>
+                        <div>
+                           <p>País: </p>
+                        </div>
                         <div>
                            {
                               country
@@ -275,7 +277,9 @@ const Profile = (props) => {
                         </div>
                      </div>
                      <div className='Profile__item'>
-                        <p>Ciudad: </p>
+                        <div>
+                         <p>Ciudad: </p>
+                        </div>
                         <div>
                            {
                               city
@@ -322,7 +326,9 @@ const Profile = (props) => {
                         </div>
                      </div>
                      <div className='Profile__item'>
-                        <p>Número de telefono: </p>
+                        <div>
+                           <p>Número de telefono: </p>
+                        </div>
                         <div>
                            {
                               phoneNumber
@@ -425,8 +431,9 @@ Profile.propTypes = {
    handleSubmit: PropTypes.func.isRequired,
    handleSubmitImg: PropTypes.func.isRequired,
    handleClickAdd: PropTypes.func.isRequired,
+   handleInputImg: PropTypes.func.isRequired,
    form: PropTypes.object.isRequired,
-   inputFile: PropTypes.object,
+   inputFile: PropTypes.object.isRequired,
    image: PropTypes.string || undefined.isRequired,
    qr: PropTypes.string,
    loader: PropTypes.bool,

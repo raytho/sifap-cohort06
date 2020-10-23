@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Context } from '../../Context';
 
@@ -56,7 +56,11 @@ const TFAuthentication = () => {
                   })
                }).then(async response => {
                   if (response.status === 500) setCodeValidate(false)
-                  const { token, user } = await response.json();
+                  const { token, user, message } = await response.json();
+                  window.console.log(message)
+                  if (message === 'Invalide code') {
+                     history.push('/login');
+                  }
                   setUser(JSON.stringify(user));
                   setResend(true);
                   activateAuth(token);
@@ -89,6 +93,13 @@ const TFAuthentication = () => {
          window.console.log(error);
       }
    }
+
+   useEffect(() => {
+      if(!TFAToken) {
+         history.push('/login');
+      }
+      return () => removeTFAToken();
+   }, [])
 
    return (
       <main className='TFA'>
