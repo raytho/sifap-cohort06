@@ -548,6 +548,7 @@ function MysqlLib() {
         );
       });
     },
+
     updateRolByUserId(id, data) {
       return new Promise(function (resolve, reject) {
         console.log(data.rol);
@@ -564,7 +565,61 @@ function MysqlLib() {
         );
       });
     },
+
+    upsertUserData(data) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "INSERT INTO fiscal_data SET ?",
+          data,
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    updateUserData(data, id) {
+      console.log(data, id);
+      return new Promise(function (resolve, reject) {
+        
+        connection.query(
+          "UPDATE users SET ? WHERE userId = ?",
+          [data, id],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    verifyInitialConfig(id){
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "SELECT id FROM fiscal_data WHERE id = ?",
+          id,
+          function (err, rows) {
+            if (err) {
+              reject(new Error(err.message));
+            }
+            if (rows.length) {
+              resolve (true);
+            } else {
+              resolve(false);
+            }
+          }
+        );
+      });
+    },
   };
 }
 
 module.exports = MysqlLib;
+//upsertUserData

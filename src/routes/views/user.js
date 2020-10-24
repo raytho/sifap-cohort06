@@ -68,6 +68,39 @@ function userView(app) {
     })(req, res, next);
   });
 
+  router.post("/data/user-fiscal-data", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+
+          const { userId } = user;
+          const userData = req.body;
+          const fiscalData = await usersService.upsertFiscalData(userData, userId);
+          const updatedUserData = await usersService.updateUserData(userData, userId);
+          if (fiscalData && updatedUserData){
+            res.status(200).json({
+              message: {
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                dateOfBirth: userData.dateOfBirth,
+                country: userData.country,
+                company_name: userData.company_name,
+                fiscal_id: userData.fiscal_id,
+                fiscal_identifier_name: userData.fiscal_identifier_name,
+              },
+            });
+          }
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
   router.put("/data/profile", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
       const userData = req.body;
@@ -125,11 +158,9 @@ function userView(app) {
             message: "No autorizado",
           });
         } else {
-          console.log(req.headers);
           const singleUpload = upload.single("image");
 
           singleUpload(req, res, async function (err) {
-            console.log(req.file);
             if (req.fileValidationError) {
               return res.status(500).json({
                 error: req.fileValidationError,
@@ -178,6 +209,33 @@ function userView(app) {
                 uploaded: true,
               });
             }
+          });
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  // FALTA
+  router.get("/config/tax receipt", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+
+          const { userId } = user;
+          const userData = req.body;
+          // const { name, lastName, companyName, fiscalId, dateOfBirth, fiscalIdentifierName, country} = req.body;
+          const newUserData = await usersService.upsertFiscalData(userData, userId);
+          
+          res.status(200).json({
+            message: {
+              newUserData,
+            },
           });
         }
       } catch (error) {

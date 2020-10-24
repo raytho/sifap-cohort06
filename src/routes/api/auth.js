@@ -35,7 +35,7 @@ function authApi(app) {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
           } else {
-            generateToken(req, res, next, user);
+            generateToken(req, res, next, user, usersService);
           }
         }
       } catch (error) {
@@ -336,13 +336,14 @@ function authApi(app) {
   });
 }
 
-const generateToken = (req, res, next, user) => {
+const generateToken = (req, res, next, user, usersService) => {
   req.login(user, { session: false }, async (error) => {
     if (error) {
       next(error);
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
+      const hasConfigured = await usersService.checkInitialConfig(user.userId);
       const {
         userId,
         email,
@@ -385,6 +386,7 @@ const generateToken = (req, res, next, user) => {
           twoFactorActive: twoFactorToNumber,
           role,
           profile_picture_url,
+          hasConfigured,
           permissions,
         },
       });

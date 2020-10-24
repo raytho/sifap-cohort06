@@ -297,6 +297,33 @@ class UsersService {
     const updatedRol = await this.mysqlLib.updateRolByUserId(id, data);
     return updatedRol;
   }
+
+  async upsertFiscalData(data, id) {
+    const fiscalData = {
+      id,
+      company_name: data.company_name,
+      fiscal_id: data.fiscal_id,
+      fiscal_identifier_name: data.fiscal_identifier_name
+    };
+    const userFiscalData = await this.mysqlLib.upsertUserData(fiscalData);
+    return userFiscalData;
+  }
+
+  async updateUserData(data, id) {
+    const updatedUserData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      dateOfBirth: data.dateOfBirth,
+      country: data.country,
+    };
+    const userData = await this.mysqlLib.updateUserData(updatedUserData, id);
+    return userData;
+  }
+  
+  async checkInitialConfig(id) {
+    const initialConfig = await this.mysqlLib.verifyInitialConfig(id);
+    return initialConfig;
+  }
 }
 
 module.exports = UsersService;
