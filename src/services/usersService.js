@@ -295,7 +295,7 @@ class UsersService {
 
   async updateRolByUserId(id, data) {
     const updatedRol = await this.mysqlLib.updateRolByUserId(id, data);
-    return updatedRol;
+    return updatedRol.affectedRows;
   }
 
   async upsertFiscalData(data, id) {

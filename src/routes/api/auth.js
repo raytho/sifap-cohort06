@@ -58,11 +58,18 @@ function authApi(app) {
               "Este correo ya está en uso, por favor intente con otro o reestableza su contraseña",
           });
         } else {
-          await usersService.createSuperAdminUser({ user }, hasInvited);
-          await usersService.updateInvitationByUserInvited(hasInvited);
-          res.status(201).json({
-            message: "User created",
-          });
+          if (hasInvited) {
+            await usersService.createSuperAdminUser({ user }, hasInvited);
+            await usersService.updateInvitationByUserInvited(hasInvited);
+            res.status(201).json({
+              message: "User created",
+            });
+          } else {
+            res.status(500).json({
+              message:
+                "No se puede registrar un usuario sin invitacion, favor de validar",
+            });
+          }
         }
       } catch (error) {
         next(error);
