@@ -602,8 +602,7 @@ function MysqlLib() {
     verifyInitialConfig(id){
       return new Promise(function (resolve, reject) {
         connection.query(
-          "SELECT companyName, fiscalId, fiscalIdentifierName FROM fiscal_data WHERE id = ?",
-          id,
+          `SELECT companyName, fiscalId, fiscalIdentifierName FROM fiscal_data WHERE id = '${id}' LIMIT 1`,
           function (err, rows) {
             if (err) {
               reject(new Error(err.message));
