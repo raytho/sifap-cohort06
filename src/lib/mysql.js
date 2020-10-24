@@ -602,14 +602,14 @@ function MysqlLib() {
     verifyInitialConfig(id){
       return new Promise(function (resolve, reject) {
         connection.query(
-          "SELECT id FROM fiscal_data WHERE id = ?",
+          "SELECT companyName, fiscalId, fiscalIdentifierName FROM fiscal_data WHERE id = ?",
           id,
           function (err, rows) {
             if (err) {
               reject(new Error(err.message));
             }
             if (rows.length) {
-              resolve (true);
+              resolve (rows[0]);
             } else {
               resolve(false);
             }
@@ -617,6 +617,8 @@ function MysqlLib() {
         );
       });
     },
+
+  
   };
 }
 

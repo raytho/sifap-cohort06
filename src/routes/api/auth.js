@@ -350,13 +350,13 @@ const generateToken = (req, res, next, user, usersService) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      const hasConfigured = await usersService.checkInitialConfig(user.userId);
+      const fiscalData = await usersService.checkInitialConfig(user.userId);
+      
       const {
         userId,
         email,
         city,
         state,
-        fiscalId,
         dateOfBirth,
         fiscalAct,
         country,
@@ -385,7 +385,6 @@ const generateToken = (req, res, next, user, usersService) => {
           country,
           city,
           state,
-          fiscalId,
           dateOfBirth: formatDate,
           fiscalAct,
           firstName,
@@ -393,7 +392,8 @@ const generateToken = (req, res, next, user, usersService) => {
           twoFactorActive: twoFactorToNumber,
           role,
           profile_picture_url,
-          hasConfigured,
+          hasConfigured: fiscalData ? true: false,
+          ...fiscalData,
           permissions,
         },
       });

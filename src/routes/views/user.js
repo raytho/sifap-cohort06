@@ -10,6 +10,8 @@ const multer = require("multer");
 // jwt stategy
 require("../../utils/auth/strategies/jwt");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
+const validationHandler = require("../../utils/middleware/validationHandler");
+const fiscalDataSchema = require("../../utils/schemas/fiscalData");
 
 function userView(app) {
   const router = express.Router();
@@ -69,6 +71,7 @@ function userView(app) {
   });
 
   router.post("/tax-receipt", async (req, res, next) => {
+    validationHandler(fiscalDataSchema),
     passport.authenticate("jwt", { session: false }, async (error, user) => {
       try {
         if (error || !user) {
@@ -103,6 +106,7 @@ function userView(app) {
   });
 
   router.post("/tax-identifier", async (req, res, next) => {
+    validationHandler(fiscalDataSchema),
     passport.authenticate("jwt", { session: false }, async (error, user) => {
       try {
         if (error || !user) {
