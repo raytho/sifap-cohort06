@@ -68,7 +68,7 @@ function userView(app) {
     })(req, res, next);
   });
 
-  router.post("/fiscal-data", async (req, res, next) => {
+  router.post("/tax-receipt", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
       try {
         if (error || !user) {
@@ -76,22 +76,57 @@ function userView(app) {
             message: "No autorizado",
           });
         } else {
-
           const { userId } = user;
           const userData = req.body;
-          const fiscalData = await usersService.upsertFiscalData(userData, userId);
           const updatedUserData = await usersService.updateUserData(userData, userId);
+          const fiscalData = await usersService.upsertFiscalData(userData, userId);
           if (fiscalData && updatedUserData){
             res.status(200).json({
               message: {
-                firstName: userData.firstName,
-                lastName: userData.lastName,
-                dateOfBirth: userData.dateOfBirth,
-                country: userData.country,
-                company_name: userData.company_name,
-                fiscal_id: userData.fiscal_id,
-                fiscal_identifier_name: userData.fiscal_identifier_name,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: formatUTCTime(user.dateOfBirth),
+                country: user.country,
+                ...userData
               },
+            });
+          } else {
+            res.status(500).json({
+              message: "Error al realizar la configuración del usuario",
+            });
+          }
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.post("/tax-identifier", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+          const { userId } = user;
+          const userData = req.body;
+          const updatedUserData = await usersService.updateUserData(userData, userId);
+          const fiscalData = await usersService.upsertFiscalData(userData, userId);
+          if (fiscalData && updatedUserData){
+            res.status(200).json({
+              message: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: formatUTCTime(user.dateOfBirth),
+                country: user.country,
+                ...userData
+              },
+            });
+          } else {
+            res.status(500).json({
+              message: "Error al realizar la configuración del usuario",
             });
           }
         }
@@ -217,32 +252,6 @@ function userView(app) {
     })(req, res, next);
   });
 
-  // FALTA
-  router.get("/config/tax receipt", async (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, async (error, user) => {
-      try {
-        if (error || !user) {
-          res.status(500).json({
-            message: "No autorizado",
-          });
-        } else {
-
-          const { userId } = user;
-          const userData = req.body;
-          // const { name, lastName, companyName, fiscalId, dateOfBirth, fiscalIdentifierName, country} = req.body;
-          const newUserData = await usersService.upsertFiscalData(userData, userId);
-          
-          res.status(200).json({
-            message: {
-              newUserData,
-            },
-          });
-        }
-      } catch (error) {
-        next(error);
-      }
-    })(req, res, next);
-  });
 }
 
 const formatUTCTime = (date) => {
