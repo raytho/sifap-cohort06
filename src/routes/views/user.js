@@ -68,7 +68,7 @@ function userView(app) {
     })(req, res, next);
   });
 
-  router.post("/data/fiscal-data", async (req, res, next) => {
+  router.post("/fiscal-data", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
       try {
         if (error || !user) {
