@@ -299,18 +299,25 @@ class UsersService {
   }
 
   async upsertFiscalData(data, id) {
+
     delete data.firstName;
     delete data.lastName;
     delete data.dateOfBirth;
     delete data.country;
+    const fiscalDataName = data["cfName"];
+    const fiscalDataValues = data["cf"];
+    delete data.cfName;
+    delete data.cf;
     const fiscalData = {
       id,
       ...data,
+      ...fiscalDataName,
+      ...fiscalDataValues,
     };
     const userFiscalData = await this.mysqlLib.upsertUserFiscalData(fiscalData);
     return userFiscalData;
   }
-
+  
   async updateUserData(data, id) {
     const updatedUserData = {
       firstName: data.firstName,

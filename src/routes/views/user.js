@@ -81,6 +81,8 @@ function userView(app) {
         } else {
           const { userId } = user;
           const userData = req.body;
+          const cf = userData.cf;
+          const cfName = userData.cfName;
           const updatedUserData = await usersService.updateUserData(userData, userId);
           const fiscalData = await usersService.upsertFiscalData(userData, userId);
           if (fiscalData && updatedUserData){
@@ -90,7 +92,9 @@ function userView(app) {
                 lastName: user.lastName,
                 dateOfBirth: formatUTCTime(user.dateOfBirth),
                 country: user.country,
-                ...userData
+                ...userData,
+                cf,
+                cfName,
               },
             });
           } else {
@@ -116,16 +120,17 @@ function userView(app) {
         } else {
           const { userId } = user;
           const userData = req.body;
+          const { firstName, lastName, dateOfBirth, country } = userData;
           const updatedUserData = await usersService.updateUserData(userData, userId);
           const fiscalData = await usersService.upsertFiscalData(userData, userId);
           if (fiscalData && updatedUserData){
             res.status(200).json({
               message: {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                dateOfBirth: formatUTCTime(user.dateOfBirth),
-                country: user.country,
-                ...userData
+                firstName,
+                lastName,
+                dateOfBirth,
+                country,
+                ...userData,
               },
             });
           } else {
