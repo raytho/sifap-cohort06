@@ -25,7 +25,7 @@ import Chatbot from '../components/Chatbot/Chatbot';
 
 const App = () => {
    const { isAuth } = useContext(Context);
-
+   const user = JSON.parse(window.sessionStorage.getItem('user'));
    return (
       <>
       <Chatbot />
@@ -35,7 +35,7 @@ const App = () => {
                isAuth
                   ? (
                      <>
-                     {true
+                     {!user.hasConfigured
                         ? <InitialConfigContainer />
                         :
                            <Layout>

@@ -17,8 +17,11 @@ const Statistics = () => {
       <>
          <Title {...propsStatistics} />
          <div className='Statistics'>
-            <div className='Statistics__header'> </div>
+            <div className='Statistics__header'> 
+               <h2>Estadísticas generales de Sifap</h2>
+            </div>
             <div className='Statistics__iframe'>
+            <p>Cargando...</p>
                <iframe
                   src='https://datastudio.google.com/embed/reporting/016bfee4-f538-4dfa-a20d-6eee39a079e7/page/H0AlB'
                   title='statistics'

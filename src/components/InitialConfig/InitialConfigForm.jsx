@@ -9,27 +9,40 @@ const InitialConfigForm = (props) => {
    const {
       handleChangeInput,
       handleChangeInputCf,
+      handleChangeInputCfName,
       handleClickPrev,
+      handleSubmit,
       formCF,
-      comprobanteFiscalJoin,
-      type
+      comprobanteFiscalName,
+      comprobanteFiscal,
+      type,
+      firstNameValidate,
+      lastNameValidate,
+      dateOfBirthValidate,
+      countryValidate,
+      nameCompanyValidate,
+      fiscalIdValidate,
+      comprobanteFiscalValidate,
+      comprobanteFiscalNameValidate,
+      nameIdentifierFiscalValidate,
+      handleChangeInputCfSeparator,
+      handleChangeInputCfIncrement,
+      separator
    } = props;
-
-   const handeSubmit = e => {
-      e.preventDefault();
-      window.console.log(e)
-   }
    return (
-      <form onSubmit={handeSubmit}>
+      <form onSubmit={handleSubmit}>
          <div className='InitialConfig__persona-data'>
             <h2>Datos generales</h2>
                <p>
-                  Con tu identificador fiscal se emitirán las facturas con validez fiscal.
+                  Con tu {type === 'fiscalId'
+                  ? 'identificador'
+                  : 'comprobante'} fiscal se emitirán las facturas con validez fiscal.
+
                </p>
             <div>
                <div className='InitialConfig__persona-input'>
                   <div >
-                  <label htmlFor='firstName'>Nombres:
+                  <label htmlFor='firstName'>Nombres: <i>*</i>
                      <input
                         type='text'
                         value={formCF.firstName}
@@ -37,8 +50,9 @@ const InitialConfigForm = (props) => {
                         placeholder='Nombre'
                         onChange={handleChangeInput}
                      />
+                     {!firstNameValidate && <p>Este campo es obligatorio</p>}
                   </label>
-                  <label htmlFor='lastName'>Apellidos:
+                  <label htmlFor='lastName'>Apellidos: <i>*</i>
                      <input
                         type='text'
                         value={formCF.lastName}
@@ -46,17 +60,19 @@ const InitialConfigForm = (props) => {
                         placeholder='Apellido'
                         onChange={handleChangeInput}
                      />
+                     {!lastNameValidate && <p>Este campo es obligatorio</p>}
                   </label>
-                  <label htmlFor='birthOfDay'>Fecha de nacimiento:
+                  <label htmlFor='birthOfDay'>Fecha de nacimiento: <i>*</i>
                      <input
-                        type='text'
-                        value={formCF.birthOfDay}
-                        name='birthOfDay'
+                        type='date'
+                        value={formCF.dateOfBirth}
+                        name='dateOfBirth'
                         placeholder='Fecha de nacimiento'
                         onChange={handleChangeInput}
                      />
+                     {!dateOfBirthValidate && <p>Este campo es obligatorio</p>}
                   </label>
-                  <label htmlFor='country'>País:
+                  <label htmlFor='country'>País: <i>*</i>
                      <input
                         type='text'
                         value={formCF.country}
@@ -64,21 +80,23 @@ const InitialConfigForm = (props) => {
                         placeholder='País'
                         onChange={handleChangeInput}
                      />
+                     {!countryValidate && <p>Este campo es obligatorio</p>}
                   </label>
                </div>
 
 
                   <div>
-                  <label htmlFor='nameCompany'>Nombre de la empresa:
+                  <label htmlFor='nameCompany'>Nombre de la empresa: <i>*</i>
                      <input
                         type='text'
-                        value={formCF.nameCompany}
-                        name='nameCompany'
+                        value={formCF.companyName}
+                        name='companyName'
                         placeholder='Nombre de la empresa'
                         onChange={handleChangeInput}
                      />
+                     {!nameCompanyValidate && <p>Este campo es obligatorioe</p>}
                   </label>
-                  <label htmlFor='fiscalId'>Identificador fiscal:
+                  <label htmlFor='fiscalId'>Identificador fiscal: <i>*</i>
                      <input
                         type='text'
                         value={formCF.fiscalId}
@@ -86,16 +104,17 @@ const InitialConfigForm = (props) => {
                         placeholder='Identificador fiscal'
                         onChange={handleChangeInput}
                      />
+                     {!fiscalIdValidate && <p>Este campo es obligatorio</p>}
                   </label>
-                  <label htmlFor='nameFiscal'>
-                     <p>Nombre del identificador fiscal en tu país:</p>
+                  <label htmlFor='nameFiscal'>Nombre del identificador fiscal en tu país: <i>*</i>
                      <input
                         type='text'
-                        value={formCF.nameFiscal}
-                        name='nameFiscal'
+                        value={formCF.fiscalIdentifierName}
+                        name='fiscalIdentifierName'
                         placeholder='Nombre de identificador fiscal'
                         onChange={handleChangeInput}
                      />
+                     {!nameIdentifierFiscalValidate && <p>Este campo es obligatorio</p>}
                   </label>
                </div>
                </div>
@@ -106,11 +125,26 @@ const InitialConfigForm = (props) => {
                <InitialConfigCF
                   handleChangeInput={handleChangeInput}
                   handleChangeInputCf={handleChangeInputCf}
+                  handleChangeInputCfName={handleChangeInputCfName}
+                  comprobanteFiscalValidate={comprobanteFiscalValidate}
+                  comprobanteFiscalNameValidate={comprobanteFiscalNameValidate}
                   formCF={formCF}
-                  comprobanteFiscalJoin={comprobanteFiscalJoin}
+                  handleChangeInputCfSeparator={handleChangeInputCfSeparator}
+                  separator={separator}
+                  comprobanteFiscalName={comprobanteFiscalName}
+                  handleChangeInputCfIncrement={handleChangeInputCfIncrement}
+                  comprobanteFiscal={comprobanteFiscal}
                   handleClickPrev={handleClickPrev}
                />
          }
+      {/* <InitialConfigCF
+               handleChangeInput={handleChangeInput}
+               handleChangeInputCf={handleChangeInputCf}
+               handleChangeInputCfName={handleChangeInputCfName}
+               formCF={formCF}
+               comprobanteFiscalJoin={comprobanteFiscalJoin}
+               handleClickPrev={handleClickPrev}
+            /> */}
          <div className='InitialConfig__buttons'>
             <button type='button' onClick={handleClickPrev}>Anterior</button>
             <button type='submit'>Aceptar</button>
@@ -122,10 +156,25 @@ const InitialConfigForm = (props) => {
 InitialConfigForm.propTypes = {
    handleChangeInput: PropTypes.func.isRequired,
    handleChangeInputCf: PropTypes.func.isRequired,
+   handleChangeInputCfName: PropTypes.func.isRequired,
+   handleChangeInputCfIncrement: PropTypes.func.isRequired,
    handleClickPrev: PropTypes.func.isRequired,
+   handleSubmit: PropTypes.func.isRequired,
    formCF: PropTypes.objectOf(arrayOf),
    type: PropTypes.string,
-   comprobanteFiscalJoin: PropTypes.string,
+   comprobanteFiscal: PropTypes.objectOf(arrayOf),
+   comprobanteFiscalName: PropTypes.objectOf(arrayOf),
+   handleChangeInputCfSeparator: PropTypes.func,
+   separator: PropTypes.string,
+   firstNameValidate: PropTypes.bool,
+   lastNameValidate: PropTypes.bool,
+   dateOfBirthValidate: PropTypes.bool,
+   countryValidate: PropTypes.bool,
+   nameCompanyValidate: PropTypes.bool,
+   fiscalIdValidate: PropTypes.bool,
+   comprobanteFiscalValidate: PropTypes.bool,
+   comprobanteFiscalNameValidate: PropTypes.bool,
+   nameIdentifierFiscalValidate: PropTypes.bool,
 }
 
 export default InitialConfigForm;

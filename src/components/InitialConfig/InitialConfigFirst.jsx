@@ -2,7 +2,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 const InitialConfigFirst = (props) => {
@@ -13,7 +13,6 @@ const InitialConfigFirst = (props) => {
       choiseOne,
       formFirst
    } = props;
-   window.console.log(formFirst, 'form');
    return (
       <div className='InitialConfig__first'>
          <h2>
@@ -47,7 +46,7 @@ const InitialConfigFirst = (props) => {
                   Identificador fiscal o identificador tributario.
             </label>
          </div>
-         {choiseOne && <p>Debes escoger una de las opciones.</p>}
+         {choiseOne && <p className='alert-form'>Debes escoger una de las opciones.</p>}
          <div className='InitialConfig__buttons button-first'>
             <button type='button' onClick={handleClickNext}>Aceptar</button>
          </div>
@@ -59,6 +58,7 @@ InitialConfigFirst.propTypes = {
    handleChangeInputConfig: PropTypes.func.isRequired,
    handleClickNext: PropTypes.func.isRequired,
    formFirst: PropTypes.object,
+   choiseOne: PropTypes.bool
 }
 
 export default InitialConfigFirst;

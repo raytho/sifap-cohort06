@@ -31,7 +31,7 @@ const FormRegister = (props) => {
       <form onSubmit={handleSubmit}>
          <h2>Crear Cuenta</h2>
          {invited && <p className='alert-form'>No puedes registrarte sin invitación</p>}
-         <label htmlFor='email'> Primer nombre personal o empresarial: <i>*</i>
+         <label htmlFor='email'> Primer nombre: <i>*</i>
             <input
                type='text'
                value={form.firstName}
@@ -41,7 +41,7 @@ const FormRegister = (props) => {
             />
             {nameValidate && <p className='alert-form'>Debe tener más de 3 caracteres</p>}
          </label>
-         <label htmlFor='email'> Identificador personal o empresarial: <i>*</i>
+         <label htmlFor='email'> Identificación: <i>*</i>
             <input
                type='text'
                value={form.fiscalId}

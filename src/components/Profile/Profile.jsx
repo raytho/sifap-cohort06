@@ -206,9 +206,8 @@ const Profile = (props) => {
                               ? <input
                                  id='input-birth'
                                  value={form.dateOfBirth}
-                                 type='text'
+                                 type='date'
                                  name='dateOfBirth'
-                                 placeholder='AAAA-MM-DD'
                                  onChange={handleChangeInput}
                               />
                               : <p>{user.dateOfBirth}</p>
