@@ -83,6 +83,7 @@ function userView(app) {
           const userData = req.body;
           const cf = userData.cf;
           const cfName = userData.cfName;
+          const increment = userData.increment;
           const updatedUserData = await usersService.updateUserData(userData, userId);
           const fiscalData = await usersService.upsertFiscalData(userData, userId);
           if (fiscalData && updatedUserData){
@@ -95,6 +96,7 @@ function userView(app) {
                 ...userData,
                 cf,
                 cfName,
+                increment,
               },
             });
           } else {

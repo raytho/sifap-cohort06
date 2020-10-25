@@ -306,13 +306,16 @@ class UsersService {
     delete data.country;
     const fiscalDataName = data["cfName"];
     const fiscalDataValues = data["cf"];
+    const increment = data["increment"];
     delete data.cfName;
     delete data.cf;
+    delete data.increment;
     const fiscalData = {
       id,
       ...data,
       ...fiscalDataName,
       ...fiscalDataValues,
+      ...increment,
     };
     const userFiscalData = await this.mysqlLib.upsertUserFiscalData(fiscalData);
     return userFiscalData;
