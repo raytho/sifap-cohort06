@@ -35,7 +35,7 @@ const App = () => {
                isAuth
                   ? (
                      <>
-                     {!user.hasConfigured
+                     {true
                         ? <InitialConfigContainer />
                         :
                            <Layout>
