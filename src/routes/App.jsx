@@ -35,9 +35,8 @@ const App = () => {
                isAuth
                   ? (
                      <>
-                     {false
-                        ? <InitialConfigContainer />
-                        :
+                     {user.hasConfigured
+                        ?
                            <Layout>
                               <Route exact path='/emitir-facturas' component={Bill} />
                               <Route exact path='/historial' component={History} />
@@ -48,6 +47,7 @@ const App = () => {
                               <Route exact path='/c.-fiscales' component={ManageCFiscales} />
                               <Route exact path='/profile' component={ProfileContainer} />
                            </Layout>
+                        : <InitialConfigContainer />
                         }
                      </>
                   ) : (
