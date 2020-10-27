@@ -97,6 +97,7 @@ function userView(app) {
                 cf,
                 cfName,
                 increment,
+                status: "Usuario configurado",
               },
             });
           } else {
@@ -133,6 +134,7 @@ function userView(app) {
                 dateOfBirth,
                 country,
                 ...userData,
+                status: "Usuario configurado",
               },
             });
           } else {
