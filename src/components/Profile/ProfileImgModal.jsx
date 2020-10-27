@@ -21,7 +21,6 @@ const ProfileImg = (props) => {
       uploadedImg,
    } = props;
    const { userImg } = useContext(Context);
-   window.console.log(uploadedImg)
    return (
       <Modal
          isOpen={addImage}
@@ -56,7 +55,6 @@ const ProfileImg = (props) => {
             <button type='button' onClick={handleClickAdd}>Aceptar</button>
          </div>
       </Modal>
-
    );
 }
 

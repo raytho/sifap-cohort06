@@ -11,7 +11,7 @@ const SignUpContainer = () => {
    const RegExPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
    const [form, setValues] = useState({
       firstName: '',
-      fiscalId: '',
+      // fiscalId: '',
       email: '',
       password: '',
       passwordVerify: '',
@@ -25,7 +25,7 @@ const SignUpContainer = () => {
    const [passwordValidate, setPasswordValidate] = useState(false);
    const [countryValidate, setCountryValidate] = useState(false);
    const [nameValidate, setNameValidate] = useState(false);
-   const [fiscalIdValidate, setFiscalIdValidate] = useState(false);
+   // const [fiscalIdValidate, setFiscalIdValidate] = useState(false);
    const [passwordVerifyValidate, setPasswordVerifyValidate] = useState(false);
    const [emailUsed, setEmailUsed] = useState(false);
    const [modalConfirm, setModalConfirm] = useState(false);
@@ -39,7 +39,7 @@ const SignUpContainer = () => {
    const validateForm = () => {
       let email;
       let name;
-      let fiscalId;
+      // let fiscalId;
       let password;
       let passwordVerify;
       let country;
@@ -56,12 +56,12 @@ const SignUpContainer = () => {
       } else {
          setNameValidate(true);
       }
-      if (Object.keys(form.fiscalId).length > 5 ) {
-         fiscalId = true;
-         setFiscalIdValidate(false);
-      } else {
-         setFiscalIdValidate(true);
-      }
+      // if (Object.keys(form.fiscalId).length > 5 ) {
+      //    fiscalId = true;
+      //    setFiscalIdValidate(false);
+      // } else {
+      //    setFiscalIdValidate(true);
+      // }
       if (RegExPassword.test(form.password)) {
          password = true;
          setPasswordValidate(false);
@@ -81,10 +81,11 @@ const SignUpContainer = () => {
          setCountryValidate(true);
       }
 
-      if(email && password && country && name && fiscalId && passwordVerify) {
+      if(email && password && country && name && passwordVerify) {
          return true
       }
    }
+   window.console.log(form)
    const handleSubmit = e => {
       e.preventDefault();
       if (validateForm()) {
@@ -119,10 +120,9 @@ const SignUpContainer = () => {
       }
       e.stopPropagation();
    }
-
    const handleModalClose = () => {
       setModalConfirm(false);
-      history.push('/login');
+      history.push('/');
    }
 
    useEffect(() => {
@@ -150,7 +150,7 @@ const SignUpContainer = () => {
          passwordValidate={passwordValidate}
          countryValidate={countryValidate}
          nameValidate={nameValidate}
-         fiscalIdValidate={fiscalIdValidate}
+         // fiscalIdValidate={fiscalIdValidate}
          passwordVerify={passwordVerifyValidate}
          countries={countries}
          emailUsed={emailUsed}

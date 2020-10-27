@@ -82,7 +82,11 @@ const LoginContainer = () => {
                      } else {
                         setUser(JSON.stringify(user));
                         activateAuth(token);
-                        history.push('/emitir-facturas')
+                        if (user.hasConfigured) {
+                           history.push('/emitir-facturas');
+                        } else {
+                           history.push('/config-inicial');
+                        }
                      }
                   }
                }).catch(error => window.console.error(error));

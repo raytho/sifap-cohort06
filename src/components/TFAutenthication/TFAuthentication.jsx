@@ -65,7 +65,11 @@ const TFAuthentication = () => {
                   setResend(true);
                   activateAuth(token);
                   removeTFAToken();
-                  history.push('/emitir-facturas');
+                  if (user.hasConfigured) {
+                     history.push('/emitir-facturas');
+                  } else {
+                     history.push('/config-inicial');
+                  }
                })
             } catch(error) {
                window.console.log(error);

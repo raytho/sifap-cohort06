@@ -11,7 +11,6 @@ import '../assets/styles/utils/Alerts.scss';
 const NewPassword = () => {
    return (
       <>
-         <Header />
          <div className="ResetPass__container">
             <div className="ResetPass__aside">
                <AsideLogo SignUpLogo />

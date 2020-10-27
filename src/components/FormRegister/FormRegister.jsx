@@ -18,7 +18,7 @@ const FormRegister = (props) => {
       passwordValidate,
       countryValidate,
       nameValidate,
-      fiscalIdValidate,
+      // fiscalIdValidate,
       passwordVerify,
       countries,
       emailUsed,
@@ -41,7 +41,7 @@ const FormRegister = (props) => {
             />
             {nameValidate && <p className='alert-form'>Debe tener más de 3 caracteres</p>}
          </label>
-         <label htmlFor='email'> Identificación: <i>*</i>
+         {/* <label htmlFor='email'> Identificación: <i>*</i>
             <input
                type='text'
                value={form.fiscalId}
@@ -50,7 +50,7 @@ const FormRegister = (props) => {
                onChange={handleChangeInput}
             />
             {fiscalIdValidate && <p className='alert-form'>Debe tener más de 6 caracteres</p>}
-         </label>
+         </label> */}
          <label htmlFor='email'> Correo: <i>*</i>
             <input
                type='email'
@@ -145,7 +145,7 @@ FormRegister.propTypes = {
    countryValidate: PropTypes.bool.isRequired,
    form: PropTypes.object.isRequired,
    nameValidate: PropTypes.bool.isRequired,
-   fiscalIdValidate: PropTypes.bool.isRequired,
+   // fiscalIdValidate: PropTypes.bool.isRequired,
    passwordVerify: PropTypes.bool.isRequired,
    emailUsed: PropTypes.bool.isRequired,
    modalConfirm: PropTypes.bool.isRequired,

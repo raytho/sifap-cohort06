@@ -29,6 +29,7 @@ const ProfileContainer = () => {
       phoneNumber: user.phoneNumber,
       twoFactorActive: user.twoFactorActive
    });
+   const regExpDate = (/^(\d{4})-(\d{2})-(\d{2})$/).test(form.dateOfBirth)
    const handleChangeInput = e => {
       if (e.target.name === 'twoFactorActive') {
          setValues({
@@ -43,8 +44,6 @@ const ProfileContainer = () => {
       }
    }
 
-   const regExpDate = (/^(\d{4})-(\d{2})-(\d{2})$/).test(form.dateOfBirth)
-   window.console.log(regExpDate)
    const handleSubmit = e => {
       e.preventDefault();
       const putData = async () => {

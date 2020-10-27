@@ -1,5 +1,7 @@
 /* eslint-disable consistent-return */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Context } from '../../Context';
 
 import InitialConfig from './InitialConfig';
 
@@ -10,6 +12,8 @@ const InitialConfigContainer = () => {
    const [type, setType] = useState('false');
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    const token = window.sessionStorage.getItem('token');
+   const history = useHistory();
+   const { setInitialConfig } = useContext(Context);
    // Código para comprobantes fiscales e identificadores fiscales
    const [formCF, setValues] = useState({
       firstName: user.firstName,
@@ -146,13 +150,13 @@ const InitialConfigContainer = () => {
       } else {
          setNameIdentifierFiscalValidate(false)
       }
-      if (comprobanteFiscal.length > 2) {
+      if (Object.values(comprobanteFiscal).length > 2) {
          setComprobanteFiscalValidate(true)
          comprobanteF = true;
       } else {
          setComprobanteFiscalValidate(false)
       }
-      if (comprobanteFiscalName.length > 2) {
+      if (Object.values(comprobanteFiscalName).length > 2) {
          setComprobanteFiscalNameValidate(true);
          comprobanteFName = true;
       } else {
@@ -193,9 +197,14 @@ const InitialConfigContainer = () => {
                   },
                   body: JSON.stringify(formCF)
                });
-               window.console.log(response);
                const { message } = await response.json();
-               window.console.log(message)
+               if (message.status === 'Usuario configurado') {
+                  setInitialConfig(true);
+                  history.push('/emitir-facturas');
+               } else {
+                  window.console.log(message.status);
+                  window.console.error('Algo salió mal');
+               }
             } catch(error) {
                window.console.log(error);
             }

@@ -21,11 +21,9 @@ const InitialConfigCF = (props) => {
    const [item] = useState([]);
    const [count, setCount] = useState(0);
    const [disable, setDisable] = useState(true);
-   // const [separator, setSeparator] = useState();
    const chunksCF = Object.values(comprobanteFiscal);
    const chunksCFName = Object.values(comprobanteFiscalName);
    const chunksCFJoin = chunksCF.join(separator || '');
-   window.console.log(chunksCF)
    const handeClickAddItem = () => {
       if(count === 10) {
          setCount(10)
@@ -36,7 +34,6 @@ const InitialConfigCF = (props) => {
    }
    useEffect(() => {
       chunksCFName.forEach(i => {
-         window.console.log(i)
          if (i.length <= 0) {
             setDisable(true)
          } else {

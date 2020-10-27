@@ -39,7 +39,7 @@ const UserItemInvited = () =>{
                               <span className='Role__item-body'>
                                  <p>{item.role}</p>
                                  <p>{item.userId}</p>
-                                 <p>{item.firstName} {item.lastName}</p>
+                                 <p>{item.email} {item.lastName}</p>
                                  <span>Invitado</span>
                               </span>
                            </div>

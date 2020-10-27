@@ -17,7 +17,6 @@ const HeaderuserContainer = () => {
    const controller = new AbortController()
 
    const logOut = async () => {
-      window.console.log(tokenTFA, 'isAuth');
       try {
          setModal(true)
          await fetch(`${API}auth/logout`, {

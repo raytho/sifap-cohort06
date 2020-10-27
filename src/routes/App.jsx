@@ -24,7 +24,7 @@ import Chatbot from '../components/Chatbot/Chatbot';
 
 
 const App = () => {
-   const { isAuth } = useContext(Context);
+   const { isAuth, initialConfig } = useContext(Context);
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    return (
       <>
@@ -35,7 +35,7 @@ const App = () => {
                isAuth
                   ? (
                      <>
-                     {user.hasConfigured
+                     {user.hasConfigured || initialConfig
                         ?
                            <Layout>
                               <Route exact path='/emitir-facturas' component={Bill} />
@@ -47,7 +47,7 @@ const App = () => {
                               <Route exact path='/c.-fiscales' component={ManageCFiscales} />
                               <Route exact path='/profile' component={ProfileContainer} />
                            </Layout>
-                        : <InitialConfigContainer />
+                        :  <Route exact path='/config-inicial' component={InitialConfigContainer} />
                         }
                      </>
                   ) : (

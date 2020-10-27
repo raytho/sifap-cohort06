@@ -36,7 +36,7 @@ const FormResetPass = (props) => {
             <div className='ResetPass__buttons'>
                <button type='submit'>Restablecer</button>
             </div>
-            <p className='ResetPass__redirect'> <Link to='/login'> Iniciar sesión</Link></p>
+            <p className='ResetPass__redirect'> <Link to='/'> Iniciar sesión</Link></p>
          </form>
          <ConfirmSendModal
             modal={modal}
