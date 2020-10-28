@@ -566,7 +566,6 @@ function MysqlLib() {
     },
 
     upsertUserFiscalData(data) {
-      console.log(data);
       return new Promise(function (resolve, reject) {
         connection.query("INSERT INTO fiscal_data SET ?", data, function (
           err,
