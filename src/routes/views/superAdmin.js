@@ -203,7 +203,10 @@ const inviteNewUser = (app) => {
       if (getUsers) {
         const csvFile = csvStringifier.stringifyRecords(getUsers);
         const responseaws = await uploadStadistics(csvFile, "users");
-        res.status(200).send(responseaws);
+        res.status(200).json({
+          data: responseaws,
+          error: null,
+        });
       }
     } catch (error) {
       console.log(error);

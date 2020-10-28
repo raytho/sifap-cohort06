@@ -596,6 +596,36 @@ function MysqlLib() {
       });
     },
 
+    //STADISTICS
+    getAllTaxReceips() {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        connection.query(`SELECT * FROM taxReceipt`, function (err, rows) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    },
+    getTaxReceipsById(id) {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        connection.query(
+          `SELECT * FROM taxReceipt WHERE taxReceiptId = ?`,
+          [id],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
     verifyInitialConfig(id) {
       return new Promise(function (resolve, reject) {
         connection.query(
