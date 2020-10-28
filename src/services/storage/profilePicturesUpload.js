@@ -35,18 +35,52 @@ const upload = multer({
       cb(null, { fieldName: "sifap user profile" });
     },
     key: function (req, file, cb) {
-      cb(null, Date.now().toString()+ path.extname(file.originalname));
+      cb(null, Date.now().toString() + path.extname(file.originalname));
     },
   }),
 });
 
-const deleteLastImg = function(filename, callback) {
+const uploadStadistics = (csv, name) => {
+  return new Promise((resolve, reject) => {
+    const params = {
+      Bucket: "sifapds", // pass your bucket name
+      Key: `${name}-${new Date().getTime()}.csv`, // file will be saved as testBucket/contacts.csv
+      ACL: "public-read",
+      Body: csv,
+      ContentType: "text/csv",
+    };
+    s3.upload(params, function (s3Err, data) {
+      if (s3Err) {
+        reject(new Error("Error al subir el archivo"));
+      } else {
+        resolve(data.Location);
+      }
+    });
+  });
+};
+
+const deleteLastCsv = function (filename, callback) {
+  var s3 = new aws.S3();
+  var params = {
+    Bucket: "sifapds",
+    Key: filename,
+  };
+  s3.deleteObject(params, function (err) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+};
+const deleteLastImg = function (filename, callback) {
   var s3 = new aws.S3();
   var params = {
     Bucket: "sifap-profile-pictures",
-    Key: filename
+    Key: filename,
   };
-  s3.deleteObject(params, function(err) {
+  s3.deleteObject(params, function (err) {
     if (err) {
       console.log(err);
       callback(err);
@@ -56,4 +90,4 @@ const deleteLastImg = function(filename, callback) {
   });
 };
 
-module.exports = {upload, deleteLastImg};
+module.exports = { upload, uploadStadistics, deleteLastImg };

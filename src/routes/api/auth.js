@@ -271,7 +271,7 @@ function authApi(app) {
     }
   });
 
-  router.get("/forgot/:token", async (req, res, next) => {
+  router.get("/newpassword/:token", async (req, res, next) => {
     const { token } = req.params;
     if (!token) {
       next(boom.unauthorized());

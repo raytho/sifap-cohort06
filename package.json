@@ -36,6 +36,7 @@
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
+    "csv-writer": "^1.6.0",
     "eslint": "^7.9.0",
     "mongodb": "^3.6.2",
     "nodemon": "^2.0.4"

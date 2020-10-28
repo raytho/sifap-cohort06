@@ -6,6 +6,38 @@ const validationHandler = require("../../utils/middleware/validationHandler");
 
 const { createUserSchema } = require("../../utils/schemas/users");
 const { inviteUserSchema } = require("../../utils/schemas/usersInvitation");
+
+const createCsvStringifier = require("csv-writer").createObjectCsvStringifier;
+const {
+  uploadStadistics,
+} = require("../../services/storage/profilePicturesUpload");
+
+const csvStringifier = createCsvStringifier({
+  header: [
+    { id: "userId", title: "userId" },
+    { id: "email", title: "email" },
+    { id: "password", title: "password" },
+    { id: "phoneNumber", title: "phoneNumber" },
+    { id: "firstName", title: "firstName" },
+    { id: "lastName", title: "lastName" },
+    { id: "dateOfBirth", title: "dateOfBirth" },
+    { id: "city", title: "city" },
+    { id: "state", title: "state" },
+    { id: "country", title: "country" },
+    { id: "taxReceiptLimit", title: "taxReceiptLimit" },
+    { id: "fiscalId", title: "fiscalId" },
+    { id: "createdAt", title: "createdAt" },
+    { id: "role", title: "role" },
+    { id: "fiscalAct", title: "fiscalAct" },
+    { id: "createdBy", title: "createdBy" },
+    { id: "active", title: "active" },
+    { id: "twoFactorActive", title: "twoFactorActive" },
+    { id: "typeEmail", title: "typeEmail" },
+    { id: "idCountry", title: "idCountry" },
+    { id: "profile_picture_url", title: "profile_picture_url" },
+  ],
+});
+
 require("../../utils/auth/strategies/jwt");
 
 const inviteNewUser = (app) => {
@@ -164,22 +196,20 @@ const inviteNewUser = (app) => {
     }
   );
 
-  router.get(
-    "/get-users",
-    passport.authenticate("jwt", { session: false }),
-    async (req, res) => {
-      const userService = new usersService();
-      try {
-        const getUsers = await userService.getAllUsers();
-        if (getUsers) {
-          res.status(200).send(getUsers);
-        }
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Error to get users" });
+  router.get("/get-users", async (req, res) => {
+    const userService = new usersService();
+    try {
+      const getUsers = await userService.getAllUsers();
+      if (getUsers) {
+        const csvFile = csvStringifier.stringifyRecords(getUsers);
+        const responseaws = await uploadStadistics(csvFile, "users");
+        res.status(200).send(responseaws);
       }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error to get users" });
     }
-  );
+  });
 
   router.get("/get-user/:id", async (req, res) => {
     const id = req.params.id;

@@ -551,7 +551,6 @@ function MysqlLib() {
 
     updateRolByUserId(id, data) {
       return new Promise(function (resolve, reject) {
-        console.log(data.rol);
         connection.query(
           "UPDATE users SET role = ?, twoFactorActive = ? WHERE userId = ?",
           [data.rol, data.twoFactorActive, id],
@@ -566,6 +565,7 @@ function MysqlLib() {
       });
     },
 
+<<<<<<< Updated upstream
     upsertUserFiscalData(data) {
       return new Promise(function (resolve, reject) {
         connection.query(
@@ -588,6 +588,27 @@ function MysqlLib() {
         connection.query(
           "UPDATE users SET ? WHERE userId = ?",
           [data, id],
+=======
+    //STADISTICS
+    getAllTaxReceips() {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        connection.query(`SELECT * FROM taxReceipt`, function (err, rows) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    },
+    getTaxReceipsById(id) {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        connection.query(
+          `SELECT * FROM taxReceipt WHERE taxReceiptId = ?`,
+          [id],
+>>>>>>> Stashed changes
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));
@@ -598,6 +619,7 @@ function MysqlLib() {
         );
       });
     },
+<<<<<<< Updated upstream
 
     verifyInitialConfig(id){
       return new Promise(function (resolve, reject) {
@@ -618,6 +640,8 @@ function MysqlLib() {
     },
 
   
+=======
+>>>>>>> Stashed changes
   };
 }
 

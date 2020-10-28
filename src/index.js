@@ -10,6 +10,7 @@ const notFoundHandler = require("./utils/middleware/notFoundHandler");
 const authApiRouter = require("./routes/api/auth");
 const rolesApiRouter = require("./routes/api/roles");
 const countriesApi = require("./routes/api/countries");
+const stadisticsApi = require("./routes/api/stadistics");
 const home = require("./routes/views/home");
 const userViewRouter = require("./routes/views/user");
 const superAdminRouter = require("./routes/views/superAdmin");
@@ -32,6 +33,7 @@ userViewRouter(app);
 rolesApiRouter(app);
 superAdminRouter(app);
 countriesApi(app);
+stadisticsApi(app);
 
 // 404 handler
 app.use(notFoundHandler);
