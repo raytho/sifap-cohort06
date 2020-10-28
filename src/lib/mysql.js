@@ -565,35 +565,12 @@ function MysqlLib() {
       });
     },
 
-<<<<<<< Updated upstream
     upsertUserFiscalData(data) {
       return new Promise(function (resolve, reject) {
-        connection.query(
-          "INSERT INTO fiscal_data SET ?",
-          data,
-          function (err, rows) {
-            if (rows === undefined) {
-              reject(new Error("Error rows is undefined"));
-            } else {
-              resolve(rows);
-            }
-          }
-        );
-      });
-    },
-
-    updateUserData(data, id) {
-      return new Promise(function (resolve, reject) {
-        
-        connection.query(
-          "UPDATE users SET ? WHERE userId = ?",
-          [data, id],
-=======
-    //STADISTICS
-    getAllTaxReceips() {
-      return new Promise(function (resolve, reject) {
-        // eslint-disable-next-line quotes
-        connection.query(`SELECT * FROM taxReceipt`, function (err, rows) {
+        connection.query("INSERT INTO fiscal_data SET ?", data, function (
+          err,
+          rows
+        ) {
           if (rows === undefined) {
             reject(new Error("Error rows is undefined"));
           } else {
@@ -602,13 +579,12 @@ function MysqlLib() {
         });
       });
     },
-    getTaxReceipsById(id) {
+
+    updateUserData(data, id) {
       return new Promise(function (resolve, reject) {
-        // eslint-disable-next-line quotes
         connection.query(
-          `SELECT * FROM taxReceipt WHERE taxReceiptId = ?`,
-          [id],
->>>>>>> Stashed changes
+          "UPDATE users SET ? WHERE userId = ?",
+          [data, id],
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));
@@ -619,9 +595,8 @@ function MysqlLib() {
         );
       });
     },
-<<<<<<< Updated upstream
 
-    verifyInitialConfig(id){
+    verifyInitialConfig(id) {
       return new Promise(function (resolve, reject) {
         connection.query(
           `SELECT companyName, fiscalId, fiscalIdentifierName FROM fiscal_data WHERE id = '${id}' LIMIT 1`,
@@ -630,7 +605,7 @@ function MysqlLib() {
               reject(new Error(err.message));
             }
             if (rows.length) {
-              resolve (rows[0]);
+              resolve(rows[0]);
             } else {
               resolve(false);
             }
@@ -638,10 +613,6 @@ function MysqlLib() {
         );
       });
     },
-
-  
-=======
->>>>>>> Stashed changes
   };
 }
 
