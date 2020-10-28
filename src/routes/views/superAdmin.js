@@ -210,7 +210,7 @@ const inviteNewUser = (app) => {
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Error to get users" });
+      res.status(500).json({ message: "Not found" });
     }
   });
 
