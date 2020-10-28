@@ -613,7 +613,7 @@ function MysqlLib() {
       return new Promise(function (resolve, reject) {
         // eslint-disable-next-line quotes
         connection.query(
-          `SELECT * FROM taxReceipt WHERE taxReceiptId = ?`,
+          "SELECT * FROM taxReceipt WHERE taxReceiptId = ?",
           [id],
           function (err, rows) {
             if (rows === undefined) {
