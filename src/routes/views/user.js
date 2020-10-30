@@ -85,20 +85,17 @@ function userView(app) {
           const cf = userData.cf;
           const cfName = userData.cfName;
           const increment = userData.increment;
-          const updatedUserData = await usersService.updateUserData(
-            userData,
-            userId
-          );
+          // const updatedUserData = await usersService.updateUserData(
+          //   userData,
+          //   userId
+          // );
           const fiscalData = await usersService.upsertFiscalData(
             userData,
             userId
           );
-          if (fiscalData && updatedUserData) {
+          if (fiscalData) {
             res.status(200).json({
               message: {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                dateOfBirth: formatUTCTime(user.dateOfBirth),
                 country: user.country,
                 ...userData,
                 cf,
@@ -290,15 +287,12 @@ function userView(app) {
           const userData = user;
           switch (user.country) {
           case "México":
-            console.log("Mexico");
             usersService.generateInvoceMx(invoiceInputData, userData);
             break;
           case "Colombia":
-            console.log("Colombia");
             usersService.generateInvoceCol(invoiceInputData, userData);
             break;
           case "República Dominicana":
-            console.log("Republica Dominicana");
             usersService.generateInvoceRd(invoiceInputData, userData);
             break;
           }

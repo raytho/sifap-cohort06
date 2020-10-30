@@ -4,7 +4,9 @@ const { nanoid } = require("nanoid");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const config = require("../config");
+const { object } = require("@hapi/joi");
 
+const TABLE_PRODUCTS = "product";
 class UsersService {
   constructor() {
     this.mysqlLib = new MysqlLib();
@@ -299,7 +301,6 @@ class UsersService {
   }
 
   async upsertFiscalData(data, id) {
-
     delete data.firstName;
     delete data.lastName;
     delete data.dateOfBirth;
@@ -320,7 +321,7 @@ class UsersService {
     const userFiscalData = await this.mysqlLib.upsertUserFiscalData(fiscalData);
     return userFiscalData;
   }
-  
+
   async updateUserData(data, id) {
     const updatedUserData = {
       firstName: data.firstName,
@@ -331,36 +332,73 @@ class UsersService {
     const userData = await this.mysqlLib.updateUserData(updatedUserData, id);
     return userData;
   }
-  
+
   async checkInitialConfig(id) {
     const initialConfig = await this.mysqlLib.verifyInitialConfig(id);
     return initialConfig;
   }
 
-  async generateInvoceMx( invoiceData, userData ) {
-    const { firstName, phoneNumber, email, products, clientName, clientFiscalIdentifier, clientAdress, currency, cfdiUse, paymentMethod } = invoiceData;
+  async generateInvoceMx(invoiceData, userData) {
+    const {
+      firstName,
+      phoneNumber,
+      email,
+      products,
+      clientName,
+      clientFiscalIdentifier,
+      clientAdress,
+      currency,
+      cfdiUse,
+      paymentMethod,
+    } = invoiceData;
+
+    //ESTÁ OK
+    await this.insertProducts(products);
     const amount = this.calcTotalAmount(products);
     const IVA = 0.16;
-    const tax = this.calcTax(amount, IVA);       
+    const tax = this.calcTax(amount, IVA);
   }
-  
-  async generateInvoceCol( invoiceData, userData ) {
+
+  async generateInvoceCol(invoiceData, userData) {
     console(invoiceData, userData);
   }
-  
-  async generateInvoceRd( invoiceData, userData ) {
+
+  async generateInvoceRd(invoiceData, userData) {
     console(invoiceData, userData);
   }
-  
-  calcTax(amount , taxValue){
+
+  async insertProducts(products) {
+
+    const newProducts = Object.assign({}, products);
+    console.log(newProducts);
+    const arrayProducts = [];
+    const columns = [];
+    for (let product in newProducts) {
+      delete newProducts[product].qty;
+      arrayProducts.push(Object.values(newProducts[product]));
+      columns.push(Object.keys(newProducts[product]));
+    }
+ 
+    //ITS OK
+    //await this.mysqlLib.upsert(TABLE_PRODUCTS, columns[0], arrayProducts);
+  }
+
+  calcTax(amount, taxValue) {
     console.log("test");
   }
-  
-  calcTotalAmount(products){
-    const reducer = "dummy";
-    const amount = products.reduce(reducer);
-    console.log(amount);
+
+  calcTotalAmount(products) {
+    console.log(products, "2");
+    const objProducts = [];
+    for (let product in products) {
+      objProducts.push(products[product]);
+    }
+    
+    const reducer = (accum, currentValue) => accum.price * accum.qty;
+    const total = objProducts.map(reducer);
+    console.log(total);
   }
+  
 }
 
 module.exports = UsersService;

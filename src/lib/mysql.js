@@ -627,7 +627,7 @@ function MysqlLib() {
     },
 
     verifyInitialConfig(id) {
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         connection.query(
           `SELECT companyName, fiscalId, fiscalIdentifierName FROM fiscal_data WHERE id = '${id}' LIMIT 1`,
           function (err, rows) {
@@ -638,6 +638,23 @@ function MysqlLib() {
               resolve(rows[0]);
             } else {
               resolve(false);
+            }
+          }
+        );
+      });
+    },
+
+    upsert(table, columns, data) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          `INSERT INTO ${table} (${columns}) VALUES ?`,
+          [data],
+          function (err, rows) {
+            if (err) {
+              reject(new Error(err.message));
+            }
+            else {
+              resolve (rows);
             }
           }
         );
