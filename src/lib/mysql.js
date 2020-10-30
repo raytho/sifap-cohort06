@@ -548,9 +548,9 @@ function MysqlLib() {
         );
       });
     },
+
     updateRolByUserId(id, data) {
       return new Promise(function (resolve, reject) {
-        console.log(data.rol);
         connection.query(
           "UPDATE users SET role = ?, twoFactorActive = ? WHERE userId = ?",
           [data.rol, data.twoFactorActive, id],
@@ -564,7 +564,87 @@ function MysqlLib() {
         );
       });
     },
+
+    upsertUserFiscalData(data) {
+      return new Promise(function (resolve, reject) {
+        connection.query("INSERT INTO fiscal_data SET ?", data, function (
+          err,
+          rows
+        ) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    },
+
+    updateUserData(data, id) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          "UPDATE users SET ? WHERE userId = ?",
+          [data, id],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    //STADISTICS
+    getAllTaxReceips() {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        connection.query(`SELECT * FROM taxReceipt`, function (err, rows) {
+          if (rows === undefined) {
+            reject(new Error("Error rows is undefined"));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    },
+    getTaxReceipsById(id) {
+      return new Promise(function (resolve, reject) {
+        // eslint-disable-next-line quotes
+        connection.query(
+          "SELECT * FROM taxReceipt WHERE taxReceiptId = ?",
+          [id],
+          function (err, rows) {
+            if (rows === undefined) {
+              reject(new Error("Error rows is undefined"));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    verifyInitialConfig(id) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `SELECT companyName, fiscalId, fiscalIdentifierName FROM fiscal_data WHERE id = '${id}' LIMIT 1`,
+          function (err, rows) {
+            if (err) {
+              reject(new Error(err.message));
+            }
+            if (rows.length) {
+              resolve(rows[0]);
+            } else {
+              resolve(false);
+            }
+          }
+        );
+      });
+    },
   };
 }
 
 module.exports = MysqlLib;
+//upsertUserData

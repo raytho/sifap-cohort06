@@ -35,7 +35,7 @@ function authApi(app) {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
           } else {
-            generateToken(req, res, next, user);
+            generateToken(req, res, next, user, usersService);
           }
         }
       } catch (error) {
@@ -58,11 +58,18 @@ function authApi(app) {
               "Este correo ya está en uso, por favor intente con otro o reestableza su contraseña",
           });
         } else {
-          await usersService.createSuperAdminUser({ user }, hasInvited);
-          await usersService.updateInvitationByUserInvited(hasInvited);
-          res.status(201).json({
-            message: "User created",
-          });
+          if (hasInvited) {
+            await usersService.createSuperAdminUser({ user }, hasInvited);
+            await usersService.updateInvitationByUserInvited(hasInvited);
+            res.status(201).json({
+              message: "User created",
+            });
+          } else {
+            res.status(500).json({
+              message:
+                "No se puede registrar un usuario sin invitacion, favor de validar",
+            });
+          }
         }
       } catch (error) {
         next(error);
@@ -264,7 +271,7 @@ function authApi(app) {
     }
   });
 
-  router.get("/forgot/:token", async (req, res, next) => {
+  router.get("/newpassword/:token", async (req, res, next) => {
     const { token } = req.params;
     if (!token) {
       next(boom.unauthorized());
@@ -336,19 +343,20 @@ function authApi(app) {
   });
 }
 
-const generateToken = (req, res, next, user) => {
+const generateToken = (req, res, next, user, usersService) => {
   req.login(user, { session: false }, async (error) => {
     if (error) {
       next(error);
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
+      const fiscalData = await usersService.checkInitialConfig(user.userId);
+      
       const {
         userId,
         email,
         city,
         state,
-        fiscalId,
         dateOfBirth,
         fiscalAct,
         country,
@@ -377,7 +385,6 @@ const generateToken = (req, res, next, user) => {
           country,
           city,
           state,
-          fiscalId,
           dateOfBirth: formatDate,
           fiscalAct,
           firstName,
@@ -385,6 +392,8 @@ const generateToken = (req, res, next, user) => {
           twoFactorActive: twoFactorToNumber,
           role,
           profile_picture_url,
+          hasConfigured: fiscalData ? true: false,
+          ...fiscalData,
           permissions,
         },
       });

@@ -10,7 +10,7 @@ class UsersService {
   }
 
   async createSuperAdminUser({ user }, userInvitation) {
-    const { firstName, fiscalId, email, password, country, typeEmail } = user;
+    const { firstName, email, password, country, typeEmail } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
     const role = userInvitation.role;
     const createdBy = userInvitation.createdBy;
@@ -18,7 +18,6 @@ class UsersService {
 
     const response = await this.mysqlLib.createSuperAdminUser({
       firstName,
-      fiscalId,
       userId,
       email,
       password: hashedPassword,
@@ -296,6 +295,45 @@ class UsersService {
   async updateRolByUserId(id, data) {
     const updatedRol = await this.mysqlLib.updateRolByUserId(id, data);
     return updatedRol.affectedRows;
+  }
+
+  async upsertFiscalData(data, id) {
+
+    delete data.firstName;
+    delete data.lastName;
+    delete data.dateOfBirth;
+    delete data.country;
+    const fiscalDataName = data["cfName"];
+    const fiscalDataValues = data["cf"];
+    const increment = data["increment"];
+    delete data.cfName;
+    delete data.cf;
+    delete data.increment;
+    const fiscalData = {
+      id,
+      ...data,
+      ...fiscalDataName,
+      ...fiscalDataValues,
+      ...increment,
+    };
+    const userFiscalData = await this.mysqlLib.upsertUserFiscalData(fiscalData);
+    return userFiscalData;
+  }
+  
+  async updateUserData(data, id) {
+    const updatedUserData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      dateOfBirth: data.dateOfBirth,
+      country: data.country,
+    };
+    const userData = await this.mysqlLib.updateUserData(updatedUserData, id);
+    return userData;
+  }
+  
+  async checkInitialConfig(id) {
+    const initialConfig = await this.mysqlLib.verifyInitialConfig(id);
+    return initialConfig;
   }
 }
 

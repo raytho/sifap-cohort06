@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require("express");
 const passport = require("passport");
 const UsersService = require("../../services/usersService");
@@ -10,6 +11,8 @@ const multer = require("multer");
 // jwt stategy
 require("../../utils/auth/strategies/jwt");
 const twoFactorAuth = require("../../utils/auth/strategies/twoFactorAuth");
+const validationHandler = require("../../utils/middleware/validationHandler");
+const fiscalDataSchema = require("../../utils/schemas/fiscalData");
 
 function userView(app) {
   const router = express.Router();
@@ -61,6 +64,97 @@ function userView(app) {
               twoFactorActive: twoFactorToNumber,
             },
           });
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.post("/tax-receipt", async (req, res, next) => {
+    validationHandler(fiscalDataSchema),
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+          const { userId } = user;
+          const userData = req.body;
+          const cf = userData.cf;
+          const cfName = userData.cfName;
+          const increment = userData.increment;
+          const updatedUserData = await usersService.updateUserData(
+            userData,
+            userId
+          );
+          const fiscalData = await usersService.upsertFiscalData(
+            userData,
+            userId
+          );
+          if (fiscalData && updatedUserData) {
+            res.status(200).json({
+              message: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: formatUTCTime(user.dateOfBirth),
+                country: user.country,
+                ...userData,
+                cf,
+                cfName,
+                increment,
+                status: "Usuario configurado",
+              },
+            });
+          } else {
+            res.status(500).json({
+              message: "Error al realizar la configuración del usuario",
+            });
+          }
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.post("/tax-identifier", async (req, res, next) => {
+    validationHandler(fiscalDataSchema),
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+          const { userId } = user;
+          const userData = req.body;
+          const { firstName, lastName, dateOfBirth, country } = userData;
+          const updatedUserData = await usersService.updateUserData(
+            userData,
+            userId
+          );
+          const fiscalData = await usersService.upsertFiscalData(
+            userData,
+            userId
+          );
+          if (fiscalData && updatedUserData) {
+            res.status(200).json({
+              message: {
+                firstName,
+                lastName,
+                dateOfBirth,
+                country,
+                ...userData,
+                status: "Usuario configurado",
+              },
+            });
+          } else {
+            res.status(500).json({
+              message: "Error al realizar la configuración del usuario",
+            });
+          }
         }
       } catch (error) {
         next(error);
@@ -125,11 +219,9 @@ function userView(app) {
             message: "No autorizado",
           });
         } else {
-          console.log(req.headers);
           const singleUpload = upload.single("image");
 
           singleUpload(req, res, async function (err) {
-            console.log(req.file);
             if (req.fileValidationError) {
               return res.status(500).json({
                 error: req.fileValidationError,
@@ -185,6 +277,37 @@ function userView(app) {
       }
     })(req, res, next);
   });
+
+  router.post("/invoices", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+          const invoiceInputData = req.body;
+          const userData = user;
+          switch (user.country) {
+          case "México":
+            generateInvoceMx(invoiceInputData, userData);
+            console.log("Mexico");
+            break;
+          case "Colombia":
+            generateInvoceCol(invoiceInputData, userData);
+            console.log("Colombia");
+            break;
+          case "República Dominicana":
+            generateInvoceRd(invoiceInputData, userData);
+            console.log("Republica Dominicana");
+            break;
+          }
+        }
+      } catch (err) {
+        next(error);
+      }
+    })(req, res, next);
+  });
 }
 
 const formatUTCTime = (date) => {
@@ -194,6 +317,31 @@ const formatUTCTime = (date) => {
   const years = date.getUTCFullYear();
   const newDate = `${years}-${month}-${day}`;
   return newDate;
+};
+
+const generateInvoceMx = ( invoiceData, userData ) => {
+  const { firstName, phoneNumber, email, products, clientName, clientFiscalIdentifier, clientAdress, currency, cfdiUse, paymentMethod } = invoiceData;
+  const amount = calcTotalAmount(products);
+  const IVA = 0.16;
+  const tax = calcTax(amount, IVA);       
+};
+
+const generateInvoceCol = ( invoiceData, userData ) => {
+  console(invoiceData, userData);
+};
+
+const generateInvoceRd = ( invoiceData, userData ) => {
+  console(invoiceData, userData);
+};
+
+const calcTax = ( amount , taxValue) => {
+//
+};
+
+const calcTotalAmount = (products) =>{
+  const reducer = "dummy";
+  const amount = products.reduce(reducer);
+  console.log(amount);
 };
 
 module.exports = userView;
