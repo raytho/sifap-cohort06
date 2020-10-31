@@ -507,32 +507,6 @@ function MysqlLib() {
       });
     },
 
-    updateUserProfile(data, id) {
-      return new Promise(function (resolve, reject) {
-        connection.query(
-          "UPDATE users SET phoneNumber=?, firstName=?, dateOfBirth=?, city=?, state=?, country=?, fiscalId=?, twoFactorActive=? WHERE userId = ?",
-          [
-            data.phoneNumber,
-            data.firstName,
-            data.dateOfBirth,
-            data.city,
-            data.state,
-            data.country,
-            data.fiscalId,
-            data.twoFactorActive,
-            id,
-          ],
-          function (err, rows) {
-            if (rows === undefined) {
-              reject(new Error("Error rows is undefined"));
-            } else {
-              resolve(rows);
-            }
-          }
-        );
-      });
-    },
-
     updateProfileImage(imgUrl, id) {
       return new Promise(function (resolve, reject) {
         connection.query(
@@ -652,10 +626,44 @@ function MysqlLib() {
           [data],
           function (err, rows) {
             if (err) {
-              reject(new Error(err.message));
+              console.log(err);
+              reject(new Error("Error:", err));
             }
             else {
               resolve (rows);
+            }
+          }
+        );
+      });
+    },
+
+    update(table, data, condition, conditionValue) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `UPDATE ${table} SET ? WHERE ${condition} = ?`,
+          [data, conditionValue],
+          function (err, rows) {
+            if (err) {
+              console.log(err);
+              reject(new Error("Error:", err));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    get(columns, table, condition, conditionValue) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `SELECT ${columns} FROM ${table} WHERE ${condition} = ?`,
+          conditionValue,
+          function (err, rows) {
+            if (err) {
+              reject(new Error(err));
+            } else {
+              resolve(rows);
             }
           }
         );

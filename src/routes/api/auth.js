@@ -350,7 +350,8 @@ const generateToken = (req, res, next, user, usersService) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      const fiscalData = await usersService.checkInitialConfig(user.country);
+      const fiscalData = await usersService.checkInitialConfig(user.idCountry);
+      const country = await usersService.getCountry(user.idCountry);
       
       const {
         userId,
@@ -359,7 +360,6 @@ const generateToken = (req, res, next, user, usersService) => {
         state,
         dateOfBirth,
         fiscalAct,
-        country,
         firstName,
         phoneNumber,
         twoFactorActive,
@@ -382,7 +382,7 @@ const generateToken = (req, res, next, user, usersService) => {
         user: {
           userId,
           email,
-          country,
+          country: country[0].code,
           city,
           state,
           dateOfBirth: formatDate,

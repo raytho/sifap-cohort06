@@ -157,7 +157,7 @@ function userView(app) {
 
   router.put("/data/profile", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
-      const userData = req.body;
+      const userProfileData = req.body;
       try {
         if (error || !user) {
           res.status(500).json({
@@ -165,7 +165,7 @@ function userView(app) {
           });
         } else {
           const updateUser = await usersService.updateUserProfile(
-            userData,
+            userProfileData,
             user.userId
           );
 
@@ -182,8 +182,9 @@ function userView(app) {
                   firstName: userData.firstName,
                   city: userData.city,
                   state: userData.state,
-                  country: userData.country,
-                  fiscalId: userData.fiscalId,
+                  country: userProfileData.country,
+                  fiscalId: userProfileData.fiscalId,
+                  companyName: userProfileData.companyName,
                   dateOfBirth: formatTime,
                   FiscalAct: userData.fiscalAct,
                   twoFactorActive: twoFactorToNumber,

@@ -7,6 +7,9 @@ const config = require("../config");
 const { object } = require("@hapi/joi");
 
 const TABLE_PRODUCTS = "product";
+const TABLE_FISCAL_DATA = "fiscal_data";
+const TABLE_USER = "users";
+const TABLE_COUNTRIES = "countries";
 class UsersService {
   constructor() {
     this.mysqlLib = new MysqlLib();
@@ -283,7 +286,45 @@ class UsersService {
   }
 
   async updateUserProfile(user, id) {
-    const updatedProfile = await this.mysqlLib.updateUserProfile(user, id);
+    const fiscalId = await this.mysqlLib.get("id", TABLE_FISCAL_DATA, "fiscalId", user.fiscalId);
+    const data = {
+      fiscalId: user.fiscalId,
+      companyName: user.companyName,
+    };
+
+    if (fiscalId.length) {
+      await this.mysqlLib.update(TABLE_FISCAL_DATA, data, "id", fiscalId[0].id);
+      const userFiscalId = { fiscalId: fiscalId[0].id };
+      await this.mysqlLib.update(TABLE_USER, userFiscalId, "userId", id);
+    } else {
+
+      const cols = [];
+      const values = [];
+      const arrayValues = [];
+
+      for (let itemValues in data) {
+        cols.push(itemValues);
+        values.push(data[itemValues]);
+      }
+      arrayValues.push(values);
+      await this.mysqlLib.upsert(TABLE_FISCAL_DATA, cols, arrayValues);
+    }
+    
+    const idCountry =
+      user.country === "COL" ? 1
+        : user.country === "MEX" ? 2
+          : user.country === "DOM" ? 3 : 0;
+    const userProfile = {
+      phoneNumber: user.phoneNumber,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      dateOfBirth: user.dateOfBirth,
+      city: user.city,
+      state: user.state,
+      idCountry: idCountry,
+      twoFactorActive: user.twoFactorActive,
+    };
+    const updatedProfile = await this.mysqlLib.update(TABLE_USER, userProfile, "userId", id);
     return updatedProfile.affectedRows;
   }
 
@@ -319,7 +360,6 @@ class UsersService {
       ...fiscalDataValues,
       ...increment,
     };
-    console.log(fiscalData);
     const userFiscalData = await this.mysqlLib.upsertUserFiscalData(fiscalData);
     return userFiscalData;
   }
@@ -335,16 +375,10 @@ class UsersService {
     return userData;
   }
 
-  async checkInitialConfig(country) {
-    const countryId =
-      country === "COL" ? 1
-        : country === "MEX" ? 2
-          : country === "DOM" ? 3 : undefined; 
-
+  async checkInitialConfig(countryId) {
     const initialConfig = await this.mysqlLib.verifyInitialConfig(countryId);
 
     if (initialConfig) {
-      console.log(initialConfig.fiscalIdentifierName);
       return initialConfig.fiscalIdentifierName;
     } else {
       return initialConfig;
@@ -392,7 +426,7 @@ class UsersService {
     }
 
     //ITS OK
-    //await this.mysqlLib.upsert(TABLE_PRODUCTS, columns[0], arrayProducts);
+    await this.mysqlLib.upsert(TABLE_PRODUCTS, columns[0], arrayProducts);
   }
 
   calcTax(amount, taxValue) {
@@ -417,6 +451,13 @@ class UsersService {
         delete obj[propName];
       }
     }
+  }
+
+  async getCountry(id) {
+    console.log(id);
+    const country = await this.mysqlLib.get("code", TABLE_COUNTRIES, "idcountries", id);
+    console.log(country);
+    return country;
   }
 }
 
