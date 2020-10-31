@@ -567,7 +567,7 @@ function MysqlLib() {
 
     upsertUserFiscalData(data) {
       return new Promise(function (resolve, reject) {
-        connection.query("INSERT INTO fiscal_data SET ?", data, function (
+        connection.query("INSERT INTO country_config SET ?", data, function (
           err,
           rows
         ) {
@@ -626,10 +626,11 @@ function MysqlLib() {
       });
     },
 
-    verifyInitialConfig(id) {
+    verifyInitialConfig(country) {
       return new Promise((resolve, reject) => {
         connection.query(
-          `SELECT companyName, fiscalId, fiscalIdentifierName FROM fiscal_data WHERE id = '${id}' LIMIT 1`,
+          "SELECT * FROM country_config WHERE id = ?",
+          country,
           function (err, rows) {
             if (err) {
               reject(new Error(err.message));

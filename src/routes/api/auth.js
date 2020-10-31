@@ -350,7 +350,7 @@ const generateToken = (req, res, next, user, usersService) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      const fiscalData = await usersService.checkInitialConfig(user.userId);
+      const fiscalData = await usersService.checkInitialConfig(user.country);
       
       const {
         userId,
@@ -393,7 +393,7 @@ const generateToken = (req, res, next, user, usersService) => {
           role,
           profile_picture_url,
           hasConfigured: fiscalData ? true: false,
-          ...fiscalData,
+          fiscalData,
           permissions,
         },
       });

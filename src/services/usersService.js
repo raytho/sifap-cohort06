@@ -301,9 +301,10 @@ class UsersService {
   }
 
   async upsertFiscalData(data, id) {
-    delete data.firstName;
-    delete data.lastName;
-    delete data.dateOfBirth;
+    const countryId =
+      data.country === "COL" ? 1
+        : data.country === "MEX" ? 2
+          : data.country === "DOM" ? 3 : undefined;
     delete data.country;
     const fiscalDataName = data["cfName"];
     const fiscalDataValues = data["cf"];
@@ -312,12 +313,13 @@ class UsersService {
     delete data.cf;
     delete data.increment;
     const fiscalData = {
-      id,
+      id: countryId,
       ...data,
       ...fiscalDataName,
       ...fiscalDataValues,
       ...increment,
     };
+    console.log(fiscalData);
     const userFiscalData = await this.mysqlLib.upsertUserFiscalData(fiscalData);
     return userFiscalData;
   }
@@ -333,9 +335,20 @@ class UsersService {
     return userData;
   }
 
-  async checkInitialConfig(id) {
-    const initialConfig = await this.mysqlLib.verifyInitialConfig(id);
-    return initialConfig;
+  async checkInitialConfig(country) {
+    const countryId =
+      country === "COL" ? 1
+        : country === "MEX" ? 2
+          : country === "DOM" ? 3 : undefined; 
+
+    const initialConfig = await this.mysqlLib.verifyInitialConfig(countryId);
+
+    if (initialConfig) {
+      console.log(initialConfig.fiscalIdentifierName);
+      return initialConfig.fiscalIdentifierName;
+    } else {
+      return initialConfig;
+    }
   }
 
   async generateInvoceMx(invoiceData, userData) {
@@ -368,7 +381,6 @@ class UsersService {
   }
 
   async insertProducts(products) {
-
     const newProducts = Object.assign({}, products);
     console.log(newProducts);
     const arrayProducts = [];
@@ -378,7 +390,7 @@ class UsersService {
       arrayProducts.push(Object.values(newProducts[product]));
       columns.push(Object.keys(newProducts[product]));
     }
- 
+
     //ITS OK
     //await this.mysqlLib.upsert(TABLE_PRODUCTS, columns[0], arrayProducts);
   }
@@ -393,12 +405,19 @@ class UsersService {
     for (let product in products) {
       objProducts.push(products[product]);
     }
-    
+
     const reducer = (accum, currentValue) => accum.price * accum.qty;
     const total = objProducts.map(reducer);
     console.log(total);
   }
-  
+
+  clean(obj) {
+    for (var propName in obj) { 
+      if (obj[propName] === null || obj[propName] === "") {
+        delete obj[propName];
+      }
+    }
+  }
 }
 
 module.exports = UsersService;
