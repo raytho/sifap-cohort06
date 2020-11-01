@@ -353,7 +353,7 @@ const generateToken = (req, res, next, user, usersService) => {
       const isConfigured = await usersService.checkInitialConfig(user.idCountry);
       const fiscalData = await usersService.getFiscalData(user.fiscalId);
       const country = await usersService.getCountry(user.idCountry);
-      console.log(fiscalData);
+      console.log(isConfigured);
       
       const {
         userId,
@@ -396,6 +396,7 @@ const generateToken = (req, res, next, user, usersService) => {
           profile_picture_url,
           hasConfigured: isConfigured ? true: false,
           ...fiscalData,
+          fiscalIdentifierName: isConfigured,
           permissions,
         },
       });

@@ -376,7 +376,7 @@ class UsersService {
   }
 
   async checkInitialConfig(countryId) {
-    if (countryId !== null || countryId !== undefined){
+    if (countryId === null || countryId === undefined){
       return undefined;
     }
     const initialConfig = await this.mysqlLib.verifyInitialConfig(countryId);
