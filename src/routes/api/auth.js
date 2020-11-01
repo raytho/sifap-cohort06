@@ -353,7 +353,6 @@ const generateToken = (req, res, next, user, usersService) => {
       const isConfigured = await usersService.checkInitialConfig(user.idCountry);
       const fiscalData = await usersService.getFiscalData(user.fiscalId);
       const country = await usersService.getCountry(user.idCountry);
-      console.log(isConfigured);
       
       const {
         userId,
@@ -363,6 +362,7 @@ const generateToken = (req, res, next, user, usersService) => {
         dateOfBirth,
         fiscalAct,
         firstName,
+        lastName,
         phoneNumber,
         twoFactorActive,
         role,
@@ -390,6 +390,7 @@ const generateToken = (req, res, next, user, usersService) => {
           dateOfBirth: formatDate,
           fiscalAct,
           firstName,
+          lastName,
           phoneNumber,
           twoFactorActive: twoFactorToNumber,
           role,
