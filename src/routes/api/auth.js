@@ -350,8 +350,10 @@ const generateToken = (req, res, next, user, usersService) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      const fiscalData = await usersService.checkInitialConfig(user.idCountry);
+      const isConfigured = await usersService.checkInitialConfig(user.idCountry);
+      const fiscalData = await usersService.getFiscalData(user.fiscalId);
       const country = await usersService.getCountry(user.idCountry);
+      console.log(fiscalData);
       
       const {
         userId,
@@ -392,8 +394,8 @@ const generateToken = (req, res, next, user, usersService) => {
           twoFactorActive: twoFactorToNumber,
           role,
           profile_picture_url,
-          hasConfigured: fiscalData ? true: false,
-          fiscalData,
+          hasConfigured: isConfigured ? true: false,
+          ...fiscalData,
           permissions,
         },
       });

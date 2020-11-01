@@ -283,15 +283,17 @@ function userView(app) {
           const invoiceInputData = req.body;
           const userData = user;
           switch (user.country) {
-          case "México":
-            usersService.generateInvoceMx(invoiceInputData, userData);
+          case "MEX":
+            usersService.generateInvoceMx(invoiceInputData, userData, res);
             break;
-          case "Colombia":
-            usersService.generateInvoceCol(invoiceInputData, userData);
+          case "COL":
+            usersService.generateInvoceCol(invoiceInputData, userData, res);
             break;
-          case "República Dominicana":
-            usersService.generateInvoceRd(invoiceInputData, userData);
+          case "DOM":
+            usersService.generateInvoceRd(invoiceInputData, userData, res);
             break;
+          default:
+            usersService.sendInvalidResponse(res);
           }
         }
       } catch (err) {

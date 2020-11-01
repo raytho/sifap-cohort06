@@ -103,7 +103,7 @@ class UsersService {
       const user = await this.mysqlLib.getUserByMail(email);
       return user[0];
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -142,7 +142,7 @@ class UsersService {
 
     smtpTransport.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        console.error(error);
       } else {
         console.log("Email sent: " + info.response);
         return info.response;
@@ -387,7 +387,7 @@ class UsersService {
     }
   }
 
-  async generateInvoceMx(invoiceData, userData) {
+  async generateInvoceMx(invoiceData, userData, res) {
     const {
       firstName,
       phoneNumber,
@@ -405,11 +405,22 @@ class UsersService {
     await this.insertProducts(products);
     const amount = this.calcTotalAmount(products);
     const IVA = 0.16;
-    const tax = this.calcTax(amount, IVA);
+    const tax = +this.calcTax(amount, IVA).toFixed(2);
   }
 
   async generateInvoceCol(invoiceData, userData) {
-    console(invoiceData, userData);
+    console.log(invoiceData, userData);
+  }
+
+  async getFiscalData(fiscalId){
+    if (!fiscalId){
+      return undefined;
+    }
+    const fiscalData = await this.mysqlLib.get("companyName, fiscalId", TABLE_FISCAL_DATA, "id", fiscalId);
+    if (fiscalData.length){
+      return (fiscalData[0]);
+    }
+    return undefined;
   }
 
   async generateInvoceRd(invoiceData, userData) {
@@ -418,33 +429,32 @@ class UsersService {
 
   async insertProducts(products) {
     const newProducts = Object.assign({}, products);
-    console.log(newProducts);
     const arrayProducts = [];
     const columns = [];
     for (let product in newProducts) {
-      delete newProducts[product].qty;
-      arrayProducts.push(Object.values(newProducts[product]));
-      columns.push(Object.keys(newProducts[product]));
+      const {qty, ...filteredProduct} = newProducts[product];
+      arrayProducts.push(Object.values(filteredProduct));
+      columns.push(Object.keys(filteredProduct));
     }
-
     //ITS OK
-    await this.mysqlLib.upsert(TABLE_PRODUCTS, columns[0], arrayProducts);
+    //await this.mysqlLib.upsert(TABLE_PRODUCTS, columns[0], arrayProducts);
   }
 
   calcTax(amount, taxValue) {
-    console.log("test");
+    return (amount * taxValue);
   }
 
   calcTotalAmount(products) {
-    console.log(products, "2");
     const objProducts = [];
+
     for (let product in products) {
       objProducts.push(products[product]);
     }
 
-    const reducer = (accum, currentValue) => accum.price * accum.qty;
+    const reducer = (product) => product.qty * product.price; 
     const total = objProducts.map(reducer);
-    console.log(total);
+    const totalAmount = total.reduce( (accum, currentValue) => accum + currentValue );
+    return totalAmount;
   }
 
   clean(obj) {
@@ -456,11 +466,17 @@ class UsersService {
   }
 
   async getCountry(id) {
-    if (!id){
+    if (!id || id === 0){
       return "No definido";
     }
     const country = await this.mysqlLib.get("code", TABLE_COUNTRIES, "idcountries", id);
     return country[0].code;
+  }
+
+  async sendInvalidResponse( res ){
+    res.status(400).json({
+      message: "País inválido",
+    });
   }
 }
 
