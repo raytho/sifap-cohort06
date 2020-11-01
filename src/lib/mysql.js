@@ -607,12 +607,12 @@ function MysqlLib() {
           country,
           function (err, rows) {
             if (err) {
-              reject(new Error(err.message));
+              reject(err);
             }
-            if (rows.length) {
-              resolve(rows[0]);
-            } else {
+            else if (rows === [] || rows === undefined) {
               resolve(false);
+            } else {
+              resolve(rows[0]);
             }
           }
         );
@@ -661,7 +661,7 @@ function MysqlLib() {
           conditionValue,
           function (err, rows) {
             if (err) {
-              reject(new Error(err));
+              reject(new Error (err));
             } else {
               resolve(rows);
             }

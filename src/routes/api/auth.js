@@ -382,7 +382,7 @@ const generateToken = (req, res, next, user, usersService) => {
         user: {
           userId,
           email,
-          country: country[0].code,
+          country: country,
           city,
           state,
           dateOfBirth: formatDate,

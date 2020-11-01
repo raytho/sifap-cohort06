@@ -376,8 +376,10 @@ class UsersService {
   }
 
   async checkInitialConfig(countryId) {
+    if (countryId !== null || countryId !== undefined){
+      return undefined;
+    }
     const initialConfig = await this.mysqlLib.verifyInitialConfig(countryId);
-
     if (initialConfig) {
       return initialConfig.fiscalIdentifierName;
     } else {
@@ -454,10 +456,11 @@ class UsersService {
   }
 
   async getCountry(id) {
-    console.log(id);
+    if (!id){
+      return "No definido";
+    }
     const country = await this.mysqlLib.get("code", TABLE_COUNTRIES, "idcountries", id);
-    console.log(country);
-    return country;
+    return country[0].code;
   }
 }
 
