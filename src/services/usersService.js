@@ -1,16 +1,18 @@
 /* eslint-disable no-unused-vars */
 const MysqlLib = require("../lib/mysql");
-const { nanoid } = require("nanoid");
+const { nanoid, customAlphabet } = require("nanoid");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const config = require("../config");
-const { object } = require("@hapi/joi");
 
 const TABLE_PRODUCTS = "product";
 const TABLE_FISCAL_DATA = "fiscal_data";
 const TABLE_USER = "users";
 const TABLE_COUNTRIES = "countries";
 const TABLE_CLIENTS = "clients";
+const HEX_CHARACTER = "0123456789abcdef";
+const TABLE_TAX_RECEIPT = "taxReceipt";
+const TABLE_COUNTRY_CONFIG = "country_config";
 
 //Impuestos por país
 let IVA_COLOMBIA = 0.19;
@@ -323,10 +325,10 @@ class UsersService {
       user.country === "COL"
         ? 1
         : user.country === "MEX"
-        ? 2
-        : user.country === "DOM"
-        ? 3
-        : 0;
+          ? 2
+          : user.country === "DOM"
+            ? 3
+            : 0;
     const userProfile = {
       phoneNumber: user.phoneNumber,
       firstName: user.firstName,
@@ -360,6 +362,14 @@ class UsersService {
   }
 
   async upsertFiscalData(data, id) {
+    const idCountry =
+      data.country === "COL"
+        ? 1
+        : data.country === "MEX"
+          ? 2
+          : data.country === "DOM"
+            ? 3
+            : 0;
     delete data.firstName;
     delete data.lastName;
     delete data.dateOfBirth;
@@ -371,7 +381,7 @@ class UsersService {
     delete data.cf;
     delete data.increment;
     const fiscalData = {
-      id: countryId,
+      id: idCountry,
       ...data,
       ...fiscalDataName,
       ...fiscalDataValues,
@@ -423,6 +433,8 @@ class UsersService {
     const amount = this.calcTotalAmount(products);
     const IVA = 0.16;
     const tax = +this.calcTax(amount, IVA).toFixed(2);
+    const fiscalUUID = this.generateHexUUID();
+    const fiscalTax = this.generateFiscalTax(userData.idCountry);
   }
 
   async generateInvoceCol(invoiceData, userData) {
@@ -639,6 +651,33 @@ class UsersService {
       }
     }
   }
+
+  generateHexUUID () {
+    const nanoidOne = customAlphabet(HEX_CHARACTER, 8);
+    const nanoidTwo = customAlphabet(HEX_CHARACTER, 4);
+    const nanoidThree = customAlphabet(HEX_CHARACTER, 12);
+    const uuid = `${nanoidOne()}-${nanoidTwo()}-${nanoidTwo()}-${nanoidTwo()}-${nanoidThree()}`;
+    return uuid;
+  }
+
+  async generateFiscalTax(countryId){
+    const lastTaxReceipt = await this.getLastTaxReceipt(countryId);
+    console.log(lastTaxReceipt);
+    if (!lastTaxReceipt[0] || lastTaxReceipt[0] === "" || !lastTaxReceipt[0].length){
+      const newTaxReceipt = await this.generateTaxReceipt(countryId);
+    }
+  }
+
+  async getLastTaxReceipt(id) {
+    const lastTaxReceipt = await this.mysqlLib.get("taxReceiptNumber", TABLE_TAX_RECEIPT, "countryId", id);
+    return lastTaxReceipt;
+  }
+
+  async generateTaxReceipt(id) {
+    const countryConfig = await this.mysqlLib.get("*", TABLE_COUNTRY_CONFIG, "id", id);
+    //
+  }
+
 }
 
 module.exports = UsersService;
