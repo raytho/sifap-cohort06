@@ -327,7 +327,7 @@ function authApi(app) {
           } else {
             try {
               const updatedUser = await usersService.updatePasswordUserByID(
-                id,
+                userToken.email,
                 newPassword
               );
               if (updatedUser) {
@@ -343,7 +343,7 @@ function authApi(app) {
           }
         }
       }
-    );
+    )(req, res, next);
   });
 
   router.get("/logout", function (req, res, next) {

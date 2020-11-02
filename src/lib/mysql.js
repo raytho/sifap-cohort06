@@ -608,8 +608,7 @@ function MysqlLib() {
           function (err, rows) {
             if (err) {
               reject(err);
-            }
-            else if (rows === [] || rows === undefined) {
+            } else if (rows === [] || rows === undefined) {
               resolve(false);
             } else {
               resolve(rows[0]);
@@ -628,9 +627,8 @@ function MysqlLib() {
             if (err) {
               console.log(err);
               reject(new Error("Error:", err));
-            }
-            else {
-              resolve (rows);
+            } else {
+              resolve(rows);
             }
           }
         );
@@ -639,19 +637,17 @@ function MysqlLib() {
 
     singleUpsert(table, data) {
       return new Promise((resolve, reject) => {
-        connection.query(
-          `INSERT INTO ${table} SET ?`,
-          [data],
-          function (err, rows) {
-            if (err) {
-              console.log(err);
-              reject(new Error("Error:", err));
-            }
-            else {
-              resolve (rows);
-            }
+        connection.query(`INSERT INTO ${table} SET ?`, [data], function (
+          err,
+          rows
+        ) {
+          if (err) {
+            console.log(err);
+            reject(new Error("Error:", err));
+          } else {
+            resolve(rows);
           }
-        );
+        });
       });
     },
 
@@ -679,7 +675,7 @@ function MysqlLib() {
           conditionValue,
           function (err, rows) {
             if (err) {
-              reject(new Error (err));
+              reject(new Error(err));
             } else {
               resolve(rows);
             }
@@ -687,7 +683,20 @@ function MysqlLib() {
         );
       });
     },
-
+    getAll(columns, table) {
+      return new Promise(function (resolve, reject) {
+        connection.query(`SELECT ${columns} FROM ${table}`, function (
+          err,
+          rows
+        ) {
+          if (err) {
+            reject(new Error(err));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    },
     delete(table, condition, conditionValue) {
       return new Promise(function (resolve, reject) {
         connection.query(
@@ -695,7 +704,7 @@ function MysqlLib() {
           conditionValue,
           function (err, rows) {
             if (err) {
-              reject(new Error (err));
+              reject(new Error(err));
             } else {
               resolve(rows);
             }

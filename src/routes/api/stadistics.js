@@ -90,6 +90,30 @@ function stadisticsApi(app) {
       return res.status(500);
     }
   });
+
+  router.get("/getAllProducts", async (req, res) => {
+    try {
+      const response = await stadisticsService.getAllProducts();
+      if (response) {
+        const csvFile = csvStringifier.stringifyRecords(response);
+        const responseaws = await uploadStadistics(csvFile, "products");
+
+        return res.status(200).send({
+          data: responseaws,
+          error: null,
+        });
+      } else {
+        return res.status(500).send({
+          data: null,
+          error: "No data found",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      next(error);
+      return res.status(500);
+    }
+  });
 }
 
 module.exports = stadisticsApi;

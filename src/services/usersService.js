@@ -12,6 +12,9 @@ const TABLE_USER = "users";
 const TABLE_COUNTRIES = "countries";
 const TABLE_CLIENTS = "clients";
 
+//Impuestos por país
+let IVA_COLOMBIA = 0.19;
+
 class UsersService {
   constructor() {
     this.mysqlLib = new MysqlLib();
@@ -423,7 +426,18 @@ class UsersService {
   }
 
   async generateInvoceCol(invoiceData, userData) {
-    console.log(invoiceData, userData);
+    const {
+      firstName,
+      email,
+      clientFiscalIdentifier,
+      phoneNumber,
+      products,
+      paymentMethod,
+    } = invoiceData;
+
+    await this.insertProducts(products);
+    const amount = this.calcTotalAmount(products);
+    const tax = +this.calcTax(amount, IVA_COLOMBIA).toFixed(2);
   }
 
   async getFiscalData(fiscalId) {
