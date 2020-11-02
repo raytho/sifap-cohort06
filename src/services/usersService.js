@@ -140,7 +140,7 @@ class UsersService {
       subject: "Sifap Password Reset",
       text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.
         Please click on the following link, or paste this into your browser to complete the process:
-        http://${request.host}/reset/${request.token} 
+        http://${request.host}/#/newpassword/${request.token} 
         If you did not request this, please ignore this email and your password will remain unchanged.`,
     };
 
@@ -290,7 +290,12 @@ class UsersService {
   }
 
   async updateUserProfile(user, id) {
-    const fiscalId = await this.mysqlLib.get("id", TABLE_FISCAL_DATA, "fiscalId", user.fiscalId);
+    const fiscalId = await this.mysqlLib.get(
+      "id",
+      TABLE_FISCAL_DATA,
+      "fiscalId",
+      user.fiscalId
+    );
     const data = {
       fiscalId: user.fiscalId,
       companyName: user.companyName,
@@ -301,7 +306,6 @@ class UsersService {
       const userFiscalId = { fiscalId: fiscalId[0].id };
       await this.mysqlLib.update(TABLE_USER, userFiscalId, "userId", id);
     } else {
-
       const cols = [];
       const values = [];
       const arrayValues = [];
@@ -313,11 +317,15 @@ class UsersService {
       arrayValues.push(values);
       await this.mysqlLib.upsert(TABLE_FISCAL_DATA, cols, arrayValues);
     }
-    
+
     const idCountry =
-      user.country === "COL" ? 1
-        : user.country === "MEX" ? 2
-          : user.country === "DOM" ? 3 : 0;
+      user.country === "COL"
+        ? 1
+        : user.country === "MEX"
+        ? 2
+        : user.country === "DOM"
+        ? 3
+        : 0;
     const userProfile = {
       phoneNumber: user.phoneNumber,
       firstName: user.firstName,
@@ -328,7 +336,12 @@ class UsersService {
       idCountry: idCountry,
       twoFactorActive: user.twoFactorActive,
     };
-    const updatedProfile = await this.mysqlLib.update(TABLE_USER, userProfile, "userId", id);
+    const updatedProfile = await this.mysqlLib.update(
+      TABLE_USER,
+      userProfile,
+      "userId",
+      id
+    );
     return updatedProfile.affectedRows;
   }
 
@@ -346,10 +359,9 @@ class UsersService {
   }
 
   async upsertFiscalData(data, id) {
-    const countryId =
-      data.country === "COL" ? 1
-        : data.country === "MEX" ? 2
-          : data.country === "DOM" ? 3 : undefined;
+    delete data.firstName;
+    delete data.lastName;
+    delete data.dateOfBirth;
     delete data.country;
     const fiscalDataName = data["cfName"];
     const fiscalDataValues = data["cf"];
@@ -380,7 +392,7 @@ class UsersService {
   }
 
   async checkInitialConfig(countryId) {
-    if (countryId === null || countryId === undefined){
+    if (countryId === null || countryId === undefined) {
       return undefined;
     }
     const initialConfig = await this.mysqlLib.verifyInitialConfig(countryId);
@@ -418,13 +430,18 @@ class UsersService {
     console.log(invoiceData, userData);
   }
 
-  async getFiscalData(fiscalId){
-    if (!fiscalId){
+  async getFiscalData(fiscalId) {
+    if (!fiscalId) {
       return undefined;
     }
-    const fiscalData = await this.mysqlLib.get("companyName, fiscalId", TABLE_FISCAL_DATA, "id", fiscalId);
-    if (fiscalData.length){
-      return (fiscalData[0]);
+    const fiscalData = await this.mysqlLib.get(
+      "companyName, fiscalId",
+      TABLE_FISCAL_DATA,
+      "id",
+      fiscalId
+    );
+    if (fiscalData.length) {
+      return fiscalData[0];
     }
     return undefined;
   }
@@ -438,7 +455,7 @@ class UsersService {
     const arrayProducts = [];
     const columns = [];
     for (let product in newProducts) {
-      const {qty, ...filteredProduct} = newProducts[product];
+      const { qty, ...filteredProduct } = newProducts[product];
       arrayProducts.push(Object.values(filteredProduct));
       columns.push(Object.keys(filteredProduct));
     }
@@ -447,7 +464,7 @@ class UsersService {
   }
 
   calcTax(amount, taxValue) {
-    return (amount * taxValue);
+    return amount * taxValue;
   }
 
   calcTotalAmount(products) {
@@ -457,14 +474,16 @@ class UsersService {
       objProducts.push(products[product]);
     }
 
-    const reducer = (product) => product.qty * product.price; 
+    const reducer = (product) => product.qty * product.price;
     const total = objProducts.map(reducer);
-    const totalAmount = total.reduce( (accum, currentValue) => accum + currentValue );
+    const totalAmount = total.reduce(
+      (accum, currentValue) => accum + currentValue
+    );
     return totalAmount;
   }
 
   clean(obj) {
-    for (var propName in obj) { 
+    for (var propName in obj) {
       if (obj[propName] === null || obj[propName] === "") {
         delete obj[propName];
       }
@@ -472,27 +491,37 @@ class UsersService {
   }
 
   async getCountry(id) {
-    if (!id || id === 0){
+    if (!id || id === 0) {
       return "No definido";
     }
-    const country = await this.mysqlLib.get("code", TABLE_COUNTRIES, "idcountries", id);
+    const country = await this.mysqlLib.get(
+      "code",
+      TABLE_COUNTRIES,
+      "idcountries",
+      id
+    );
     return country[0].code;
   }
 
-  async sendInvalidResponse( res ){
+  async sendInvalidResponse(res) {
     res.status(400).json({
       message: "País inválido",
     });
   }
 
-  async getUserClients (userId, res){
-    if (!userId){
+  async getUserClients(userId, res) {
+    if (!userId) {
       res.status(400).json({
-        message: "Error interno"
+        message: "Error interno",
       });
     } else {
-      const clientData = await this.mysqlLib.get("*", TABLE_CLIENTS, "userId", userId);
-      if (clientData.length){
+      const clientData = await this.mysqlLib.get(
+        "*",
+        TABLE_CLIENTS,
+        "userId",
+        userId
+      );
+      if (clientData.length) {
         res.status(200).json({
           clients: clientData,
         });
@@ -505,14 +534,19 @@ class UsersService {
     }
   }
 
-  async getClient (clientId, res){
-    if (!clientId){
+  async getClient(clientId, res) {
+    if (!clientId) {
       res.status(400).json({
-        message: "Error interno"
+        message: "Error interno",
       });
     } else {
-      const clientData = await this.mysqlLib.get("*", TABLE_CLIENTS, "clientId", clientId);
-      if (clientData.length){
+      const clientData = await this.mysqlLib.get(
+        "*",
+        TABLE_CLIENTS,
+        "clientId",
+        clientId
+      );
+      if (clientData.length) {
         res.status(200).json({
           clients: clientData,
         });
@@ -525,61 +559,73 @@ class UsersService {
     }
   }
 
-  async upsertClients (userId, clientData, res){
-    if (!userId || !clientData){
+  async upsertClients(userId, clientData, res) {
+    if (!userId || !clientData) {
       res.status(400).json({
-        message: "Error interno"
+        message: "Error interno",
       });
     } else {
       clientData.clientId = nanoid(4);
       clientData.userId = userId;
-      const upsertedClient = await this.mysqlLib.singleUpsert(TABLE_CLIENTS, clientData);
-      if (upsertedClient){
+      const upsertedClient = await this.mysqlLib.singleUpsert(
+        TABLE_CLIENTS,
+        clientData
+      );
+      if (upsertedClient) {
         res.status(200).json({
           message: "Cliente agregado correctamente",
         });
-      } else{
+      } else {
         res.status(500).json({
           message: "Error al crear cliente",
-        });  
+        });
       }
     }
   }
 
-  async updateClient (clientId, clientData, res){
-    if (!clientId || !clientData){
+  async updateClient(clientId, clientData, res) {
+    if (!clientId || !clientData) {
       res.status(400).json({
-        message: "Error interno"
+        message: "Error interno",
       });
     } else {
-      const upsertedClient = await this.mysqlLib.update(TABLE_CLIENTS, clientData, "clientId", clientId);
-      if (upsertedClient){
+      const upsertedClient = await this.mysqlLib.update(
+        TABLE_CLIENTS,
+        clientData,
+        "clientId",
+        clientId
+      );
+      if (upsertedClient) {
         res.status(200).json({
           message: "Cliente actualizado correctamente",
         });
-      } else{
+      } else {
         res.status(500).json({
           message: "Error al actualizar cliente",
-        });  
+        });
       }
     }
   }
 
-  async deleteClient (clientId, res){
-    if (!clientId){
+  async deleteClient(clientId, res) {
+    if (!clientId) {
       res.status(400).json({
-        message: "Error interno"
+        message: "Error interno",
       });
     } else {
-      const deletedClient = await this.mysqlLib.delete(TABLE_CLIENTS, "clientId", clientId);
-      if (deletedClient.affectedRows){
+      const deletedClient = await this.mysqlLib.delete(
+        TABLE_CLIENTS,
+        "clientId",
+        clientId
+      );
+      if (deletedClient.affectedRows) {
         res.status(200).json({
           message: "Cliente eliminado",
         });
-      } else{
+      } else {
         res.status(500).json({
           message: "Cliente no existente",
-        });  
+        });
       }
     }
   }

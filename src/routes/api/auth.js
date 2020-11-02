@@ -307,31 +307,43 @@ function authApi(app) {
     }
   });
 
-  router.put("/password/:id", async (req, res) => {
-    const id = req.params.id;
-    const newPassword = req.body.password;
-    if (!newPassword) {
-      res.status(400).json({
-        message: "Bad request",
-        error: "Bad request",
-      });
-    } else {
-      try {
-        const updatedUser = await usersService.updatePasswordUserByID(
-          id,
-          newPassword
-        );
-        if (updatedUser) {
-          res.status(200).send({
-            data: updatedUser.message,
-            message: "User updated",
+  router.put("/password", async (req, res, next) => {
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (error, userToken) => {
+        if (!userToken || !req.body) {
+          res.status(400).json({
+            message: "Bad request",
+            error: "Bad request",
           });
+        } else {
+          const newPassword = req.body.password;
+          if (!newPassword) {
+            res.status(400).json({
+              message: "Bad request",
+              error: "Bad request",
+            });
+          } else {
+            try {
+              const updatedUser = await usersService.updatePasswordUserByID(
+                id,
+                newPassword
+              );
+              if (updatedUser) {
+                res.status(200).send({
+                  data: updatedUser.message,
+                  message: "User updated",
+                });
+              }
+            } catch (error) {
+              console.log(error);
+              res.status(500).json({ message: "Error to get user" });
+            }
+          }
         }
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Error to get user" });
       }
-    }
+    );
   });
 
   router.get("/logout", function (req, res, next) {
@@ -350,10 +362,12 @@ const generateToken = (req, res, next, user, usersService) => {
     } else {
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      const isConfigured = await usersService.checkInitialConfig(user.idCountry);
+      const isConfigured = await usersService.checkInitialConfig(
+        user.idCountry
+      );
       const fiscalData = await usersService.getFiscalData(user.fiscalId);
       const country = await usersService.getCountry(user.idCountry);
-      
+
       const {
         userId,
         email,
@@ -395,7 +409,7 @@ const generateToken = (req, res, next, user, usersService) => {
           twoFactorActive: twoFactorToNumber,
           role,
           profile_picture_url,
-          hasConfigured: isConfigured ? true: false,
+          hasConfigured: isConfigured ? true : false,
           ...fiscalData,
           fiscalIdentifierName: isConfigured,
           permissions,
