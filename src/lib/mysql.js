@@ -687,6 +687,22 @@ function MysqlLib() {
         );
       });
     },
+
+    delete(table, condition, conditionValue) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `DELETE FROM ${table} WHERE ${condition} = ?`,
+          conditionValue,
+          function (err, rows) {
+            if (err) {
+              reject(new Error (err));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
   };
 }
 

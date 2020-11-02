@@ -288,6 +288,23 @@ function userView(app) {
     })(req, res, next);
   });
 
+  router.get("/clients/:id", (req, res, next) =>{
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const { id } = req.params;
+          await usersService.getClient(id, res);
+        } catch(error){
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
   router.post("/clients", (req, res, next) =>{
     passport.authenticate("jwt", { session: false }, async (error, user) => {
       if (error || !user) {
@@ -298,6 +315,41 @@ function userView(app) {
         try {
           const clientData = req.body;
           await usersService.upsertClients(user.userId, clientData, res);
+        } catch(error){
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
+  router.put("/clients/:id", (req, res, next) =>{
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const { id } = req.params;
+          const clientData = req.body;
+          await usersService.updateClient(id, clientData, res);
+        } catch(error){
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
+  router.delete("/clients/:id", (req, res, next) =>{
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const { id } = req.params;
+          await usersService.deleteClient(id, res);
         } catch(error){
           res.status(500).json({ message: "Internal Error" });
         }

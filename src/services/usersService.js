@@ -484,7 +484,7 @@ class UsersService {
   async getUserClients (userId, res){
     if (!userId){
       res.status(400).json({
-        message: "Error al consultar datos"
+        message: "Error interno"
       });
     } else {
       const clientData = await this.mysqlLib.get("*", TABLE_CLIENTS, "userId", userId);
@@ -493,18 +493,37 @@ class UsersService {
           clients: clientData,
         });
       } else {
-        res.status(200).json({
+        res.status(500).json({
           message: "No existen clientes para este usuario",
           clients: clientData,
         });
       }
-        
+    }
+  }
+
+  async getClient (clientId, res){
+    if (!clientId){
+      res.status(400).json({
+        message: "Error interno"
+      });
+    } else {
+      const clientData = await this.mysqlLib.get("*", TABLE_CLIENTS, "clientId", clientId);
+      if (clientData.length){
+        res.status(200).json({
+          clients: clientData,
+        });
+      } else {
+        res.status(500).json({
+          message: "Cliente no encontrado",
+          clients: clientData,
+        });
+      }
     }
   }
 
   async upsertClients (userId, clientData, res){
     if (!userId || !clientData){
-      res.status(500).json({
+      res.status(400).json({
         message: "Error interno"
       });
     } else {
@@ -516,12 +535,51 @@ class UsersService {
           message: "Cliente agregado correctamente",
         });
       } else{
-        res.status(400).json({
+        res.status(500).json({
           message: "Error al crear cliente",
         });  
       }
     }
   }
+
+  async updateClient (clientId, clientData, res){
+    if (!clientId || !clientData){
+      res.status(400).json({
+        message: "Error interno"
+      });
+    } else {
+      const upsertedClient = await this.mysqlLib.update(TABLE_CLIENTS, clientData, "clientId", clientId);
+      if (upsertedClient){
+        res.status(200).json({
+          message: "Cliente actualizado correctamente",
+        });
+      } else{
+        res.status(500).json({
+          message: "Error al actualizar cliente",
+        });  
+      }
+    }
+  }
+
+  async deleteClient (clientId, res){
+    if (!clientId){
+      res.status(400).json({
+        message: "Error interno"
+      });
+    } else {
+      const deletedClient = await this.mysqlLib.delete(TABLE_CLIENTS, "clientId", clientId);
+      if (deletedClient.affectedRows){
+        res.status(200).json({
+          message: "Cliente eliminado",
+        });
+      } else{
+        res.status(500).json({
+          message: "Cliente no existente",
+        });  
+      }
+    }
+  }
+
 }
 
 module.exports = UsersService;
