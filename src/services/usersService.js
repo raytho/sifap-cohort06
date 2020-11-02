@@ -325,10 +325,10 @@ class UsersService {
       user.country === "COL"
         ? 1
         : user.country === "MEX"
-          ? 2
-          : user.country === "DOM"
-            ? 3
-            : 0;
+        ? 2
+        : user.country === "DOM"
+        ? 3
+        : 0;
     const userProfile = {
       phoneNumber: user.phoneNumber,
       firstName: user.firstName,
@@ -366,10 +366,10 @@ class UsersService {
       data.country === "COL"
         ? 1
         : data.country === "MEX"
-          ? 2
-          : data.country === "DOM"
-            ? 3
-            : 0;
+        ? 2
+        : data.country === "DOM"
+        ? 3
+        : 0;
     delete data.firstName;
     delete data.lastName;
     delete data.dateOfBirth;
@@ -450,6 +450,8 @@ class UsersService {
     await this.insertProducts(products);
     const amount = this.calcTotalAmount(products);
     const tax = +this.calcTax(amount, IVA_COLOMBIA).toFixed(2);
+    const fiscalUUID = this.generateHexUUID();
+    const fiscalTax = this.generateFiscalTax(userData.idCountry);
   }
 
   async getFiscalData(fiscalId) {
@@ -652,7 +654,7 @@ class UsersService {
     }
   }
 
-  generateHexUUID () {
+  generateHexUUID() {
     const nanoidOne = customAlphabet(HEX_CHARACTER, 8);
     const nanoidTwo = customAlphabet(HEX_CHARACTER, 4);
     const nanoidThree = customAlphabet(HEX_CHARACTER, 12);
@@ -660,24 +662,40 @@ class UsersService {
     return uuid;
   }
 
-  async generateFiscalTax(countryId){
+  async generateFiscalTax(countryId) {
     const lastTaxReceipt = await this.getLastTaxReceipt(countryId);
     console.log(lastTaxReceipt);
-    if (!lastTaxReceipt[0] || lastTaxReceipt[0] === "" || !lastTaxReceipt[0].length){
+    if (
+      !lastTaxReceipt[0] ||
+      lastTaxReceipt[0] === "" ||
+      !lastTaxReceipt[0].length
+    ) {
       const newTaxReceipt = await this.generateTaxReceipt(countryId);
+      return newTaxReceipt;
+    } else {
+      return null;
     }
   }
 
   async getLastTaxReceipt(id) {
-    const lastTaxReceipt = await this.mysqlLib.get("taxReceiptNumber", TABLE_TAX_RECEIPT, "countryId", id);
+    const lastTaxReceipt = await this.mysqlLib.get(
+      "taxReceiptNumber",
+      TABLE_TAX_RECEIPT,
+      "countryId",
+      id
+    );
     return lastTaxReceipt;
   }
 
   async generateTaxReceipt(id) {
-    const countryConfig = await this.mysqlLib.get("*", TABLE_COUNTRY_CONFIG, "id", id);
+    const countryConfig = await this.mysqlLib.get(
+      "*",
+      TABLE_COUNTRY_CONFIG,
+      "id",
+      id
+    );
     //
   }
-
 }
 
 module.exports = UsersService;

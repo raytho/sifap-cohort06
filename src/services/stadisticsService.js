@@ -18,7 +18,7 @@ class StadisticsService {
   }
 
   async getAllProducts() {
-    const products = await this.mysqlLib.getAll("*", "product", "", "");
+    const products = await this.mysqlLib.getAll("*", "product");
     return products;
   }
 }
