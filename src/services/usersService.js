@@ -322,10 +322,10 @@ class UsersService {
       user.country === "COL"
         ? 1
         : user.country === "MEX"
-        ? 2
-        : user.country === "DOM"
-        ? 3
-        : 0;
+          ? 2
+          : user.country === "DOM"
+            ? 3
+            : 0;
     const userProfile = {
       phoneNumber: user.phoneNumber,
       firstName: user.firstName,
@@ -359,6 +359,14 @@ class UsersService {
   }
 
   async upsertFiscalData(data, id) {
+    const idCountry =
+      data.country === "COL"
+        ? 1
+        : data.country === "MEX"
+          ? 2
+          : data.country === "DOM"
+            ? 3
+            : 0;
     delete data.firstName;
     delete data.lastName;
     delete data.dateOfBirth;
@@ -370,7 +378,7 @@ class UsersService {
     delete data.cf;
     delete data.increment;
     const fiscalData = {
-      id: countryId,
+      id: idCountry,
       ...data,
       ...fiscalDataName,
       ...fiscalDataValues,
