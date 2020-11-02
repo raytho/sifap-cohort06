@@ -290,16 +290,16 @@ function userView(app) {
           const userData = user;
           switch (user.country) {
           case "México":
-            generateInvoceMx(invoiceInputData, userData);
             console.log("Mexico");
+            usersService.generateInvoceMx(invoiceInputData, userData);
             break;
           case "Colombia":
-            generateInvoceCol(invoiceInputData, userData);
             console.log("Colombia");
+            usersService.generateInvoceCol(invoiceInputData, userData);
             break;
           case "República Dominicana":
-            generateInvoceRd(invoiceInputData, userData);
             console.log("Republica Dominicana");
+            usersService.generateInvoceRd(invoiceInputData, userData);
             break;
           }
         }
@@ -319,29 +319,6 @@ const formatUTCTime = (date) => {
   return newDate;
 };
 
-const generateInvoceMx = ( invoiceData, userData ) => {
-  const { firstName, phoneNumber, email, products, clientName, clientFiscalIdentifier, clientAdress, currency, cfdiUse, paymentMethod } = invoiceData;
-  const amount = calcTotalAmount(products);
-  const IVA = 0.16;
-  const tax = calcTax(amount, IVA);       
-};
 
-const generateInvoceCol = ( invoiceData, userData ) => {
-  console(invoiceData, userData);
-};
-
-const generateInvoceRd = ( invoiceData, userData ) => {
-  console(invoiceData, userData);
-};
-
-const calcTax = ( amount , taxValue) => {
-//
-};
-
-const calcTotalAmount = (products) =>{
-  const reducer = "dummy";
-  const amount = products.reduce(reducer);
-  console.log(amount);
-};
 
 module.exports = userView;

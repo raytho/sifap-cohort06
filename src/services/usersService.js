@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const MysqlLib = require("../lib/mysql");
 const { nanoid } = require("nanoid");
 const bcrypt = require("bcrypt");
@@ -334,6 +335,31 @@ class UsersService {
   async checkInitialConfig(id) {
     const initialConfig = await this.mysqlLib.verifyInitialConfig(id);
     return initialConfig;
+  }
+
+  async generateInvoceMx( invoiceData, userData ) {
+    const { firstName, phoneNumber, email, products, clientName, clientFiscalIdentifier, clientAdress, currency, cfdiUse, paymentMethod } = invoiceData;
+    const amount = this.calcTotalAmount(products);
+    const IVA = 0.16;
+    const tax = this.calcTax(amount, IVA);       
+  }
+  
+  async generateInvoceCol( invoiceData, userData ) {
+    console(invoiceData, userData);
+  }
+  
+  async generateInvoceRd( invoiceData, userData ) {
+    console(invoiceData, userData);
+  }
+  
+  calcTax(amount , taxValue){
+    console.log("test");
+  }
+  
+  calcTotalAmount(products){
+    const reducer = "dummy";
+    const amount = products.reduce(reducer);
+    console.log(amount);
   }
 }
 
