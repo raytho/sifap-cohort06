@@ -10,6 +10,8 @@ const TABLE_PRODUCTS = "product";
 const TABLE_FISCAL_DATA = "fiscal_data";
 const TABLE_USER = "users";
 const TABLE_COUNTRIES = "countries";
+const TABLE_CLIENTS = "clients";
+
 class UsersService {
   constructor() {
     this.mysqlLib = new MysqlLib();
@@ -477,6 +479,48 @@ class UsersService {
     res.status(400).json({
       message: "País inválido",
     });
+  }
+
+  async getUserClients (userId, res){
+    if (!userId){
+      res.status(400).json({
+        message: "Error al consultar datos"
+      });
+    } else {
+      const clientData = await this.mysqlLib.get("*", TABLE_CLIENTS, "userId", userId);
+      if (clientData.length){
+        res.status(200).json({
+          clients: clientData,
+        });
+      } else {
+        res.status(200).json({
+          message: "No existen clientes para este usuario",
+          clients: clientData,
+        });
+      }
+        
+    }
+  }
+
+  async upsertClients (userId, clientData, res){
+    if (!userId || !clientData){
+      res.status(500).json({
+        message: "Error interno"
+      });
+    } else {
+      clientData.clientId = nanoid(4);
+      clientData.userId = userId;
+      const upsertedClient = await this.mysqlLib.singleUpsert(TABLE_CLIENTS, clientData);
+      if (upsertedClient){
+        res.status(200).json({
+          message: "Cliente agregado correctamente",
+        });
+      } else{
+        res.status(400).json({
+          message: "Error al crear cliente",
+        });  
+      }
+    }
   }
 }
 

@@ -272,6 +272,39 @@ function userView(app) {
     })(req, res, next);
   });
 
+  router.get("/clients", (req, res, next) =>{
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          await usersService.getUserClients(user.userId, res);
+        } catch(error){
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
+  router.post("/clients", (req, res, next) =>{
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const clientData = req.body;
+          await usersService.upsertClients(user.userId, clientData, res);
+        } catch(error){
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
   router.post("/invoices", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, (error, user) => {
       try {

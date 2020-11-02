@@ -637,6 +637,24 @@ function MysqlLib() {
       });
     },
 
+    singleUpsert(table, data) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          `INSERT INTO ${table} SET ?`,
+          [data],
+          function (err, rows) {
+            if (err) {
+              console.log(err);
+              reject(new Error("Error:", err));
+            }
+            else {
+              resolve (rows);
+            }
+          }
+        );
+      });
+    },
+
     update(table, data, condition, conditionValue) {
       return new Promise(function (resolve, reject) {
         connection.query(
