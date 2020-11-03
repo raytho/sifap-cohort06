@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -6,6 +7,7 @@ import PropTypes, { object } from 'prop-types';
 
 import Title from '../Title';
 import BillItem from './BillItem';
+import BillItemAdded from './BillItemAdded';
 import BillCustomerModal from './BillCustomerModal';
 import iconBill from '../../assets/static/icon/bill.png';
 import iconSearch from '../../assets/static/icon/search.png';
@@ -23,10 +25,12 @@ const Bill = (props) => {
       fullNameValidate,
       fiscalIdValidate,
       CFDIValidate,
-      itemProduct,
       modal,
       form,
       customers,
+      formProduct,
+      article,
+      loaderCustomer,
       addItem,
       removeItem,
       handleInput,
@@ -40,9 +44,18 @@ const Bill = (props) => {
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    const date = new Date();
    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-   const month = date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth();
+   const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
    const year = date.getFullYear();
    const dateBill = `${month}-${day}-${year}`;
+
+   let sumProduct = 0;
+   for (let i = 0; i < formProduct.length; i++) {
+      sumProduct += formProduct[i].total
+   }
+   const ivaResult = sumProduct * form.ivaPorcent / 100;
+   form.subtotal = sumProduct;
+   form.total = sumProduct + ivaResult;
+   window.console.log(form);
 
    return (
       <>
@@ -67,9 +80,6 @@ const Bill = (props) => {
                            <p>
                               <span>Teléfono:</span> {user.phoneNumber}
                            </p>
-                           {/* <p>
-                              <span>Comprobante fiscal (Si lo requiere):</span> SIFAP
-                           </p> */}
                         </div>
                         <div>
                            <p>
@@ -97,6 +107,7 @@ const Bill = (props) => {
                               modal={modal}
                               handleModal={handleModal}
                               customers={customers}
+                              loaderCustomer={loaderCustomer}
                               handleInputCustomer={handleInputCustomer}
                               getDataCustomerId={getDataCustomerId}
                            />
@@ -165,31 +176,34 @@ const Bill = (props) => {
                      <div className='Bill-product-header'>
                         <p>Item</p>
                         <p>ID</p>
-                        <p>Precio</p>
+                        <p>Precio unitario</p>
                         <p>Descripción</p>
                         <p>Cantidad</p>
                         <p>Total</p>
                      </div>
+                     <div>
+                        <BillItem
+                              removeItem={removeItem}
+                              handleInputProduct={handleInputProduct}
+                              addItem={addItem}
+                              article={article}
+                           />
+                     </div>
                      <div className='Bill__container-items'>
                         <ul>
                            {
-                              itemProduct.map((item, i) =>
+                              formProduct.map((item, i) =>
                                  <li key={i}>
-                                    <BillItem
+                                    <BillItemAdded
                                        removeItem={removeItem}
+                                       item={item}
                                        i={i}
-                                       handleInputProduct={handleInputProduct}
                                     />
                                  </li>
                               )
                            }
                         </ul>
                      </div>
-                     <button
-                        className='Bill__add-item'
-                        type='button'
-                        onClick={addItem}
-                     >+</button>
                      <div className='Bill__total'>
                         <label htmlFor='comments'>
                            Comentarios:
@@ -201,13 +215,26 @@ const Bill = (props) => {
                            />
                         </label>
                         <div>
+                           <label htmlFor='ivaPorcent'>
+                              IVA
+                              <input
+                                 type='number'
+                                 min='0'
+                                 value={form.ivaPorcent}
+                                 name='ivaPorcent'
+                                 placeholder='IVA'
+                                 onChange={handleInput}
+                              />
+                              %
+                              <span>${ivaResult}</span>
+                           </label>
                            <p>
                               <span>Subtotal</span>
-                              <span>$0</span>
+                              <span>${form.subtotal}</span>
                            </p>
                            <p>
                               <span>Total</span>
-                              <span>$0</span>
+                              <span>${form.total}</span>
                            </p>
                         </div>
                      </div>
@@ -228,18 +255,19 @@ Bill.propTypes = {
    fiscalIdValidate: PropTypes.bool,
    modal: PropTypes.bool,
    CFDIValidate: PropTypes.bool,
-   itemProduct: PropTypes.arrayOf(
-      PropTypes.number
-   ),
+   loaderCustomer: PropTypes.bool.isRequired,
    form: PropTypes.objectOf(
       PropTypes.string || object
    ),
    formProduct: PropTypes.arrayOf(
-      PropTypes.array
+      PropTypes.object
    ),
    customers: PropTypes.objectOf(
       PropTypes.array
    ),
+   article: PropTypes.objectOf(
+      PropTypes.any
+   ).isRequired,
    addItem: PropTypes.func,
    removeItem: PropTypes.func,
    handleInput: PropTypes.func,

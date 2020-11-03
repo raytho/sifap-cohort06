@@ -16,12 +16,18 @@ const BillContainer = () => {
    const [CFDIValidate, setCFDIValidate] = useState(false);
    const [modal, setModal] = useState(false);
    const [count, setCount] = useState(0);
+   const [formProduct, setFormProduct] = useState([]);
+   const [itemProduct] = useState([]);
+   const [loaderCustomer, setLoaderCustomer] = useState(true);
    const [form, setValues] = useState({
       fullName: '',
       fiscalId: '',
       email: '',
       phoneNumber: '',
       comments: '',
+      ivaPorcent: '',
+      subtotal: '',
+      total: ''
    });
    // Manage product item
    const [article, setArticle] = useState({
@@ -29,18 +35,24 @@ const BillContainer = () => {
       id: '',
       price: '',
       product: '',
-      quantity: null
+      quantity: '',
+      total: ''
    });
-   const [formProduct] = useState([]);
-   const [itemProduct, setItemProduct] = useState([]);
    const addItem = () => {
       setCount(count + 1);
       itemProduct.push(count);
       formProduct.push(article);
+      setArticle({
+         description: '',
+         id: '',
+         price: '',
+         product: '',
+         quantity: ''
+      })
    }
    const removeItem = (item) => {
-      setItemProduct(itemProduct.filter(elem => {
-         return elem !== item
+      setFormProduct(formProduct.filter((elem, i) => {
+         return i !== item
       }));
    }
 
@@ -96,9 +108,6 @@ const BillContainer = () => {
          [e.target.name]: e.target.value,
       })
    }
-   window.console.log(article, 'article')
-   window.console.log(formProduct, 'formProduct');
-
    const handleSubmit = e => {
       e.preventDefault();
       form.products = formProduct;
@@ -124,7 +133,7 @@ const BillContainer = () => {
          setModal(false);
       } else {
          setModal(true);
-         const getData = async () => {
+         const getDataCustomer = async () => {
             try {
                const response = await fetch(`${API}user/clients`, {
                   method: 'GET',
@@ -133,18 +142,18 @@ const BillContainer = () => {
                   }
                });
                const data = await response.json();
+               setLoaderCustomer(false)
                setCustomers(data);
             } catch(error) {
                window.console.log(error);
             }
          }
-         getData();
+         getDataCustomer();
       }
    }
    const handleInputCustomer = e => {
       setCustomerId(e.target.value);
    }
-
    const getDataCustomerId = async () => {
       try {
          const response = await fetch(`${API}user/clients/${customerId}`, {
@@ -158,7 +167,6 @@ const BillContainer = () => {
          form.fiscalId = data.clients[0]?.fiscalId
          form.email = data.clients[0]?.email
          form.phoneNumber = data.clients[0]?.phoneNumber
-         // getCustomer(data)
       } catch(error) {
          window.console.error(error);
       }
@@ -176,6 +184,9 @@ const BillContainer = () => {
          itemProduct={itemProduct}
          form={form}
          customers={customers}
+         formProduct={formProduct}
+         article={article}
+         loaderCustomer={loaderCustomer}
          addItem={addItem}
          removeItem={removeItem}
          handleInput={handleInput}

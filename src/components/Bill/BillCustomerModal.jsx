@@ -1,7 +1,6 @@
 /* eslint-disable react/require-default-props */
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Context } from '../../Context';
 
 import Modal from '../Modal';
 import '../../assets/styles/components/Bill/BillCustomerModal.scss';
@@ -12,6 +11,7 @@ const BillCustomerModal = (props) => {
       modal,
       handleModal,
       customers,
+      loaderCustomer,
       handleInputCustomer,
       getDataCustomerId
    } = props;
@@ -25,6 +25,7 @@ const BillCustomerModal = (props) => {
             <h2>Clientes</h2>
             <label htmlFor='customer'>
                <select name='customer' size='3' onChange={handleInputCustomer}>
+                  {loaderCustomer && <option>Cargando...</option>}
                   {
                      customers?.clients.map(item =>
                         <option value={item.clientId} key={item.clientId}>{item.fullName}</option>
@@ -43,6 +44,7 @@ const BillCustomerModal = (props) => {
 
 BillCustomerModal.propTypes = {
    modal: PropTypes.bool.isRequired,
+   loaderCustomer: PropTypes.bool.isRequired,
    handleModal: PropTypes.func.isRequired,
    handleInputCustomer: PropTypes.func.isRequired,
    getDataCustomerId: PropTypes.func.isRequired,

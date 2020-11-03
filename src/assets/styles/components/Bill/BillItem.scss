@@ -7,6 +7,7 @@
    margin: 20px auto 5px;
    display: flex;
    align-items: center;
+   position: relative;
    border-radius: 5px 100px 5px 5px;
    box-shadow: 0 0 7px 0 rgba(3, 36, 35, 0.25);
    input {
@@ -66,4 +67,19 @@
       background-color: transparent;
       @extend %reset-btn;
    }
+}
+
+.Bill__add-item {
+   width: 30px;
+   height: 30px;
+   position: absolute;
+   top: 540px;
+   left: 30px;
+   font-size: var(--font-big);
+   color: var(--white-color);
+   line-height: 0;
+   background-color: var(--secundary-color);
+   border-radius: 50%;
+   border: none;
+   @extend %reset-btn;
 }
