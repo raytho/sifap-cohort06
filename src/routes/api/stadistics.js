@@ -91,7 +91,7 @@ function stadisticsApi(app) {
     }
   });
 
-  router.get("/getAllProducts", async (req, res) => {
+  router.get("/getAllProducts", async (req, res, next) => {
     try {
       const response = await stadisticsService.getAllProducts();
       if (response) {

@@ -4,6 +4,10 @@ const { nanoid, customAlphabet } = require("nanoid");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const config = require("../config");
+const invoiceMxData = require("../utils/mocks/invoice");
+const { createInvoice } = require("../services/files/createInvoiceMx");
+const { uploadPdf } = require("../services/storage/profilePicturesUpload");
+const multer = require("multer");
 
 const TABLE_PRODUCTS = "product";
 const TABLE_FISCAL_DATA = "fiscal_data";
@@ -322,13 +326,9 @@ class UsersService {
     }
 
     const idCountry =
-      user.country === "COL"
-        ? 1
-        : user.country === "MEX"
-        ? 2
-        : user.country === "DOM"
-        ? 3
-        : 0;
+      user.country === "COL" ? 1
+        : user.country === "MEX" ? 2
+          : user.country === "DOM" ? 3 : 0;
     const userProfile = {
       phoneNumber: user.phoneNumber,
       firstName: user.firstName,
@@ -363,13 +363,9 @@ class UsersService {
 
   async upsertFiscalData(data, id) {
     const idCountry =
-      data.country === "COL"
-        ? 1
-        : data.country === "MEX"
-        ? 2
-        : data.country === "DOM"
-        ? 3
-        : 0;
+      data.country === "COL" ? 1
+        : data.country === "MEX" ? 2
+          : data.country === "DOM" ? 3 : 0;
     delete data.firstName;
     delete data.lastName;
     delete data.dateOfBirth;
@@ -427,7 +423,10 @@ class UsersService {
       cfdiUse,
       paymentMethod,
     } = invoiceData;
-
+    const pdfInvoice = await createInvoice(invoiceMxData, "invoice.pdf");
+    const uploadeInvoice = await uploadPdf(pdfInvoice);
+    console.log(uploadeInvoice);
+    
     //ESTÁ OK
     await this.insertProducts(products);
     const amount = this.calcTotalAmount(products);
