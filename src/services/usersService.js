@@ -176,7 +176,7 @@ class UsersService {
       subject: "Sifap Invite",
       text: `You're invite to join in SIFAP system. Please create an account in the following link
         Please click on the following link, or paste this into your browser to complete the process:
-        https://sifap.netlify.app/#/Register 
+        https://sifap.netlify.app/register 
         If you did not request this, please ignore this email.`,
     };
 
