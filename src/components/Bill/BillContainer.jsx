@@ -36,7 +36,7 @@ const BillContainer = () => {
    const addItem = () => {
       setCount(count + 1);
       itemProduct.push(count);
-      // formProduct.push(article);
+      formProduct.push(article);
    }
    const removeItem = (item) => {
       setItemProduct(itemProduct.filter(elem => {

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { HashRouter, BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Context } from '../Context';
 
 import '../assets/styles/Global.scss';
@@ -23,8 +23,9 @@ import Chatbot from '../components/Chatbot/Chatbot';
 
 
 const App = () => {
-   const { isAuth, initialConfig } = useContext(Context);
-   const user = JSON.parse(window.sessionStorage.getItem('user'));
+
+   const { isAuth } = useContext(Context);
+
    return (
       <>
       <Chatbot />
