@@ -1,13 +1,23 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/require-default-props */
 import React from 'react';
-import PropTypes, { arrayOf } from 'prop-types';
+import PropTypes, { arrayOf, objectOf } from 'prop-types';
 
 import InitialConfigForm from './InitialConfigForm';
 import InitialConfigFirst from './InitialConfigFirst';
-import Header from '../Header/Header';
+import Title from '../Title';
+import InitialConfigModalConfirm from './InitialConfigModalConfirm';
+
+import iconConfig from '../../assets/static/icon/config.png';
 
 import '../../assets/styles/components/InitialConfig/InitialConfig.scss';
+
+const propsConfig = {
+   title: 'Configuración de país',
+   icon: iconConfig,
+   alt: 'Icono configuración'
+}
 
 const InitialConfig = (props) => {
 
@@ -17,6 +27,7 @@ const InitialConfig = (props) => {
       handleChangeInputCfName,
       handleSubmit,
       formCF,
+      countries,
       comprobanteFiscalName,
       comprobanteFiscal,
       handleChangeInputConfig,
@@ -26,88 +37,77 @@ const InitialConfig = (props) => {
       handleClickPrev,
       choiseOne,
       formFirst,
-      firstNameValidate,
-      lastNameValidate,
-      dateOfBirthValidate,
       countryValidate,
-      nameCompanyValidate,
-      fiscalIdValidate,
       comprobanteFiscalValidate,
       comprobanteFiscalNameValidate,
       nameIdentifierFiscalValidate,
       handleChangeInputCfSeparator,
       handleChangeInputCfIncrement,
+      handleModal,
+      modal,
       separator
    } = props;
-
+   
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    return (
       <>
-      <Header />
-         <div className='InitialConfig'>
-            <div className='InitialConfig__header'>
-                  {!slide && <button type='button' onClick={handleClickPrev}> </button>}
-               <span>
-                  <p>
-                     {user.firstName}
-                  </p>
-                  <p>
-                     {user.userId}
-                  </p>
-                  <p>
-                     {user.email}
-                  </p>
-                  <p>
-                     {user.country}
-                  </p>
-               </span>
-            </div>
-            <div className='InitialConfig__main'>
+         <Title  {...propsConfig}/>
+         <div className='History'>
+            <div className='InitialConfig'>
+               <div className='InitialConfig__header'>
+                     {!slide && <button type='button' onClick={handleClickPrev}> </button>}
+                  <span>
+                     <p>
+                        {user.firstName}
+                     </p>
+                     <p>
+                        {user.userId}
+                     </p>
+                     <p>
+                        {user.email}
+                     </p>
+                     <p>
+                        {user.country}
+                     </p>
+                  </span>
+               </div>
+               <div className='InitialConfig__main'>
 
-            {/* <InitialConfigForm
-                  handleChangeInput={handleChangeInput}
-                  handleChangeInputCf={handleChangeInputCf}
-                  formCF={formCF}
-                  comprobanteFiscal={comprobanteFiscal}
-                  handleChangeInputCfName={handleChangeInputCfName}
-                  comprobanteFiscalJoin={comprobanteFiscalJoin}
-                  handleClickNext={handleClickNext}
-                  handleClickPrev={handleClickPrev}
-                  type={type}
-               /> */}
+                  <InitialConfigModalConfirm
+                     modal={modal}
+                     handleModal={handleModal}
+                  />
 
-            {slide
-               ? <InitialConfigFirst
-                  handleChangeInputConfig={handleChangeInputConfig}
-                  handleClickNext={handleClickNext}
-                  choiseOne={choiseOne}
-                  formFirst={formFirst}
-               />
-               : <InitialConfigForm
-                  handleChangeInput={handleChangeInput}
-                  handleChangeInputCf={handleChangeInputCf}
-                  handleChangeInputCfName={handleChangeInputCfName}
-                  handleChangeInputCfIncrement={handleChangeInputCfIncrement}
-                  handleSubmit={handleSubmit}
-                  formCF={formCF}
-                  handleChangeInputCfSeparator={handleChangeInputCfSeparator}
-                  separator={separator}
-                  comprobanteFiscalName={comprobanteFiscalName}
-                  comprobanteFiscal={comprobanteFiscal}
-                  handleClickNext={handleClickNext}
-                  handleClickPrev={handleClickPrev}
-                  type={type}
-                  firstNameValidate={firstNameValidate}
-                  lastNameValidate={lastNameValidate}
-                  dateOfBirthValidate={dateOfBirthValidate}
-                  countryValidate={countryValidate}
-                  nameCompanyValidate={nameCompanyValidate}
-                  fiscalIdValidate={fiscalIdValidate}
-                  nameIdentifierFiscalValidate={nameIdentifierFiscalValidate}
-                  comprobanteFiscalValidate={comprobanteFiscalValidate}
-                  comprobanteFiscalNameValidate={comprobanteFiscalNameValidate}
-               />
-            }
+
+               {slide
+                  ? <InitialConfigFirst
+                     handleChangeInputConfig={handleChangeInputConfig}
+                     handleClickNext={handleClickNext}
+                     choiseOne={choiseOne}
+                     formFirst={formFirst}
+                  />
+                  : <InitialConfigForm
+                     handleChangeInput={handleChangeInput}
+                     handleChangeInputCf={handleChangeInputCf}
+                     handleChangeInputCfName={handleChangeInputCfName}
+                     handleChangeInputCfIncrement={handleChangeInputCfIncrement}
+                     handleSubmit={handleSubmit}
+                     formCF={formCF}
+                     countries={countries}
+                     handleChangeInputCfSeparator={handleChangeInputCfSeparator}
+                     separator={separator}
+                     comprobanteFiscalName={comprobanteFiscalName}
+                     comprobanteFiscal={comprobanteFiscal}
+                     handleClickNext={handleClickNext}
+                     handleClickPrev={handleClickPrev}
+                     type={type}
+                     countryValidate={countryValidate}
+                     nameIdentifierFiscalValidate={nameIdentifierFiscalValidate}
+                     comprobanteFiscalValidate={comprobanteFiscalValidate}
+                     comprobanteFiscalNameValidate={comprobanteFiscalNameValidate}
+                  />
+               }
+               </div>
             </div>
          </div>
       </>
@@ -127,18 +127,16 @@ InitialConfig.propTypes = {
    formFirst: PropTypes.objectOf(arrayOf),
    comprobanteFiscal: PropTypes.objectOf(arrayOf),
    comprobanteFiscalName: PropTypes.objectOf(arrayOf),
+   countries: PropTypes.arrayOf(objectOf),
    type: PropTypes.string,
    slide: PropTypes.bool,
    choiseOne: PropTypes.bool,
-   firstNameValidate: PropTypes.bool,
-   lastNameValidate: PropTypes.bool,
-   dateOfBirthValidate: PropTypes.bool,
    countryValidate: PropTypes.bool,
-   nameCompanyValidate: PropTypes.bool,
-   fiscalIdValidate: PropTypes.bool,
    comprobanteFiscalValidate: PropTypes.bool,
    comprobanteFiscalNameValidate: PropTypes.bool,
    nameIdentifierFiscalValidate: PropTypes.bool,
+   modal: PropTypes.bool,
+   handleModal: PropTypes.func,
    handleChangeInputCfSeparator: PropTypes.func,
    separator: PropTypes.string,
 }

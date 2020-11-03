@@ -16,7 +16,7 @@ const InitialConfigFirst = (props) => {
    return (
       <div className='InitialConfig__first'>
          <h2>
-            Configuración incial:
+            Configuración inicial:
          </h2>
             <p>
                Para poder generar tus facturas con validez fiscal necesitamos que nos des información de que requermientos debe tener tu factura.

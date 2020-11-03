@@ -29,20 +29,20 @@ const RoleManage = (props) => {
    const [filterName, setFilterName] = useState('')
    const [filteredName, setFilteredName] = useState(false)
 
-   const [filterOpen, setFilterOpen] = useState(false)
+   // const [filterOpen, setFilterOpen] = useState(false)
 
-   const handleFilter = () => {
-      // document.getElementById('form-filter').classList.toggle('isVisible');
-      // if (filterOpen) {
-      //    setFilterOpen(false)
-      // } else {
-      //    setFilterOpen(true)
-      // }
-      // Limpieando filtros cuando se cierran
-      setFilterId('')
-      setFilterName('')
-      setFilterRole([])
-   }
+   // const handleFilter = () => {
+   //    // document.getElementById('form-filter').classList.toggle('isVisible');
+   //    // if (filterOpen) {
+   //    //    setFilterOpen(false)
+   //    // } else {
+   //    //    setFilterOpen(true)
+   //    // }
+   //    // Limpieando filtros cuando se cierran
+   //    setFilterId('')
+   //    setFilterName('')
+   //    setFilterRole([])
+   // }
    const handleChangeFilterId = e => {
       setFilterId(e.target.value)
    }

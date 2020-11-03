@@ -23,6 +23,7 @@ const Profile = (props) => {
       handleSubmitImg,
       handleClickAdd,
       handleInputImg,
+      countries,
       form,
       qr,
       loader,
@@ -40,9 +41,9 @@ const Profile = (props) => {
    const [country, setCountry] = useState(false);
    const [fiscalId, setFiscalId] = useState(false);
    const [phoneNumber, setPhoneNumber] = useState(false);
+   const [companyName, setCompanyName] = useState(false);
    const user = JSON.parse(window.sessionStorage.getItem('user'));
-
-   const handleEditClick = (state, setState, setState2, setState3, setState4, setState5, setState6) => {
+   const handleEditClick = (state, setState, setState2, setState3, setState4, setState5, setState6, setState7) => {
       if(state) {
          setState(false);
       } else {
@@ -52,6 +53,7 @@ const Profile = (props) => {
          setState4(false);
          setState5(false);
          setState6(false);
+         setState7(false);
       }
    }
 
@@ -74,7 +76,10 @@ const Profile = (props) => {
       if (phoneNumber) {
          document.getElementById('input-phone').focus();
       }
-   }, [name, dateOfBirth, city, country, fiscalId, phoneNumber]);
+      if (companyName) {
+         document.getElementById('input-company').focus();
+      }
+   }, [name, dateOfBirth, city, country, fiscalId, phoneNumber, companyName]);
 
    useEffect(() => {
       document.getElementById('form').addEventListener('keypress', e => {
@@ -123,7 +128,8 @@ const Profile = (props) => {
                         <div>
                            {
                               name
-                              ? <input
+                              ? <>
+                              <input
                                  id='input-name'
                                  value={form.firstName}
                                  type='text'
@@ -131,7 +137,15 @@ const Profile = (props) => {
                                  placeholder='Nombre'
                                  onChange={handleChangeInput}
                               />
-                              : <p>{user.firstName}</p>
+                              <input
+                                 value={form.lastName}
+                                 type='text'
+                                 name='lastName'
+                                 placeholder='Apellido'
+                                 onChange={handleChangeInput}
+                              />
+                              </>
+                              : <p>{user.firstName} {user.lastName}</p>
                            }
                            <button
                               type='button'
@@ -144,52 +158,13 @@ const Profile = (props) => {
                                     setCity,
                                     setCountry,
                                     setFiscalId,
-                                    setPhoneNumber
+                                    setPhoneNumber,
+                                    setCompanyName
                                  )
                               }
                            >
                               {
                                  name
-                                 ? <img src={iconSave} alt='icono de editar'/>
-                                 : <img src={iconEdit} alt='icono de editar'/>
-                              }
-                           </button>
-                        </div>
-                     </div>
-                     <div className='Profile__item'>
-                        <div>
-                           <p>Identificador: </p>
-                        </div>
-                        <div>
-                           {
-                              fiscalId
-                              ? <input
-                                 id='input-fiscalId'
-                                 value={form.fiscalId}
-                                 type='text'
-                                 name='fiscalId'
-                                 placeholder='N° de indetificación'
-                                 onChange={handleChangeInput}
-                              />
-                              : <p>{user.fiscalId}</p>
-                           }
-                           <button
-                              type='button'
-                              className='Profile__edit'
-                              onClick={() =>
-                                 handleEditClick(
-                                    fiscalId,
-                                    setFiscalId,
-                                    setName,
-                                    setDateOfBirth,
-                                    setCity,
-                                    setCountry,
-                                    setPhoneNumber
-                                 )
-                              }
-                           >
-                              {
-                                 fiscalId
                                  ? <img src={iconSave} alt='icono de editar'/>
                                  : <img src={iconEdit} alt='icono de editar'/>
                               }
@@ -223,7 +198,8 @@ const Profile = (props) => {
                                     setFiscalId,
                                     setCity,
                                     setCountry,
-                                    setPhoneNumber
+                                    setPhoneNumber,
+                                    setCompanyName
                                  )
                               }
                            >
@@ -237,19 +213,111 @@ const Profile = (props) => {
                      </div>
                      <div className='Profile__item'>
                         <div>
+                           <p>Nombre de la empresa: </p>
+                        </div>
+                        <div>
+                           {
+                              companyName
+                              ? <input
+                                    id='input-company'
+                                    value={form.companyName}
+                                    type='text'
+                                    name='companyName'
+                                    placeholder='Nombre de la empresa'
+                                    onChange={handleChangeInput}
+                                 />
+                              : <p>{user.companyName}</p>
+                           }
+                           <button
+                              type='button'
+                              className='Profile__edit'
+                              onClick={() =>
+                                 handleEditClick(
+                                    companyName,
+                                    setCompanyName,
+                                    setPhoneNumber,
+                                    setCity,
+                                    setCountry,
+                                    setDateOfBirth,
+                                    setName,
+                                    setFiscalId,
+                                 )
+                              }
+                           >
+                              {
+                                 companyName
+                                 ? <img src={iconSave} alt='icono de editar'/>
+                                 : <img src={iconEdit} alt='icono de editar'/>
+                              }
+                           </button>
+                        </div>
+                     </div>
+                     <div className='Profile__item'>
+                        <div>
+                           <p>{
+                              user.fiscalIdentifierName
+                                 ? user.fiscalIdentifierName
+                                 : 'Identificador fiscal:'
+                           }</p>
+                        </div>
+                        <div>
+                           {
+                              fiscalId
+                              ? <input
+                                 id='input-fiscalId'
+                                 value={form.fiscalId}
+                                 type='text'
+                                 name='fiscalId'
+                                 placeholder='N° de indetificación'
+                                 onChange={handleChangeInput}
+                              />
+                              : <p>{user.fiscalId}</p>
+                           }
+                           <button
+                              type='button'
+                              className='Profile__edit'
+                              onClick={() =>
+                                 handleEditClick(
+                                    fiscalId,
+                                    setFiscalId,
+                                    setName,
+                                    setDateOfBirth,
+                                    setCity,
+                                    setCountry,
+                                    setPhoneNumber,
+                                    setCompanyName
+                                 )
+                              }
+                           >
+                              {
+                                 fiscalId
+                                 ? <img src={iconSave} alt='icono de editar'/>
+                                 : <img src={iconEdit} alt='icono de editar'/>
+                              }
+                           </button>
+                        </div>
+                     </div>
+                     <div className='Profile__item'>
+                        <div>
                            <p>País: </p>
                         </div>
                         <div>
                            {
                               country
-                              ? <input
-                                 id='input-country'
-                                 value={form.country}
-                                 type='text'
-                                 name='country'
-                                 placeholder='País'
-                                 onChange={handleChangeInput}
-                              />
+                              ? <>
+                                 <select
+                                    id='input-country'
+                                    name='country'
+                                    onChange={handleChangeInput}
+                                 >
+                                 <option value=''>País</option>
+                                 {
+                                    countries.map((item) =>
+                                       <option key={item.idcountries} value={item.code}>{item.name}</option>
+                                    )
+                                 }
+                                 </select>
+                              </>
                               : <p>{user.country}</p>
                            }
                            <button
@@ -263,7 +331,8 @@ const Profile = (props) => {
                                     setName,
                                     setFiscalId,
                                     setCity,
-                                    setPhoneNumber
+                                    setPhoneNumber,
+                                    setCompanyName
                                  )
                               }
                            >
@@ -312,7 +381,8 @@ const Profile = (props) => {
                                     setDateOfBirth,
                                     setName,
                                     setFiscalId,
-                                    setPhoneNumber
+                                    setPhoneNumber,
+                                    setCompanyName
                                  )
                               }
                            >
@@ -324,6 +394,9 @@ const Profile = (props) => {
                            </button>
                         </div>
                      </div>
+                  </div>
+                  {/* Seguridad */}
+                  <div>
                      <div className='Profile__item'>
                         <div>
                            <p>Número de telefono: </p>
@@ -353,6 +426,7 @@ const Profile = (props) => {
                                     setDateOfBirth,
                                     setName,
                                     setFiscalId,
+                                    setCompanyName
                                  )
                               }
                            >
@@ -364,9 +438,6 @@ const Profile = (props) => {
                            </button>
                         </div>
                      </div>
-                  </div>
-                  {/* Seguridad */}
-                  <div>
                      <div className='Profile__authentication'>
                         <h3>Seguridad:</h3>
                         <div>
@@ -431,6 +502,7 @@ Profile.propTypes = {
    handleSubmitImg: PropTypes.func.isRequired,
    handleClickAdd: PropTypes.func.isRequired,
    handleInputImg: PropTypes.func.isRequired,
+   countries: PropTypes.func.isRequired,
    form: PropTypes.object.isRequired,
    inputFile: PropTypes.object.isRequired,
    image: PropTypes.string || undefined.isRequired,

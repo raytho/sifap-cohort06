@@ -17,8 +17,8 @@ const HeaderUser = (props) => {
       // handleModalClose
    } = props;
    const user = JSON.parse(window.sessionStorage.getItem('user'));
-   const { userImg } = useContext(Context);
-
+   const { userImg, userData } = useContext(Context);
+   // window.console.log(userData?.firstName);
    return (
       <>
          <div className='Header__user-container'>
@@ -28,7 +28,7 @@ const HeaderUser = (props) => {
             </div>
             <ul className='Header__menu'>
                <li>
-                  <p>{user.firstName}</p>
+                  <p>{user.firstName || userData?.firstName}</p>
                   <p>{user.email}</p>
                   <p>{user.role}</p>
                </li>

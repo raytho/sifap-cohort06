@@ -23,7 +23,7 @@ const Statistics = () => {
             <div className='Statistics__iframe'>
             <p>Cargando...</p>
                <iframe
-                  src='https://datastudio.google.com/embed/reporting/016bfee4-f538-4dfa-a20d-6eee39a079e7/page/H0AlB'
+                  src='https://datastudio.google.com/embed/reporting/ca6ffff8-c5d7-4a78-b949-7b6334a87e63/page/H0AlB'
                   title='statistics'
                />
             </div>

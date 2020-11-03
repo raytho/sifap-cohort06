@@ -23,7 +23,6 @@ const UserDeleteModal = (props) => {
       setErrorDeleted(false);
       setRequest(false)
    }
-   window.console.log(type);
    const deleteUser = () => {
       const getData = async () => {
          try {
@@ -39,7 +38,6 @@ const UserDeleteModal = (props) => {
                setRequest(true);
                setErrorDeleted(true);
             }
-            window.console.log(result.message);
          } catch (error) {
             window.console.log(error.message);
          }

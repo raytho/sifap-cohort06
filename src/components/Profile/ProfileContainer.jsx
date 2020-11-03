@@ -12,6 +12,7 @@ const ProfileContainer = () => {
    const inputFile = createRef();
    const { setUser, setUserImg } = useContext(Context);
    const [qr, setQr] = useState();
+   const [countries, setCountries] = useState([])
    const [loader, setLoader] = useState(false);
    const [loaderImg, setLoaderImg] = useState(false);
    const [saved, setSaved] = useState(false);
@@ -20,7 +21,9 @@ const ProfileContainer = () => {
    const [uploadedImg, setUploadImg] = useState();
    const [addImage, setAddImg] = useState(false);
    const [form, setValues] = useState({
+      companyName: user.companyName,
       firstName: user.firstName,
+      lastName: user.lastName,
       dateOfBirth: user.dateOfBirth,
       city: user.city,
       state: user.state,
@@ -43,7 +46,6 @@ const ProfileContainer = () => {
          })
       }
    }
-
    const handleSubmit = e => {
       e.preventDefault();
       const putData = async () => {
@@ -123,7 +125,9 @@ const ProfileContainer = () => {
          postImg();
    }
    useEffect(() => {
+      user.companyName = form.companyName;
       user.firstName = form.firstName;
+      user.lastName = form.lastName;
       user.dateOfBirth = form.dateOfBirth;
       user.city = form.city;
       user.state = form.state;
@@ -133,6 +137,7 @@ const ProfileContainer = () => {
       user.profile_picture_url = image || user.profile_picture_url
       setUser(JSON.stringify(user));
    }, [form, image]);
+
    useEffect(() => {
       const getData = async () => {
          try{
@@ -153,6 +158,19 @@ const ProfileContainer = () => {
 
       return () => controller.abort();
    }, []);
+   useEffect(() => {
+      const getData = async () => {
+         try {
+            const response = await fetch(`${API}countries`, { signal: controller.signal });
+            const data = await response.json();
+            setCountries(data.data)
+         } catch(error) {
+            window.console.log(error)
+         }
+      }
+      getData();
+      return () => controller.abort()
+   }, [])
    const handleClickAdd = () => {
       if(addImage) {
          setAddImg(false);
@@ -168,6 +186,7 @@ const ProfileContainer = () => {
          handleSubmitImg={handleSubmitImg}
          handleClickAdd={handleClickAdd}
          handleInputImg={handleInputImg}
+         countries={countries}
          addImage={addImage}
          form={form}
          qr={qr}

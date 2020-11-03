@@ -1,7 +1,8 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable consistent-return */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types'
+import { Context } from '../../../Context';
 import RoleAddCtrl from './RoleAddCtrl';
 
 const RoleAddContainer = ({ dataLength }) => {
@@ -9,6 +10,7 @@ const RoleAddContainer = ({ dataLength }) => {
    const RegExEmail = /^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
    const token = window.sessionStorage.getItem('token');
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
+   const { userData } = useContext(Context);
    const [modal, setModal] = useState(false);
    const [emailValidate, setEmailValidate] = useState(false);
    const [roleValidate, setRoleValidate] = useState(false);
@@ -17,6 +19,7 @@ const RoleAddContainer = ({ dataLength }) => {
    const [sent, setSent] = useState(false);
    const [form, setValues] = useState({
       email: '',
+      role: ''
    });
    // Manage input
    const handleChangeInput = e => {
@@ -48,12 +51,16 @@ const RoleAddContainer = ({ dataLength }) => {
          setEmailValidate(true);
 
       }
-      if(form.role !== undefined) {
+      if (userData?.role === 'Administrador') {
          role = true;
          setRoleValidate(false);
+      } else if(form.role === undefined || form.role.length === 0) {
+
+         setRoleValidate(true);
 
       } else {
-         setRoleValidate(true);
+         role = true;
+         setRoleValidate(false);
 
       }
       if(email && role) {
@@ -65,6 +72,9 @@ const RoleAddContainer = ({ dataLength }) => {
       e.preventDefault();
       if (validateForm()) {
          setModal(false);
+         if (userData.role === 'Administrador') {
+            form.role = 'empleado';
+         }
          const postData = async () => {
             try {
                await fetch(`${API}superAdmin/invite-user`, {
@@ -85,6 +95,8 @@ const RoleAddContainer = ({ dataLength }) => {
                      setSent(true)
                   }
                });
+               form.email = '';
+               form.role = '';
             } catch (error) {
                window.console.log(error.message);
             }

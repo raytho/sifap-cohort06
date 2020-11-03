@@ -7,7 +7,8 @@ import '../assets/styles/layout/Modal.scss';
 
 const Modal = (props) => {
 
-   const { children,
+   const {
+      children,
       isOpen,
       isModalAddRole,
       isConfirmation,
@@ -32,7 +33,7 @@ const Modal = (props) => {
          <div  className='Modal__overlay' >
             <div role='button' tabIndex='0' className='close' onClick={handleModalClose}> </div>
             <div className={modalClass} id='modal'>
-                  {children}
+               {children}
             </div>
          </div>
          </>,

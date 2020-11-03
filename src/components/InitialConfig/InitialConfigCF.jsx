@@ -65,13 +65,17 @@ const InitialConfigCF = (props) => {
                      </p>
                      <p>Las fracciones se conforman por Nombre y el Valor que representa.</p>
                      <ul>
-                        <li><span>Serie: </span>La serie que lleva los comprobantes fiscales</li>
+                        <li>
+                           <span>Serie: </span>La serie que lleva los comprobantes fiscales
+                        </li>
                         <li>
                            <span>Tipo de comprobante: </span>Indica que tipo de transacción se realiza, ejemplo: consumidor final, debito, credito, etc
                         </li>
-                        <li><span>Secuencial: </span>Comprobantes emitidos</li>
+                        <li>
+                           <span>Secuencial: </span>Comprobantes emitidos
+                        </li>
                      </ul>
-                     <img src='https://cdn.discordapp.com/attachments/748935265942372353/769347876999659530/unknown.png' alt='' />
+                     <img src='https://i.imgur.com/JnrIws4.png' alt='Imagen ejemplo comprobante fiscal' />
                      <div>
                         <p><span>Arma tu comprobante:</span></p>
                         <p>En el siguiente recuadro vas a ver un ejemplo de cómo decirnos la estructura de tu comprobante fiscal.</p>
@@ -123,7 +127,7 @@ const InitialConfigCF = (props) => {
                         </ul>
                      </div>
                   </div>
-                  <div className='InitialConfig__cf-section'>
+                  <div className='InitialConfig__cf-section-ejemplo'>
                      <div className='InitialConfig__cf-label'>
                         <p>
                            <span>
@@ -156,7 +160,7 @@ const InitialConfigCF = (props) => {
                               </div>
                            </span>
                         </div>
-                        <label htmlFor='cf' className='InitialConfig__cf-input-prev'>
+                        <label htmlFor='cf' className='InitialConfig__cf-input-prev--ej'>
                            <span>
                               <span>
                                  Nombre
@@ -206,7 +210,7 @@ const InitialConfigCF = (props) => {
                               />
                            </div>
                         </div>
-                        <div className='InitialConfig__cf-input'>
+                        <div className='InitialConfig__cf-input--ej'>
                            {/* Aquí vamos poniendo los que nuevo Fracción */}
                            <label htmlFor='cf'>
                               <input

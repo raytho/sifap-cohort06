@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
-import React, { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+// import { useHistory } from 'react-router-dom';
 import { Context } from '../../Context';
 
 import InitialConfig from './InitialConfig';
@@ -10,32 +10,23 @@ const InitialConfigContainer = () => {
    // General
    const [slide, setSlide] = useState(true);
    const [type, setType] = useState('false');
-   const user = JSON.parse(window.sessionStorage.getItem('user'));
    const token = window.sessionStorage.getItem('token');
-   const history = useHistory();
    const { setInitialConfig } = useContext(Context);
    // Código para comprobantes fiscales e identificadores fiscales
    const [formCF, setValues] = useState({
-      firstName: user.firstName,
-      lastName: '',
-      dateOfBirth: '',
-      country: user.country,
-      companyName: '',
-      fiscalId: '',
+      country: '',
       fiscalIdentifierName: ''
    });
+   const controller = new AbortController();
+   const [countries, setCountries] = useState();
+   const [modal, setModal] = useState(false);
    const [comprobanteFiscal, setComprobanteFiscal] = useState({});
    const [comprobanteFiscalName, setComprobanteFiscalName] = useState({});
    const [comprobanteFiscalIncrement, setComprobanteFiscalIncrement] = useState({});
    const [separator, setSeparator] = useState();
    const [comprobanteFiscalValidate, setComprobanteFiscalValidate] = useState(true);
    const [comprobanteFiscalNameValidate, setComprobanteFiscalNameValidate] = useState(true);
-   const [firstNameValidate, setFirstNameValidate] = useState(true);
-   const [lastNameValidate, setLastNameValidate] = useState(true);
-   const [dateOfBirthValidate, setDateOfBirthValidate] = useState(true);
    const [countryValidate, setCountryValidate] = useState(true);
-   const [nameCompanyValidate, setNameCompanyValidate] = useState(true);
-   const [fiscalIdValidate, setFiscalIdValidate] = useState(true);
    const [nameIdentifierFiscalValidate, setNameIdentifierFiscalValidate] = useState(true);
 
    const handleChangeInput = e => {
@@ -58,7 +49,6 @@ const InitialConfigContainer = () => {
       // Esto sería lo que se envia
    }
    const handleChangeInputCfIncrement = e => {
-      window.console.log(e.target.name.substring(0, 9))
       setComprobanteFiscalIncrement({
          ...comprobanteFiscalIncrement,
          [e.target.name]: e.target.checked
@@ -97,52 +87,24 @@ const InitialConfigContainer = () => {
    const handleClickPrev = () => {
       setSlide(true);
    }
+   const handleModal = () => {
+      if (modal) {
+         setModal(false);
+      } else {
+         setModal(true);
+      }
+   }
    const validateForm = () => {
-      let firstName;
-      let lastName;
-      let dateOfBirth;
       let country;
-      let nameCompany;
-      let fiscalId;
       let nameIdentifierFiscal;
       let comprobanteF;
       let comprobanteFName;
 
-      if (formCF.firstName.length > 3) {
-         setFirstNameValidate(true);
-         firstName = true;
-      } else {
-         setFirstNameValidate(false);
-      }
-      if (formCF.lastName.length > 3) {
-         setLastNameValidate(true);
-         lastName = true;
-      } else {
-         setLastNameValidate(false)
-      }
-      if (formCF.dateOfBirth.length === 10) {
-         setDateOfBirthValidate(true);
-         dateOfBirth = true;
-      } else {
-         setDateOfBirthValidate(false);
-      }
-      if (formCF.country.length > 2) {
+      if (formCF.country.length > 0) {
          setCountryValidate(true);
          country = true;
       } else {
          setCountryValidate(false);
-      }
-      if (formCF.companyName.length > 2) {
-         setNameCompanyValidate(true);
-         nameCompany = true;
-      } else {
-         setNameCompanyValidate(false)
-      }
-      if (formCF.fiscalId.length > 5) {
-         setFiscalIdValidate(true);
-         fiscalId = true;
-      } else {
-         setFiscalIdValidate(false)
       }
       if (formCF.fiscalIdentifierName.length > 2) {
          setNameIdentifierFiscalValidate(true);
@@ -150,25 +112,27 @@ const InitialConfigContainer = () => {
       } else {
          setNameIdentifierFiscalValidate(false)
       }
-      if (Object.values(comprobanteFiscal).length > 2) {
-         setComprobanteFiscalValidate(true)
-         comprobanteF = true;
+      if(type === 'CF') {
+         if (Object.values(comprobanteFiscal).length > 0) {
+            setComprobanteFiscalValidate(true);
+            comprobanteF = true;
+         } else {
+            setComprobanteFiscalValidate(false);
+         }
+         if (Object.values(comprobanteFiscalName).length > 0) {
+            setComprobanteFiscalNameValidate(true);
+            comprobanteFName = true;
+         } else {
+            setComprobanteFiscalNameValidate(false);
+         }
       } else {
-         setComprobanteFiscalValidate(false)
-      }
-      if (Object.values(comprobanteFiscalName).length > 2) {
+         setComprobanteFiscalValidate(true);
          setComprobanteFiscalNameValidate(true);
+         comprobanteF = true;
          comprobanteFName = true;
-      } else {
-         setComprobanteFiscalNameValidate(false);
       }
        if (
-         firstName
-         && lastName
-         && dateOfBirth
-         && country
-         && nameCompany
-         && fiscalId
+            country
          && nameIdentifierFiscal
          && comprobanteF
          && comprobanteFName
@@ -184,10 +148,9 @@ const InitialConfigContainer = () => {
       formCF.cfName = comprobanteFiscalName;
       formCF.cf = comprobanteFiscal;
       formCF.increment = comprobanteFiscalIncrement;
-      window.console.log(formCF)
       const postData = async () => {
-         if (validateForm()) {
             try {
+               window.console.log(JSON.stringify(formCF));
                const response = await fetch(`${API}${type === 'CF' ? 'user/tax-receipt' : 'user/tax-identifier'}`, {
                   method: 'POST',
                   headers: {
@@ -200,7 +163,7 @@ const InitialConfigContainer = () => {
                const { message } = await response.json();
                if (message.status === 'Usuario configurado') {
                   setInitialConfig(true);
-                  history.push('/emitir-facturas');
+                  handleModal()
                } else {
                   window.console.log(message.status);
                   window.console.error('Algo salió mal');
@@ -208,32 +171,47 @@ const InitialConfigContainer = () => {
             } catch(error) {
                window.console.log(error);
             }
+      }
+      if (validateForm()) {
+         postData();
+      }
+   }
+
+   useEffect(() => {
+      const getDataCountry = async () => {
+         try {
+            const response = await fetch(`${API}countries`, {
+               signal: controller.signal
+            })
+            const data = await response.json();
+            setCountries(data.data);
+         } catch(error) {
+            window.console.log(error);
          }
       }
-      postData();
-   }
+      getDataCountry();
+
+      return () => controller.abort()
+   }, []);
 
    return (
       <InitialConfig
          handleChangeInput={handleChangeInput}
          handleChangeInputCf={handleChangeInputCf}
          formCF={formCF}
+         countries={countries}
          comprobanteFiscal={comprobanteFiscal}
          comprobanteFiscalName={comprobanteFiscalName}
          handleChangeInputCfName={handleChangeInputCfName}
          handleChangeInputCfIncrement={handleChangeInputCfIncrement}
-         firstNameValidate={firstNameValidate}
-         lastNameValidate={lastNameValidate}
-         dateOfBirthValidate={dateOfBirthValidate}
          countryValidate={countryValidate}
-         nameCompanyValidate={nameCompanyValidate}
          comprobanteFiscalValidate={comprobanteFiscalValidate}
          comprobanteFiscalNameValidate={comprobanteFiscalNameValidate}
-         fiscalIdValidate={fiscalIdValidate}
          nameIdentifierFiscalValidate={nameIdentifierFiscalValidate}
          handleChangeInputCfSeparator={handleChangeInputCfSeparator}
+         handleModal={handleModal}
+         modal={modal}
          separator={separator}
-
          handleSubmit={handleSubmit}
          handleChangeInputConfig={handleChangeInputConfig}
          handleClickNext={handleClickNext}

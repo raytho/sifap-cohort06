@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/Header/Header';
+import PropTypes from 'prop-types';
 import AsideLogo from '../components/AsideLogo';
 import LoginSlides from '../components/FormLogin/LoginSlidees';
 import FormNewPassContainer from '../components/FormResetPass/FormNewPassContainer';
@@ -8,13 +8,18 @@ import '../assets/styles/components/ResetPassword/ResetPassword.scss';
 import '../assets/styles/utils/Alerts.scss';
 
 
-const NewPassword = () => {
+const NewPassword = (props) => {
+
+   const { match } = props;
+
    return (
       <>
          <div className="ResetPass__container">
             <div className="ResetPass__aside">
                <AsideLogo SignUpLogo />
-               <FormNewPassContainer />
+               <FormNewPassContainer
+                  match={match}
+               />
             </div>
                <LoginSlides/>
          </div>
@@ -22,4 +27,9 @@ const NewPassword = () => {
    )
 }
 
+NewPassword.propTypes = {
+   match: PropTypes.objectOf(
+      PropTypes.any
+   ).isRequired
+}
 export default NewPassword;

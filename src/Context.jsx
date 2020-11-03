@@ -12,6 +12,7 @@ const Provider = ({ children }) => {
    const [TFAToken, setTFAToken] = useState(() => {
       return window.sessionStorage.getItem('TFAToken');
    });
+   const [userData, setUserData] = useState();
    const [userImg, setUserImg] = useState();
    const [userDeleted, setUserDeleted] = useState();
    const [initialConfig, setInitialConfig] = useState(false);
@@ -26,8 +27,10 @@ const Provider = ({ children }) => {
          setIsAuth(false)
          window.sessionStorage.removeItem('token');
       },
-      setUser: userData => {
-         window.sessionStorage.setItem('user', userData);
+      userData,
+      setUser: user => {
+         window.sessionStorage.setItem('user', user);
+         setUserData(JSON.parse(user));
       },
       removeUser: () => {
          window.sessionStorage.removeItem('user');

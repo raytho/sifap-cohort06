@@ -49,7 +49,7 @@ const RoleAddModal = (props) => {
                   ? <label htmlFor='role'>
                      Rol: <i>*</i>
                      <select  name='role' value={form.role} onChange={handleChangeInput}>
-                        <option value='role'>Rol</option>
+                        <option value=''>Rol</option>
                         <option value='empleado'>Empleado</option>
                         <option value='administrador'>Administrador</option>
                      </select>

@@ -1,9 +1,16 @@
 /* eslint-disable consistent-return */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import FormNewPass from './FormNewPass';
 
-const FormNewPassContainer = () => {
+const FormNewPassContainer = (props) => {
 
+   const {
+      match
+    } = props;
+
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
+   const idUser = match.params.id;
    const RegExPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
    const [passwordVerifyValidate, setPasswordVerifyValidate] = useState(false);
    const [passwordValidate, setPasswordValidate] = useState(false);
@@ -44,8 +51,24 @@ const FormNewPassContainer = () => {
    const handleSubmit = e => {
       e.preventDefault();
       if (validateForm()) {
-         window.console.log('enviar nueva contraseña')
+         delete form.passwordVerify;
+         window.console.log(form)
+         const postDataNewPassword = async () => {
+            const response = await fetch(`${API}auth/password`, {
+               method: 'POST',
+               headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${idUser}`
+               },
+               body: JSON.stringify(form)
+            });
+            window.console.log(response);
+            window.console.log(response.message);
+         }
+         postDataNewPassword();
       }
+
    }
 
    return (
@@ -59,4 +82,9 @@ const FormNewPassContainer = () => {
    );
 }
 
+FormNewPassContainer.propTypes = {
+   match: PropTypes.objectOf(
+      PropTypes.any
+   ).isRequired
+}
 export default FormNewPassContainer;
