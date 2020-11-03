@@ -1,0 +1,68 @@
+@import '../../utils/Placeholder.scss';
+@import '../../utils/Mixin.scss';
+
+.Profile {
+   width: 400px;
+   height: 375px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   background-color: var(--white-color);
+   border-radius: 5px 40px 5px 5px;
+   & > button:nth-of-type(1) {
+      width: 30px;
+      height: 30px;
+      padding: 3px 2px 0 0;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: var(--font-small);
+      color: var(--white-color);
+      background-color: var(--secundary-color);
+      border-radius: 5px 20px 5px 5px;
+      @extend %reset-btn;
+   }
+   & > button:nth-of-type(2) {
+      margin: 30px 0 0 0;
+      @include btn(100px, 50px, --font-small);
+   }
+}
+.Profile__modal-img {
+   width: 250px;
+   height: auto;
+   margin: 30px 0 30px 0;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   & > img {
+      width: 140px;
+      height: 140px;
+      background-color: #c4c4c4;
+      border-radius: 50%;
+      margin: 0 0 20px 0;
+   }
+   & > div {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      input {
+         cursor: pointer;
+      }
+      button {
+         background-color: transparent;
+         border: none;
+         @extend %reset-btn;
+         @include btn(60px, 30px, none);
+         img {
+            width: 18px;
+            height: 18px;
+            // opacity: .5;
+         }
+      }
+   }
+   p {
+      width: 300px;
+      font-family: var(--font-title);
+   }
+}

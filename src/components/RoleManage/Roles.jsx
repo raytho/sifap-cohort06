@@ -14,14 +14,10 @@ const propsRole = {
 }
 
 
-const Roles = ({ children }) => {
-
-   return (
+const Roles = ({ children }) => (
       <>
          <Title {...propsRole} />
          {children}
       </>
-   )
-}
-
+)
 export default Roles;

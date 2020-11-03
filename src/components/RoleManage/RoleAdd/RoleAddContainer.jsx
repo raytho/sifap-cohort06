@@ -1,21 +1,26 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable consistent-return */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types'
+import { Context } from '../../../Context';
 import RoleAddCtrl from './RoleAddCtrl';
 
 const RoleAddContainer = ({ dataLength }) => {
 
+   const RegExEmail = /^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+   const token = window.sessionStorage.getItem('token');
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
+   const { userData } = useContext(Context);
    const [modal, setModal] = useState(false);
-   const [form, setValues] = useState({
-      email: '',
-      firstName: '',
-   });
-   const [nameValidate, setNameValidate] = useState(false);
    const [emailValidate, setEmailValidate] = useState(false);
    const [roleValidate, setRoleValidate] = useState(false);
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
-
+   const [invited, setInvited] = useState(false);
+   const [errorInvited, setErrorInvited] = useState(false);
+   const [sent, setSent] = useState(false);
+   const [form, setValues] = useState({
+      email: '',
+      role: ''
+   });
    // Manage input
    const handleChangeInput = e => {
       setValues({
@@ -30,45 +35,46 @@ const RoleAddContainer = ({ dataLength }) => {
    const handleModalClose = () => {
       setModal(false);
    }
+   const handleModalCloseConfirm = () => {
+      setSent(false);
+   }
 
    // Validate forms
    const validateForm = () => {
-      let name;
       let email;
       let role;
 
-      if (Object.keys(form.firstName).length > 2) {
-         name = true;
-         setNameValidate(false);
-      } else {
-         setNameValidate(true);
-      }
-      if(/^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/.test(form.email)) {
+      if(RegExEmail.test(form.email)) {
          email = true;
          setEmailValidate(false);
       } else {
          setEmailValidate(true);
 
       }
-      if(form.role !== undefined) {
+      if (userData?.role === 'Administrador') {
+         role = true;
+         setRoleValidate(false);
+      } else if(form.role === undefined || form.role.length === 0) {
+
+         setRoleValidate(true);
+
+      } else {
          role = true;
          setRoleValidate(false);
 
-      } else {
-         setRoleValidate(true);
-
       }
-
-      if(email && name && role) {
+      if(email && role) {
          return true
       }
    }
-
    // Super admin create new user admin/employee
    const handleSubmit = e => {
       e.preventDefault();
       if (validateForm()) {
          setModal(false);
+         if (userData.role === 'Administrador') {
+            form.role = 'empleado';
+         }
          const postData = async () => {
             try {
                await fetch(`${API}superAdmin/invite-user`, {
@@ -76,9 +82,21 @@ const RoleAddContainer = ({ dataLength }) => {
                   headers: {
                      'Accept': 'application/json',
                      'Content-Type': 'application/json',
+                     'Authorization': `Bearer ${token}`
                   },
                   body: JSON.stringify(form)
+               }).then(async response => {
+                  const { message } = await response.json();
+                  if (message === 'Invitation sent') {
+                     setInvited(true)
+                     setSent(true)
+                  } else {
+                     setErrorInvited(true);
+                     setSent(true)
+                  }
                });
+               form.email = '';
+               form.role = '';
             } catch (error) {
                window.console.log(error.message);
             }
@@ -95,10 +113,13 @@ const RoleAddContainer = ({ dataLength }) => {
          handleChangeInput={handleChangeInput}
          form={form}
          modalIsOpen={modal}
-         nameValidate={nameValidate}
          emailValidate={emailValidate}
          roleValidate={roleValidate}
          dataLength={dataLength}
+         invited={invited}
+         errorInvited={errorInvited}
+         sent={sent}
+         handleModalCloseConfirm={handleModalCloseConfirm}
       />
    )
 

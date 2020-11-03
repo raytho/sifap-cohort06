@@ -1,13 +1,11 @@
 .isModalAddRole {
-   width: 500px;
-   height: 550px;
+   width: 400px;
+   height: 450px;
    padding: 50px;
    display: flex;
    flex-direction: column;
    align-items: center;
    position: absolute;
-   // top: -1150px;
-   // left: 400px;
    font-family: var(--font-title);
    background-color: white;
    border-radius: 5px 100px 5px 5px;
@@ -37,29 +35,14 @@
          outline-color: var(--secundary-color);
       }
       input {
-         width: 290px;
+         width: 302px;
          height: 40px;
-      }
-      label:nth-of-type(3) {
-         position: relative;
       }
       select {
          width: 302px;
          height: 40px;
          background-color: var(--white-color);
          cursor: pointer;
-         -webkit-appearance: none;
-	      -moz-appearance: none;
-         option:nth-of-type(1) {
-            display: none;
-         }
-         &::-ms-expand {
-            display: none;
-         }
-      }
-      // Dropdown aún no funciona dandole click a la flecha, pero si desplega normal
-      .Arrow {
-         @include icon-arrow(absolute, 45px, 10px, 8px, var(--secundary-color), 180deg)
       }
       div {
          width: 300px;

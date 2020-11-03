@@ -1,0 +1,34 @@
+@import '../../utils/Placeholder.scss';
+@import '../../utils/Mixin.scss';
+
+.BillCustomerModal {
+   width: 400px;
+   height: 350px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   background-color: var(--white-color);
+   border-radius: 20px 100px 20px 20px;
+   h2 {
+      margin: 50px 0 0 0;
+      font-family: var(--font-title);
+      font-size: var(--font-big);
+   }
+   label {
+      margin: 50px 0 0 0;
+      select {
+         width: 250px;
+         height: 100px;
+      }
+   }
+}
+.BillCustomerModal__buttons {
+   width: 250px;
+   margin: 50px 0 0 0;
+   display: flex;
+   justify-content: space-between;
+   button {
+      @include btn(90px, 35px, --font-smaller);
+   }
+
+}

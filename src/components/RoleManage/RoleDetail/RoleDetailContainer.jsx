@@ -3,23 +3,27 @@ import React, { useState } from 'react';
 import RoleDetail from './RoleDetail';
 import GetData from '../../../containers/GetData';
 
-// import mockRoles from '../../../../mockRoles';
-
-// Aquí vamos a hacer las peticiones de los detalles de cada rol
-
 const RoleDetailContainer = (props) => {
 
    const {
       history,
       match,
    } = props;
-   const [modal, setModal] = useState(false)
-   const [form, setValues] = useState({});
    const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
+   const TFAToken = window.sessionStorage.getItem('TFAToken');
    const idUser = match.params.id;
+   const [modal, setModal] = useState(false);
+   const [editRole, setEditRole] = useState(false);
+   const [form, setValues] = useState({});
 
+   const handleClickEdit = () => {
+      if (editRole) {
+         setEditRole(false)
+      } else {
+         setEditRole(true)
+      }
+   }
    const handleChangeInput = (e) => {
-
       if(e.target.name === 'role') {
          setValues({
             ...form,
@@ -33,22 +37,36 @@ const RoleDetailContainer = (props) => {
       }
    }
    window.console.log(form);
-
-   window.console.log(match.params.id)
+   const handleSubmit = e => {
+      e.preventDefault();
+      const putData = async () => {
+         try {
+            window.console.log(form);
+            const response = await fetch(`${API}superAdmin/userEditRol/${idUser}`, {
+               method: 'PUT',
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+               'Authorization': `Basic ${TFAToken}`,
+               body: JSON.stringify(form)
+            });
+            window.console.log(response);
+         } catch(error) {
+            window.console.log(error)
+         }
+      }
+      putData();
+   }
 
    const handleModalOpen = () => {
       setModal(true);
    }
-
    const handleModalClose = () => {
       setModal(false)
    }
-
    const goBack = () => {
       history.goBack()
    }
 
-   // const { roles } = mockRoles;
    return (
       <GetData api={`${API}superAdmin/get-user/${idUser}`}>
          {
@@ -64,6 +82,9 @@ const RoleDetailContainer = (props) => {
                   modalIsOpen={modal}
                   form={form}
                   goBack={goBack}
+                  handleClickEdit={handleClickEdit}
+                  editRole={editRole}
+                  handleSubmit={handleSubmit}
                />
                )
             }

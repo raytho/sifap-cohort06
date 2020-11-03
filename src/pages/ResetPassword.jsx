@@ -4,25 +4,25 @@
 
 import React from 'react';
 import AsideLogo from '../components/AsideLogo';
-import ResetPassContainer from '../components/FormResetPass/FormResetPassContainer';
-import Header from '../components/Header/Header';
+import LoginSlides from '../components/FormLogin/LoginSlidees';
+import FormResetPassContainer from '../components/FormResetPass/FormResetPassContainer';
 
-import '../assets/styles/components/Register/Register.scss';
+import '../assets/styles/components/ResetPassword/ResetPassword.scss';
 import '../assets/styles/utils/Alerts.scss';
 
 
 const ResetPassword = () => {
-    return (
-        <>
-            <Header />
-            <div className="ResetPass__container">
-                <div className="ResetPass__aside">
-                    <AsideLogo SignUpLogo />
-                    <ResetPassContainer />
-                </div>
+   return (
+      <>
+         <div className="ResetPass__container">
+            <div className="ResetPass__aside">
+               <AsideLogo SignUpLogo />
+               <FormResetPassContainer />
             </div>
-        </>
-    )
+               <LoginSlides/>
+         </div>
+      </>
+   )
 }
 
 export default ResetPassword;

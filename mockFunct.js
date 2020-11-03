@@ -46,7 +46,7 @@ const funcMock = {
          id: 6,
          type: 'C. Fiscales',
          icon: iconCf,
-         path: '/c-fiscales',
+         path: '/c.-fiscales',
 
       },
    ],

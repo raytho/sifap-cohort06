@@ -14,10 +14,13 @@ const RoleAddCtrl = (props) => {
       form,
       sendUser,
       modalIsOpen,
-      nameValidate,
       emailValidate,
       roleValidate,
       dataLength,
+      invited,
+      errorInvited,
+      sent,
+      handleModalCloseConfirm
    } = props;
 
    return (
@@ -33,9 +36,12 @@ const RoleAddCtrl = (props) => {
                handleSubmit={handleSubmit}
                form={form}
                sendUser={sendUser}
-               nameValidate={nameValidate}
                emailValidate={emailValidate}
                roleValidate={roleValidate}
+               sent={sent}
+               invited={invited}
+               errorInvited={errorInvited}
+               handleModalCloseConfirm={handleModalCloseConfirm}
             />
          </span>
       </div>

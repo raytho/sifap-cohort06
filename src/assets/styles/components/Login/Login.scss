@@ -8,10 +8,14 @@
 }
 
 .Login__aside {
-    height: 620px;
-    position: relative;
-    top: -80px;
-    grid-area: Aside;
+   height: 620px;
+   position: relative;
+   // top: -80px;
+   grid-area: Aside;
+   @include media(tablet) {
+      height: 0;
+      // top: 0px;
+   }
 }
 
 .Login__form {
@@ -103,7 +107,7 @@
    width: 100%;
    margin: 50px 0 0 0;
    display: flex;
-   justify-content: space-between;
+   justify-content: center;
 
    button {
       &[disabled] {

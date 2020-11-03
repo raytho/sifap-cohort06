@@ -1,29 +1,35 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react';
+import { Context } from '../../../Context';
 
 import GetData from '../../../containers/GetData';
-import RoleDeleteModal from './UserGestionModal';
+import UserDeleteModal from './UserDeleteModal';
 import '../../../assets/styles/components/RoleManage/ItemUser.scss';
 
 
 const UserItemInvited = () =>{
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/superAdmin/'
 
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
+   const { userDeleted } = useContext(Context);
    const [modal, setModal] = useState(false);
-   const handleModalOpen = () => {
+   const [userId, setUserId] = useState('');
+   const token = window.sessionStorage.getItem('token');
+   const type = 'invite';
+
+   const handleModalOpen = id => {
       setModal(true)
+      setUserId(id)
    }
    const handleModalClose = () => {
       setModal(false)
    }
+
    return (
-      <GetData api={`${API}getInvitedUsers`} >
+      <GetData api={`${API}superAdmin/getInvitedUsers`} token={token} change={userDeleted}>
          {
-            ({ loading, error, data}) => {
+            ({ loading, error, data }) => {
                if (loading) return <p>Cargando...</p>
                if (error) return <p>¡Error!</p>
-               window.console.log(data[0].userId)
-
                return (
                 <ul>
                   {
@@ -33,18 +39,19 @@ const UserItemInvited = () =>{
                               <span className='Role__item-body'>
                                  <p>{item.role}</p>
                                  <p>{item.userId}</p>
-                                 <p>{item.firstName} {item.lastName}</p>
+                                 <p>{item.email} {item.lastName}</p>
                                  <span>Invitado</span>
                               </span>
                            </div>
-                           <button type='button' onClick={handleModalOpen}>X</button>
+                           <button type='button' onClick={() => handleModalOpen(item.userId)}>X</button>
                         </li>
                      )
                   }
-                  <RoleDeleteModal
+                  <UserDeleteModal
                      handleModalClose={handleModalClose}
                      modalIsOpen={modal}
-                     endpoint={`superAdmin/users-invitation/${data[0].userId}`}
+                     endpoint={`superAdmin/users-invitation/${userId}`}
+                     type={type}
                   />
                 </ul>
                )

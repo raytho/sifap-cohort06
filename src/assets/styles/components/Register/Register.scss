@@ -9,7 +9,7 @@
 .SignUp__aside{
    height: 911px;
    position: relative;
-   top: -80px;
+   // top: -80px;
    grid-area: Aside;
 }
 .SignUp__form {
@@ -52,6 +52,13 @@
             border: 1px solid  rgba(3, 36, 35, .25);
             border-radius: 5px;
          }
+         select {
+            width: 100%;
+            height: 40px;
+            margin: 5px 0 0 0;
+            font-family: var(--font-text);
+            font-size: var(--font-small);
+         }
       }
       .SignUp__password {
          height: 40px;
@@ -85,27 +92,6 @@
             }
          }
       }
-      .SignUp__type-email {
-         margin: 15px 0 0 0;
-         font-family: var(--font-title);
-         font-size: var(--font-smaller);
-         text-align: start;
-      }
-      .SigUp__radio-email {
-         width: 100%;
-         margin: 20px 0 5px 0;
-         display: flex;
-         .font-small {
-            margin: 0;
-            font-family: var(--font-text);
-            font-size: var(--font-smallest);
-            font-weight: 400;
-            input {
-               width: 0px;
-               height: 15px;
-            }
-         }
-      }
    }
 }
 .SignUp__redirect {
@@ -122,7 +108,7 @@
    width: 100%;
    margin: 50px 0 0 0;
    display: flex;
-   justify-content: space-between;
+   justify-content: center;
    button {
       @include btn(150px, 50px, --font-smaller)
    }

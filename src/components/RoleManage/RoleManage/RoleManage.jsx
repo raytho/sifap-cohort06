@@ -8,14 +8,14 @@ import PropTypes from 'prop-types'
 import Roles from '../Roles';
 import RoleAddContainer from '../RoleAdd/RoleAddContainer';
 import RoleManageModal from './RoleManageModal';
-import UserItem from './UserItem';
+import UserFilter from './UserFilter';
 import UserItemInvited from './UserItemInvited';
 import '../../../assets/styles/components/RoleManage/RoleManage.scss';
 
 const RoleManage = (props) => {
 
    const {
-      // loading,
+      loading,
       data,
       handleModalOpen,
       handleModalClose,
@@ -24,29 +24,59 @@ const RoleManage = (props) => {
    } = props;
 
    const [users, setUsers] = useState(true);
-   const [filteredRole, setFilteredRole] = useState([]);
-   const [filtered, setFiltered] = useState(false);
-   const [filter, setFilter] = useState('')
-   window.console.log(filter);
-   const handleFilter = () => {
-      document.getElementById('form-filter').classList.toggle('isVisible');
-   }
-   const handleChangeFilter = e => {
-      setFilter(e.target.value)
-   }
-   // busqueda id general
-   const result = data.filter(item => item.userId.toLowerCase().includes(filter.toLowerCase())  );
-   // búsqueda de id con filtrado de roles
-   // const resultWithFilteredRole = filteredRole.filter(item => item.userId.toLowerCase().includes(filter.toLowerCase()));
-   window.console.log(result.length, 'result', result)
-   const handleChangeFilterRole = e => {
-      const resultRole = data.filter(item => item.role.toLowerCase() === e.target.value.toLowerCase())
-      setFilteredRole(resultRole)
-      setFiltered(true)
-      if (e.target.value === 'rol') setFiltered(false)
-   }
+   const [filterRole, setFilterRole] = useState([]);
+   const [filterId, setFilterId] = useState('')
+   const [filterName, setFilterName] = useState('')
+   const [filteredName, setFilteredName] = useState(false)
 
-   if (result.length > 0) {
+   // const [filterOpen, setFilterOpen] = useState(false)
+
+   // const handleFilter = () => {
+   //    // document.getElementById('form-filter').classList.toggle('isVisible');
+   //    // if (filterOpen) {
+   //    //    setFilterOpen(false)
+   //    // } else {
+   //    //    setFilterOpen(true)
+   //    // }
+   //    // Limpieando filtros cuando se cierran
+   //    setFilterId('')
+   //    setFilterName('')
+   //    setFilterRole([])
+   // }
+   const handleChangeFilterId = e => {
+      setFilterId(e.target.value)
+   }
+   const handleChangeFilterName = e => {
+      setFilterName(e.target.value)
+      setFilteredName(true)
+      if (e.target.value === '') setFilteredName(false)
+   }
+   // búsqueda por nombre general
+   const resultName = data.filter(item =>
+      `${item.firstName} ${item.lastName}`.toLowerCase()
+      .includes(filterName.toLowerCase())
+   );
+   // búsqueda por nombre filtrado por roles
+   const resultNameWithFilteredRole = filterRole.filter(item =>
+      `${item.firstName} ${item.lastName}`.toLowerCase()
+      .includes(filterName.toLowerCase())
+   );
+   // búsqueda id general
+   const resultId = data.filter(item =>
+      item.userId.toLowerCase().includes(filterId.toLowerCase())
+   );
+   // búsqueda de id con filtrado de roles
+   const resultIdWithFilteredRole = filterRole.filter(item =>
+      item.userId.toLowerCase().includes(filterId.toLowerCase())
+   );
+   // filtrado por roles
+   const handleChangeFilterRole = e => {
+      const resultRole = data.filter(item =>
+         item.role.toLowerCase() === e.target.value.toLowerCase()
+      )
+      setFilterRole(resultRole)
+   }
+   if (filterRole.length > 0) {
       return (
          <Roles >
          <section className='Role'>
@@ -67,19 +97,18 @@ const RoleManage = (props) => {
             <div className='Role__manage-panel'>
                <div className='Role__filter'>
                   <form id='form-filter' className='isVisible'>
-                  <label htmlFor='rol'>
-                     <select defaultValue='rol' onChange={handleChangeFilterRole}>
-                        <option value='rol'>Rol</option>
-                        <option value='Empleado'>Empleado</option>
-                        <option value='Administrador'>Administrador</option>
-                        <option value='SuperAdministrador'>Super Admin</option>
-                     </select>
-                     <i className='Arrow'> </i>
-                  </label>
-                     <input placeholder='ID' onChange={handleChangeFilter} />
-                     <input placeholder='Nombre' onChange={handleChangeFilter}/>
+                     <label htmlFor='rol'>
+                        <select defaultValue='rol' onChange={handleChangeFilterRole}>
+                           <option value='rol'>Rol</option>
+                           <option value='Empleado'>Empleado</option>
+                           <option value='Administrador'>Administrador</option>
+                           <option value='SuperAdministrador'>Super Admin</option>
+                        </select>
+                     </label>
+                     <input placeholder='ID' onChange={handleChangeFilterId} />
+                     <input placeholder='Nombre' onChange={handleChangeFilterName}/>
                   </form>
-                  <button type='button' onClick={handleFilter} >Filtrar</button>
+                  <button type='button'>Filtros</button>
                </div>
                <div className='Role__header'>
                   <span>
@@ -89,19 +118,27 @@ const RoleManage = (props) => {
                   </span>
                </div>
                <div className='Role__main'>
-                  <button type='button' onClick={() => setUsers(true)}>Usuarios</button>
-                  <button type='button' onClick={() => setUsers(false)}>Usuarios invitados</button>
+                  <button
+                     type='button'
+                     onClick={() => setUsers(true)}
+                  >Usuarios</button>
+                  <button
+                     type='button'
+                     onClick={() => setUsers(false)}
+                  >Usuarios invitados</button>
                   <div className='Role__item-container'>
-
-                     {
-                        filtered
-                           ? <UserItem data={filteredRole}/>
-                           : <UserItem data={result.length > 0 ? result : data}/>
-                     }
-
+                  {loading && <p>Cargando...</p>}
+                  {users
+                     ? <UserFilter
+                        filteredName={filteredName}
+                        resultUno={resultNameWithFilteredRole}
+                        resultDos={resultIdWithFilteredRole}
+                      />
+                     : <UserItemInvited />
+                  }
                   </div>
                   <div className='Role__panel-ctrl'>
-                     <RoleAddContainer dataLength={data.length} />
+                     <RoleAddContainer dataLength={filterRole.length} />
                      <button type='button' onClick={handleModalOpen}>Guardar</button>
                      <RoleManageModal
                         handleModalClose={handleModalClose}
@@ -135,19 +172,18 @@ const RoleManage = (props) => {
             <div className='Role__manage-panel'>
                <div className='Role__filter'>
                   <form id='form-filter' className='isVisible'>
-                  <label htmlFor='rol'>
-                     <select defaultValue='rol' onChange={handleChangeFilterRole}>
-                        <option value='rol'>Rol</option>
-                        <option value='Empleado'>Empleado</option>
-                        <option value='Administrador'>Administrador</option>
-                        <option value='SuperAdministrador'>Super Admin</option>
-                     </select>
-                     <i className='Arrow'> </i>
-                  </label>
-                     <input placeholder='ID' onChange={handleChangeFilter} />
-                     <input placeholder='Nombre' onChange={handleChangeFilter}/>
+                     <label htmlFor='rol'>
+                        <select defaultValue='rol' onChange={handleChangeFilterRole}>
+                           <option value='rol'>Rol</option>
+                           <option value='Empleado'>Empleado</option>
+                           <option value='Administrador'>Administrador</option>
+                           <option value='SuperAdministrador'>Super Admin</option>
+                        </select>
+                     </label>
+                     <input placeholder='ID' onChange={handleChangeFilterId} />
+                     <input placeholder='Nombre' onChange={handleChangeFilterName}/>
                   </form>
-                  <button type='button' onClick={handleFilter} >Filtrar</button>
+                  <button type='button'>Filtros</button>
                </div>
                <div className='Role__header'>
                   <span>
@@ -157,29 +193,30 @@ const RoleManage = (props) => {
                   </span>
                </div>
                <div className='Role__main'>
-                  <button type='button' onClick={() => setUsers(true)}>Usuarios</button>
-                  <button type='button' onClick={() => setUsers(false)}>Usuarios invitados</button>
+                  <div className='Role__btn-users'>
+                     <button
+                        type='button'
+                        onClick={() => setUsers(true)}
+                     >Usuarios</button>
+                     <button
+                        type='button'
+                        onClick={() => setUsers(false)}
+                     >Usuarios invitados</button>
+                  </div>
                   <div className='Role__item-container'>
-                  {/* {users
-                  ? ( */}
-                     {/* {
-                        result.length > 0
-                           ? <UserItem data={result}/>
-                           : <UserItem data={data}/>
-                     } */}
-                     {
-
-                        filtered
-                           ? <UserItem data={result}/>
-                           : <UserItem data={result.length > 0 ? result : data}/>
-                     }
-                  {/* )
-                  : <UserItemInvited />
-                  } */}
+                  {loading && <p>Cargando...</p>}
+                  {users
+                     ? <UserFilter
+                        filteredName={filteredName}
+                        resultUno={resultName}
+                        resultDos={resultId}
+                        />
+                     : <UserItemInvited />
+                  }
                   </div>
                   <div className='Role__panel-ctrl'>
-                     <RoleAddContainer dataLength={data.length} />
-                     <button type='button' onClick={handleModalOpen}>Guardar</button>
+                     <RoleAddContainer dataLength={resultId.length} />
+                     {/* <button type='button' onClick={handleModalOpen}>Guardar</button> */}
                      <RoleManageModal
                         handleModalClose={handleModalClose}
                         modalIsOpen={modalIsOpen}
@@ -193,11 +230,12 @@ const RoleManage = (props) => {
 };
 
 RoleManage.propTypes = {
-   data: PropTypes.array,
-   handleModalOpen: PropTypes.func,
-   handleModalClose: PropTypes.func,
-   handleChangeInput: PropTypes.func,
-   modalIsOpen: PropTypes.bool,
+   data: PropTypes.array.isRequired,
+   handleModalOpen: PropTypes.func.isRequired,
+   handleModalClose: PropTypes.func.isRequired,
+   handleChangeInput: PropTypes.func.isRequired,
+   modalIsOpen: PropTypes.bool.isRequired,
+   loading: PropTypes.bool,
 }
 
 export default RoleManage;

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import RoleManage from './RoleManage';
 import GetData from '../../../containers/GetData'
+import { Context } from '../../../Context';
 
 const RoleManageContainer = () => {
 
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
+   const token = window.sessionStorage.getItem('token');
    const [modal, setModal] = useState(false);
-
+   const { userDeleted } = useContext(Context);
    // Save data in sessionStorage, after send all data with button save of section Roles
    const setSessionStorage = value => {
       try {
@@ -20,22 +22,6 @@ const RoleManageContainer = () => {
       setSessionStorage(e.target.checked)
    }
 
-   const deleteUser = () => {
-      window.console.log('pglo')
-      const getData = async () => {
-
-         try {
-            await fetch('url',{
-               method: 'DELETE',
-            });
-
-         } catch (error) {
-            window.console.log(error.message);
-         }
-      };
-      getData()
-   }
-
    // Manejo de modales
    const handleModalOpen = () => {
       setModal(true);
@@ -46,7 +32,7 @@ const RoleManageContainer = () => {
 
 
    return (
-      <GetData api={`${API}superAdmin/get-users`}>
+      <GetData api={`${API}superAdmin/getInvitedUsersFilter`} token={token} change={userDeleted}>
          {
             ({ loading, error, data }) => {
                if(error) return <p>¡Error!</p>
@@ -54,7 +40,6 @@ const RoleManageContainer = () => {
                   <RoleManage
                      loading={loading}
                      data={data}
-                     deleteUser={deleteUser}
                      handleModalOpen={handleModalOpen}
                      handleModalClose={handleModalClose}
                      handleChangeInput={handleChangeInput}

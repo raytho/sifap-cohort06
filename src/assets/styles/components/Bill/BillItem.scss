@@ -1,0 +1,69 @@
+@import '../../utils/Placeholder.scss';
+@import '../../utils/Mixin.scss';
+
+.Bill__item {
+   width: 99%;
+   height: 50px;
+   margin: 20px auto 5px;
+   display: flex;
+   align-items: center;
+   border-radius: 5px 100px 5px 5px;
+   box-shadow: 0 0 7px 0 rgba(3, 36, 35, 0.25);
+   input {
+      height: 30px;
+      border: none;
+      border-bottom: 1px solid var(--secundary-color);
+   }
+   label:nth-of-type(1) {
+      margin: 0 0 0 2%;
+      input {
+         width: 180px;
+      }
+   }
+   label:nth-of-type(2) {
+      margin: 0 0 0 3%;
+      input {
+         width: 80px;
+      }
+   }
+   label:nth-of-type(3) {
+      margin: 0 0 0 1%;
+      input {
+         width: 80px;
+         &[type=number]::-webkit-inner-spin-button,
+         &[type=number]::-webkit-outer-spin-button {
+            appearance: none;
+         }
+      }
+   }
+   label:nth-of-type(4) {
+      margin: 0 0 0 1%;
+      input {
+         width: 230px;
+      }
+   }
+   label:nth-of-type(5) {
+      margin: 0 0 0 3%;
+      input {
+         width: 60px;
+         &[type=number]::-webkit-inner-spin-button,
+         &[type=number]::-webkit-outer-spin-button {
+            height: 25px;
+         }
+      }
+   }
+   span {
+      width: 10%;
+      display: block;
+      text-align: center;
+      p {
+         width: 100%;
+      }
+   }
+   button {
+      font-size: var(--font-small);
+      font-weight: 600;
+      background-color: transparent;
+      @extend %reset-btn;
+   }
+}
