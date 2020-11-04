@@ -29,7 +29,36 @@ const invoiceMx = {
       quantity: 1,
       unit: "Pieza",
       amount: 1000.11
+    },
+    {
+      item: "USB_EXT",
+      description: "USB Cable Extender",
+      quantity: 1,
+      unit: "Pieza",
+      amount: 1000.11
+    },
+    {
+      item: "USB_EXT",
+      description: "USB Cable Extender",
+      quantity: 1,
+      unit: "Pieza",
+      amount: 1000.11
+    },
+    {
+      item: "USB_EXT",
+      description: "USB Cable Extender",
+      quantity: 1,
+      unit: "Pieza",
+      amount: 1000.11
+    },
+    {
+      item: "USB_EXT",
+      description: "USB Cable Extender",
+      quantity: 1,
+      unit: "Pieza",
+      amount: 1000.11
     }
+    
   ],
   currency: "MXN Peso Mexicano",
   subtotal: 8000.46,
