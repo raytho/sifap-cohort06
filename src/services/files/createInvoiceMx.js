@@ -105,12 +105,12 @@ function generateInvoiceTable(doc, invoice) {
     generateTableRow(
       doc,
       position,
-      item.item,
-      item.description,
-      formatCurrency(item.amount),
+      item.id,
+      item.product,
+      formatCurrency(item.price),
       item.quantity,
       item.unit,
-      formatCurrency(item.amount * item.quantity)
+      formatCurrency(item.price * item.quantity)
     );
 
     generateHr(doc, position + 10);
@@ -216,8 +216,8 @@ function generateFooter(doc, invoice) {
 function generateTableRow(
   doc,
   y,
-  item,
-  description,
+  id,
+  product,
   unitCost,
   quantity,
   unit,
@@ -225,8 +225,8 @@ function generateTableRow(
 ) {
   doc
     .fontSize(9)
-    .text(item, 50, y)
-    .text(description, 130, y,)
+    .text(id, 50, y)
+    .text(product, 130, y,)
     .text(unitCost, 250, y, { width: 90, align: "center"})
     .text(quantity, 330, y, { width: 90, align: "center"})
     .text(unit, 400, y, { width: 90, align: "center" })

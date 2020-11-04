@@ -17,46 +17,46 @@ const invoiceMx = {
   },
   products: [
     {
-      item: "TC 100",
-      description: "Toner Cartridge",
+      id: "TC 100",
+      product: "Toner Cartridge",
       quantity: 2,
       unit: "Pieza",
-      amount: 3000.12
+      price: 3000.12
     },
     {
-      item: "USB_EXT",
-      description: "USB Cable Extender",
+      id: "USB_EXT",
+      product: "USB Cable Extender",
       quantity: 1,
       unit: "Pieza",
-      amount: 1000.11
+      price: 1000.11
     },
     {
-      item: "USB_EXT",
-      description: "USB Cable Extender",
+      id: "USB_EXT",
+      product: "USB Cable Extender",
       quantity: 1,
       unit: "Pieza",
-      amount: 1000.11
+      price: 1000.11
     },
     {
-      item: "USB_EXT",
-      description: "USB Cable Extender",
+      id: "USB_EXT",
+      product: "USB Cable Extender",
       quantity: 1,
       unit: "Pieza",
-      amount: 1000.11
+      price: 1000.11
     },
     {
-      item: "USB_EXT",
-      description: "USB Cable Extender",
+      id: "USB_EXT",
+      product: "USB Cable Extender",
       quantity: 1,
       unit: "Pieza",
-      amount: 1000.11
+      price: 1000.11
     },
     {
-      item: "USB_EXT",
-      description: "USB Cable Extender",
+      id: "USB_EXT",
+      product: "USB Cable Extender",
       quantity: 1,
       unit: "Pieza",
-      amount: 1000.11
+      price: 1000.11
     }
     
   ],

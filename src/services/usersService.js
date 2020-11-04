@@ -7,6 +7,7 @@ const config = require("../config");
 const invoiceMxData = require("../utils/mocks/invoice");
 const { createInvoice } = require("../services/files/createInvoiceMx");
 const { uploadPdf } = require("../services/storage/profilePicturesUpload");
+const numberToLetter = require("../lib/numbersToLetter");
 const multer = require("multer");
 
 const TABLE_PRODUCTS = "product";
@@ -412,51 +413,72 @@ class UsersService {
     }
   }
 
-  async generateInvoceMx(invoiceData, userData, res) {
+  async generateInvoceMx(invoiceData, userData) {
     const {
-      firstName,
-      phoneNumber,
-      email,
+      client,
       products,
-      clientName,
-      clientFiscalIdentifier,
-      clientAdress,
       currency,
       cfdiUse,
       paymentMethod,
     } = invoiceData;
-    const pdfInvoice = await createInvoice(invoiceMxData, "invoice.pdf");
-    const uploadeInvoice = await uploadPdf(pdfInvoice);
-    console.log(uploadeInvoice);
-
-    //ESTÁ OK
+    await this.upsertOrUpdateClient(client.fiscalId, client, userData.userId);
     await this.insertProducts(products);
     const amount = this.calcTotalAmount(products);
     const IVA = 0.16;
     const tax = +this.calcTax(amount, IVA).toFixed(2);
     const fiscalUUID = this.generateHexUUID();
     const fiscalTax = await this.generateFiscalTax(userData.idCountry);
+    const totalWithLetter= numberToLetter(amount + tax);
+    const emitterData = await this.mysqlLib.get("companyName, fiscalId", TABLE_FISCAL_DATA, "id", userData.fiscalId);
+    const now = new Date();
+    const satCertNumber = customAlphabet("000001234567589", 20);
+    const digitalSingCfdi = "ZCDwrNgcG0bCgvVi8HN5pmPfIk/iyRCKnkwIKLox9uHOf14unlPuKv7OHU6uVpGDI+W0cGfkvAdxh8sBY6b7NmBwfvLq7CbYT088c6phJLm7zuiYJB+ngJ5o0v0Fs8QgBFIxn5quLf4739z3Zbe0J/4v2bAJg2oNp1qECq8w4e1dcIw14SxTGCtJDOfj9QPQOoOFdt6EpjG2544eKn4P1ljx9OGg0kt6w/CDDofvXGr93Zow3mg3yolW8FhlQny8xdX1YaQFDwrKmKEw6UGP6Nempt+mtRVJWQzvGZGD9iTaM6CdCfxfTpnmtCpZCF60KSy1nnYu+VUfGnaNGZMd2Q==";
+    const satDigitalSign = "hNl+BdleVrXeAMgtTeKADtcqjaSylq3FUjYUmDDhEnYVDEsBfEO/ZNkP0f7NtEA7o5lY9AIS5OXJU8HaojhKri63djPzoxHGBXDjYzvTIlUgpx0ZI3JhDz+qjbWLaTIOddQZ80ElCTyEToofbB4LPg845X/LMNIN3d2h8amVdxotF0/ZWIGF3x0JeEssest6VvJ5HNSQYD8bxR3/CXQKK2670husLzBXKAYY2Twucd22V4FCIRNaUAq80/+LtQRlvC1Zzv+3o5SPm2GevLVMN67iawr6nk3tRJyoN/pfjtmNLyqyk6bpBvIy+JwMO+upTc3z1DD9OP+PSsWwQbtLOQ==";
+    const originalChain= "||1.1|B1C48A08-56BF-4B3A-BE81-2D7500AC29DA|2020-10-26T15:20:15|SVT110323827|ZCDwrNgcG0bCgvVi8HN5pmPfIk/iyRCKnkwIKLox9uHOf14unlPuKv7OHU6uVpGDI+W0cGfkvAdxh8sBY6b7NmBwfvLq7CbYT088c6phJLm7zuiYJB+ngJ5o0v0Fs8QgBFIxn5quLf4739z3Zbe0J/4v2bAJg2oNp1qECq8w4e1dcIw14SxTGCtJDOfj9QPQOoOFdt6EpjG2544eKn4P1ljx9OGg0kt6w/CDDofvXGr93Zow3mg3yolW8FhlQny8xdX1YaQFDwrKmKEw6UGP6Nempt+mtRVJWQzvGZGD9iTaM6CdCfxfTpnmtCpZCF60KSy1nnYu+VUfGnaNGZMd2Q==|00001000000413073350||";
+    delete products.description;
     const valuesObj = {
-      userFirstName: firstName,
-      userFiscalId: clientFiscalIdentifier,
-      userPhoneNumber: phoneNumber,
-      userEmail: email,
-      contactFiscalId: clientFiscalIdentifier,
-      userAddress: clientAdress,
-      contactFisrtName: clientName,
+      emitter: {
+        name: emitterData[0].companyName,
+        address: "",
+        fiscalId: emitterData[0].fiscalId,
+      },
+      client: {
+        name:client.fullName,
+        address: client.fiscalAddress,
+        fiscalId: client.fiscalId
+      },
       currency: currency,
-      methodPayment: paymentMethod,
-      taxReceiptNumber: fiscalTax,
+      wayToPay: paymentMethod || "Efectivo",
+      folio: fiscalTax,
+      logoUrl: "https://i.imgur.com/FjzAcjI.png",
+      subtotal: amount,
+      taxes: tax,
+      total: (amount + tax),
+      totalWithLetter,
+      fiscalFolio: fiscalUUID,
+      products,
+      cfdiUse,
+      paymentMethod: "Pago en una sola exhibición",
+      createdAt: now,
+      satCertNumber: satCertNumber(),
+      serialNumberCertEmiter: satCertNumber(),
+      dateOfCertification: now,
+      expeditionPlace: "24118",
+      digitalSingCfdi,
+      satDigitalSign,
+      originalChain,
+      certProvider: "SVT110323827",
     };
+    console.log(valuesObj);
+    const pdfInvoice = await createInvoice(valuesObj);
+    const uploadeInvoice = await uploadPdf(pdfInvoice);
+    
+    // const insertedTaxReceipt = await this.mysqlLib.singleUpsert(
+    //   TABLE_TAX_RECEIPT,
+    //   valuesObj
+    // );
 
-    const insertedTaxReceipt = await this.mysqlLib.singleUpsert(
-      TABLE_TAX_RECEIPT,
-      valuesObj
-    );
-    res.status(200).json({
-      message: insertedTaxReceipt.insertId,
-      error: null,
-    });
+    return uploadeInvoice;
   }
 
   async generateInvoceCol(invoiceData, userData) {
@@ -513,15 +535,9 @@ class UsersService {
     return amount * taxValue;
   }
 
-  calcTotalAmount(products) {
-    const objProducts = [];
-
-    for (let product in products) {
-      objProducts.push(products[product]);
-    }
-
-    const reducer = (product) => product.qty * product.price;
-    const total = objProducts.map(reducer);
+  calcTotalAmount(products) {   
+    const reducer = (product) => product.quantity * product.price;
+    const total = products.map(reducer);
     const totalAmount = total.reduce(
       (accum, currentValue) => accum + currentValue
     );
@@ -582,76 +598,43 @@ class UsersService {
   }
 
   async getClient(clientId, res) {
-    if (!clientId) {
-      res.status(400).json({
-        message: "Error interno",
-      });
-    } else {
-      const clientData = await this.mysqlLib.get(
-        "*",
-        TABLE_CLIENTS,
-        "clientId",
-        clientId
-      );
-      if (clientData.length) {
-        res.status(200).json({
-          clients: clientData,
-        });
-      } else {
-        res.status(500).json({
-          message: "Cliente no encontrado",
-          clients: clientData,
-        });
-      }
-    }
+    const clientData = await this.mysqlLib.get(
+      "*",
+      TABLE_CLIENTS,
+      "clientId",
+      clientId
+    );
+    return clientData;
   }
 
-  async upsertClients(userId, clientData, res) {
-    if (!userId || !clientData) {
-      res.status(400).json({
-        message: "Error interno",
-      });
-    } else {
-      clientData.clientId = nanoid(4);
-      clientData.userId = userId;
-      const upsertedClient = await this.mysqlLib.singleUpsert(
-        TABLE_CLIENTS,
-        clientData
-      );
-      if (upsertedClient) {
-        res.status(200).json({
-          message: "Cliente agregado correctamente",
-        });
-      } else {
-        res.status(500).json({
-          message: "Error al crear cliente",
-        });
-      }
-    }
+  async getClientByFiscalID(fiscalId) {
+    const clientData = await this.mysqlLib.get(
+      "*",
+      TABLE_CLIENTS,
+      "fiscalId",
+      fiscalId
+    );
+    return clientData;
+  }
+
+  async upsertClients(userId, clientData) {
+    clientData.clientId = nanoid(4);
+    clientData.userId = userId;
+    const upsertedClient = await this.mysqlLib.singleUpsert(
+      TABLE_CLIENTS,
+      clientData
+    );
+    return upsertedClient;
   }
 
   async updateClient(clientId, clientData, res) {
-    if (!clientId || !clientData) {
-      res.status(400).json({
-        message: "Error interno",
-      });
-    } else {
-      const upsertedClient = await this.mysqlLib.update(
-        TABLE_CLIENTS,
-        clientData,
-        "clientId",
-        clientId
-      );
-      if (upsertedClient) {
-        res.status(200).json({
-          message: "Cliente actualizado correctamente",
-        });
-      } else {
-        res.status(500).json({
-          message: "Error al actualizar cliente",
-        });
-      }
-    }
+    const upsertedClient = await this.mysqlLib.update(
+      TABLE_CLIENTS,
+      clientData,
+      "clientId",
+      clientId
+    );
+    return upsertedClient;
   }
 
   async deleteClient(clientId, res) {
@@ -677,6 +660,15 @@ class UsersService {
     }
   }
 
+  async upsertOrUpdateClient(clientId, clientData, userId) {
+    const client = await this.getClientByFiscalID(clientId);
+  
+    if (client.length) {
+      await this.updateClient(client[0].clientId, clientData );
+    } else {
+      await this.upsertClients(userId, clientData);
+    }
+  }
   generateHexUUID() {
     const nanoidOne = customAlphabet(HEX_CHARACTER, 8);
     const nanoidTwo = customAlphabet(HEX_CHARACTER, 4);
