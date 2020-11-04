@@ -358,7 +358,7 @@ function userView(app) {
   });
 
   router.post("/invoices", async (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, (error, user) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
       try {
         if (error || !user) {
           res.status(500).json({
@@ -367,7 +367,9 @@ function userView(app) {
         } else {
           const invoiceInputData = req.body;
           const userData = user;
+
           switch (user.country) {
+<<<<<<< Updated upstream
           case "MEX":
             usersService.generateInvoceMx(invoiceInputData, userData, res);
             break;
@@ -379,9 +381,33 @@ function userView(app) {
             break;
           default:
             usersService.sendInvalidResponse(res);
+=======
+            case "MEX":
+              response = await usersService.generateInvoceMx(
+                invoiceInputData,
+                userData,
+                res
+              );
+              break;
+            case "COL":
+              return usersService.generateInvoceCol(
+                invoiceInputData,
+                userData,
+                res
+              );
+            case "DOM":
+              return usersService.generateInvoceRd(
+                invoiceInputData,
+                userData,
+                res
+              );
+            default:
+              usersService.sendInvalidResponse(res);
+>>>>>>> Stashed changes
           }
         }
       } catch (err) {
+        console.log(err);
         next(error);
       }
     })(req, res, next);
