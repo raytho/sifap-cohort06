@@ -80,7 +80,7 @@ function generateCustomerInformation(doc, invoice) {
 
 function generateInvoiceTable(doc, invoice) {
   let i;
-  const invoiceTableTop = 300;
+  const invoiceTableTop = axisY(300);
 
   doc.font("Helvetica-Bold")
     .fontSize(10);

@@ -441,7 +441,6 @@ class UsersService {
       userEmail: email,
       contactFiscalId: clientFiscalIdentifier,
       userAddress: clientAdress,
-      userAddress: clientName,
       currency: currency,
       methodPayment: paymentMethod,
       taxReceiptNumber: fiscalTax,
@@ -701,7 +700,7 @@ class UsersService {
     const charChange = String.fromCharCode(
       lastTaxReceipt.charCodeAt(lastTaxReceipt - 1) + 1
     );
-    newTaxReceiptGenerated = lastTaxReceipt.replace(
+    const newTaxReceiptGenerated = lastTaxReceipt.replace(
       lastTaxReceipt.substring(
         lastTaxReceipt.length - 1,
         lastTaxReceipt.length
