@@ -6,12 +6,14 @@ function fetchRemoteImage(url){
 }
 
 async function createInvoice(invoice) {
-  let doc = new PDFDocument({ size: "A4", margin: 50 });
-
+  let doc = new PDFDocument({ size: "A4", margin: 40 });
   await generateHeader(doc, invoice);
   generateCustomerInformation(doc, invoice);
+
   generateInvoiceTable(doc, invoice);
-  generateFooter(doc);
+ 
+ 
+  generateFooter(doc, invoice);
 
   doc.end();
   return doc;
@@ -50,11 +52,11 @@ async function generateHeader(doc, invoice) {
 }
 
 function generateCustomerInformation(doc, invoice) {
-  doc.fillColor("#444444").fontSize(20).text("Cliente", 50, 180);
+  doc.fillColor("#444444").fontSize(12).text("Cliente", 50, 195);
 
   generateHr(doc, 210);
 
-  const customerInformationTop = 230;
+  const customerInformationTop = 215;
 
   doc
     .fontSize(10)
@@ -73,14 +75,16 @@ function generateCustomerInformation(doc, invoice) {
     
     .moveDown();
 
-  generateHr(doc, 280);
+  generateHr(doc, 260);
 }
 
 function generateInvoiceTable(doc, invoice) {
   let i;
-  const invoiceTableTop = 330;
+  const invoiceTableTop = 300;
 
-  doc.font("Helvetica-Bold");
+  doc.font("Helvetica-Bold")
+    .fontSize(10);
+  
   generateTableRow(
     doc,
     invoiceTableTop,
@@ -102,10 +106,10 @@ function generateInvoiceTable(doc, invoice) {
       position,
       item.item,
       item.description,
-      formatCurrency(item.amount / item.quantity),
+      formatCurrency(item.amount),
       item.quantity,
       item.unit,
-      formatCurrency(item.amount)
+      formatCurrency(item.amount * item.quantity)
     );
 
     generateHr(doc, position + 20);
@@ -142,18 +146,52 @@ function generateInvoiceTable(doc, invoice) {
     "",
     "Importe total",
     "",
-    formatCurrency(invoice.total + invoice.taxes)
+    formatCurrency(invoice.total)
   );
   doc.font("Helvetica");
 }
 
-function generateFooter(doc) {
+function generateFooter(doc, invoice) {
   doc
+    .fontSize(8)
+    .font("Helvetica-Bold")
+    .text("Importe con letra:", 50, 620)
+    .font("Helvetica")
+    .text(invoice.totalWithLetter, 150, 620)
+    .font("Helvetica-Bold")
+    .text("Tipo de comprobante:", 50, 630)
+    .font("Helvetica")
+    .text("I - Ingreso", 150, 630)
+    .font("Helvetica-Bold")
+    .text("Método de pago:", 50, 640)
+    .font("Helvetica")
+    .text(invoice.paymentMethod, 150, 640)
+    .font("Helvetica-Bold")
+    .text("Forma de pago:", 50, 650)
+    .font("Helvetica")
+    .text(invoice.wayToPay, 150, 650)
+    .font("Helvetica-Bold")
+    .text("SELLO DIGITAL DEL CFDI:", 150, 660)
+    .font("Helvetica")
+    .fontSize(6)
+    .text(invoice.digitalSingCfdi, 150, 670)
+    .fontSize(8)
+    .font("Helvetica-Bold")
+    .text("SELLO DIGITAL DEL SAT:", 150, 700)
+    .font("Helvetica")
+    .fontSize(6)
+    .text(invoice.satDigitalSign, 150, 710)
+    .fontSize(8)
+    .font("Helvetica-Bold")
+    .text("CADENA ORIGINAL DEL COMPLEMENTO DE CERTIFICACIÓN DIGITAL DEL SAT:", 150, 740)
+    .font("Helvetica")
+    .fontSize(6)
+    .text(invoice.originalChain, 150, 750)
     .fontSize(10)
     .text(
       "Este documento es NO una representación impresa de un CFDI..",
       50,
-      780,
+      790,
       { align: "center", width: 500 }
     );
 }
@@ -182,10 +220,20 @@ function generateHr(doc, y) {
   doc.strokeColor("#aaaaaa").lineWidth(1).moveTo(50, y).lineTo(550, y).stroke();
 }
 
-function formatCurrency(cents) {
-  return "$" + (cents / 100).toFixed(2);
+function formatCurrency(amount) {
+  return "$" + (amount).toFixed(2);
 }
 
+function addYAxe() {
+  let i = 0;
+  const add = (amount) => {
+    return i += amount;
+  };
+  return add;
+}
+
+const axisY = addYAxe();
+ 
 
 module.exports = {
   createInvoice,
