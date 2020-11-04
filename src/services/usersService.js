@@ -326,9 +326,13 @@ class UsersService {
     }
 
     const idCountry =
-      user.country === "COL" ? 1
-        : user.country === "MEX" ? 2
-          : user.country === "DOM" ? 3 : 0;
+      user.country === "COL"
+        ? 1
+        : user.country === "MEX"
+        ? 2
+        : user.country === "DOM"
+        ? 3
+        : 0;
     const userProfile = {
       phoneNumber: user.phoneNumber,
       firstName: user.firstName,
@@ -363,9 +367,13 @@ class UsersService {
 
   async upsertFiscalData(data, id) {
     const idCountry =
-      data.country === "COL" ? 1
-        : data.country === "MEX" ? 2
-          : data.country === "DOM" ? 3 : 0;
+      data.country === "COL"
+        ? 1
+        : data.country === "MEX"
+        ? 2
+        : data.country === "DOM"
+        ? 3
+        : 0;
     delete data.firstName;
     delete data.lastName;
     delete data.dateOfBirth;
@@ -426,7 +434,7 @@ class UsersService {
     const pdfInvoice = await createInvoice(invoiceMxData, "invoice.pdf");
     const uploadeInvoice = await uploadPdf(pdfInvoice);
     console.log(uploadeInvoice);
-    
+
     //ESTÁ OK
     await this.insertProducts(products);
     const amount = this.calcTotalAmount(products);
@@ -441,7 +449,7 @@ class UsersService {
       userEmail: email,
       contactFiscalId: clientFiscalIdentifier,
       userAddress: clientAdress,
-      userAddress: clientName,
+      contactFisrtName: clientName,
       currency: currency,
       methodPayment: paymentMethod,
       taxReceiptNumber: fiscalTax,
@@ -701,7 +709,8 @@ class UsersService {
     const charChange = String.fromCharCode(
       lastTaxReceipt.charCodeAt(lastTaxReceipt - 1) + 1
     );
-    newTaxReceiptGenerated = lastTaxReceipt.replace(
+
+    const newTaxReceiptGenerated = lastTaxReceipt.replace(
       lastTaxReceipt.substring(
         lastTaxReceipt.length - 1,
         lastTaxReceipt.length

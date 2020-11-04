@@ -73,86 +73,86 @@ function userView(app) {
 
   router.post("/tax-receipt", async (req, res, next) => {
     validationHandler(fiscalDataSchema),
-    passport.authenticate("jwt", { session: false }, async (error, user) => {
-      try {
-        if (error || !user) {
-          res.status(500).json({
-            message: "No autorizado",
-          });
-        } else {
-          const { userId } = user;
-          const userData = req.body;
-          const cf = userData.cf;
-          const cfName = userData.cfName;
-          const increment = userData.increment;
-          const fiscalData = await usersService.upsertFiscalData(
-            userData,
-            userId
-          );
-          if (fiscalData) {
-            res.status(200).json({
-              message: {
-                country: user.country,
-                ...userData,
-                cf,
-                cfName,
-                increment,
-                status: "Usuario configurado",
-              },
+      passport.authenticate("jwt", { session: false }, async (error, user) => {
+        try {
+          if (error || !user) {
+            res.status(500).json({
+              message: "No autorizado",
             });
           } else {
-            res.status(500).json({
-              message: "Error al realizar la configuración del usuario",
-            });
+            const { userId } = user;
+            const userData = req.body;
+            const cf = userData.cf;
+            const cfName = userData.cfName;
+            const increment = userData.increment;
+            const fiscalData = await usersService.upsertFiscalData(
+              userData,
+              userId
+            );
+            if (fiscalData) {
+              res.status(200).json({
+                message: {
+                  country: user.country,
+                  ...userData,
+                  cf,
+                  cfName,
+                  increment,
+                  status: "Usuario configurado",
+                },
+              });
+            } else {
+              res.status(500).json({
+                message: "Error al realizar la configuración del usuario",
+              });
+            }
           }
+        } catch (error) {
+          next(error);
         }
-      } catch (error) {
-        next(error);
-      }
-    })(req, res, next);
+      })(req, res, next);
   });
 
   router.post("/tax-identifier", async (req, res, next) => {
     validationHandler(fiscalDataSchema),
-    passport.authenticate("jwt", { session: false }, async (error, user) => {
-      try {
-        if (error || !user) {
-          res.status(500).json({
-            message: "No autorizado",
-          });
-        } else {
-          const { userId } = user;
-          const userData = req.body;
-          const { firstName, lastName, dateOfBirth, country } = userData;
-          const updatedUserData = await usersService.updateUserData(
-            userData,
-            userId
-          );
-          const fiscalData = await usersService.upsertFiscalData(
-            userData,
-            userId
-          );
-          if (fiscalData && updatedUserData) {
-            res.status(200).json({
-              message: {
-                firstName,
-                lastName,
-                dateOfBirth,
-                country,
-                ...userData,
-                status: "Usuario configurado",
-              },
+      passport.authenticate("jwt", { session: false }, async (error, user) => {
+        try {
+          if (error || !user) {
+            res.status(500).json({
+              message: "No autorizado",
             });
           } else {
-            res.status(500).json({
-              message: "Error al realizar la configuración del usuario",
-            });
+            const { userId } = user;
+            const userData = req.body;
+            const { firstName, lastName, dateOfBirth, country } = userData;
+            const updatedUserData = await usersService.updateUserData(
+              userData,
+              userId
+            );
+            const fiscalData = await usersService.upsertFiscalData(
+              userData,
+              userId
+            );
+            if (fiscalData && updatedUserData) {
+              res.status(200).json({
+                message: {
+                  firstName,
+                  lastName,
+                  dateOfBirth,
+                  country,
+                  ...userData,
+                  status: "Usuario configurado",
+                },
+              });
+            } else {
+              res.status(500).json({
+                message: "Error al realizar la configuración del usuario",
+              });
+            }
           }
+        } catch (error) {
+          next(error);
         }
-      } catch (error) {
-        next(error);
-      }
-    })(req, res, next);
+      })(req, res, next);
   });
 
   router.put("/data/profile", async (req, res, next) => {
@@ -369,19 +369,6 @@ function userView(app) {
           const userData = user;
 
           switch (user.country) {
-<<<<<<< Updated upstream
-          case "MEX":
-            usersService.generateInvoceMx(invoiceInputData, userData, res);
-            break;
-          case "COL":
-            usersService.generateInvoceCol(invoiceInputData, userData, res);
-            break;
-          case "DOM":
-            usersService.generateInvoceRd(invoiceInputData, userData, res);
-            break;
-          default:
-            usersService.sendInvalidResponse(res);
-=======
             case "MEX":
               response = await usersService.generateInvoceMx(
                 invoiceInputData,
@@ -403,7 +390,6 @@ function userView(app) {
               );
             default:
               usersService.sendInvalidResponse(res);
->>>>>>> Stashed changes
           }
         }
       } catch (err) {
