@@ -95,7 +95,7 @@ function generateInvoiceTable(doc, invoice) {
     "Unidad",
     "Importe"
   );
-  generateHr(doc, invoiceTableTop + 20);
+  generateHr(doc, axisY(20));
   doc.font("Helvetica");
 
   for (i = 0; i < invoice.products.length; i++) {
