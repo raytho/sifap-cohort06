@@ -326,8 +326,10 @@ class UsersService {
     }
 
     const idCountry =
-      user.country === "COL" ? 1
-        : user.country === "MEX" ? 2
+      user.country === "COL"
+        ? 1
+        : user.country === "MEX"
+          ? 2
           : user.country === "DOM" ? 3 : 0;
     const userProfile = {
       phoneNumber: user.phoneNumber,
@@ -426,7 +428,7 @@ class UsersService {
     const pdfInvoice = await createInvoice(invoiceMxData, "invoice.pdf");
     const uploadeInvoice = await uploadPdf(pdfInvoice);
     console.log(uploadeInvoice);
-    
+
     //ESTÁ OK
     await this.insertProducts(products);
     const amount = this.calcTotalAmount(products);
@@ -441,6 +443,7 @@ class UsersService {
       userEmail: email,
       contactFiscalId: clientFiscalIdentifier,
       userAddress: clientAdress,
+      contactFisrtName: clientName,
       currency: currency,
       methodPayment: paymentMethod,
       taxReceiptNumber: fiscalTax,
