@@ -469,7 +469,6 @@ class UsersService {
       originalChain,
       certProvider: "SVT110323827",
     };
-    console.log(valuesObj);
     const pdfInvoice = await createInvoice(valuesObj);
     const uploadeInvoice = await uploadPdf(pdfInvoice);
     
