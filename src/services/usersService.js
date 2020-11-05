@@ -148,7 +148,7 @@ class UsersService {
       subject: "Sifap Password Reset",
       text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.
         Please click on the following link, or paste this into your browser to complete the process:
-        http://${request.host}/#/newpassword/${request.token} 
+        https://sifap.netlify.app/newpassword/${request.token} 
         If you did not request this, please ignore this email and your password will remain unchanged.`,
     };
 
@@ -220,6 +220,34 @@ class UsersService {
     });
   }
 
+
+  async sendinvoiceToMail(email, invoice) {
+    const smtpTransport = nodemailer.createTransport({
+      service: config.mailProvider,
+      auth: {
+        user: config.mailAccount,
+        pass: config.mailPassword,
+      },
+    });
+
+    const mailOptions = {
+      to: email,
+      from: "passwordreset@demo.com",
+      subject: "Tienes una nueva factura de sifap",
+      text: `Hola,
+      Por favor accede al siguiente link para descargar tu factura:
+      ${invoice}
+      `,
+    };
+
+    smtpTransport.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.error(error);
+      } else {
+        return info.response;
+      }
+    });
+  }
   async createAccoutSetting(account) {
     const response = await this.mysqlLib.addAccountSetting(account);
     return response;
@@ -495,6 +523,7 @@ class UsersService {
     };
     await this.mysqlLib.singleUpsert( TABLE_TAX_RECEIPT, invoiceSavedData);
 
+    await this.sendinvoiceToMail(client.email, uploadedInvoice);
     return uploadedInvoice;
   }
 
