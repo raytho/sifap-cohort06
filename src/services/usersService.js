@@ -443,7 +443,7 @@ class UsersService {
       products[product].quantity = Number(products[product].quantity);
       products[product].price = Number(products[product].price);
     }
-    console.log(products);
+  
     const invoiceInputData = {
       emitter: {
         name: emitterData[0].companyName,
@@ -477,7 +477,7 @@ class UsersService {
       originalChain,
       certProvider: "SVT110323827",
     };
-    console.log(invoiceInputData);
+ 
     const pdfInvoice = await createInvoice(invoiceInputData);
     const uploadedInvoice = await uploadPdf(pdfInvoice);
     
@@ -540,11 +540,11 @@ class UsersService {
    
 
     for (let product in products) {
-      const { quantity, ...filteredProduct } = products[product];
+      const { quantity, total, ...filteredProduct } = products[product];
       arrayProducts.push(Object.values(filteredProduct));
 
     }
-    await this.mysqlLib.upsert(TABLE_PRODUCTS, "id, name, description, unit, price", arrayProducts);
+    await this.mysqlLib.upsert(TABLE_PRODUCTS, "description, id, price, name, unit", arrayProducts);
   }
 
   calcTax(amount, taxValue) {
