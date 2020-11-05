@@ -168,7 +168,7 @@ const Bill = (props) => {
                            <label htmlFor='paymentMethod'>
                                  Forma de pago:
                                  <select name='paymentMethod' onChange={handleInput}>
-                                    <option value=''>Form de pago</option>
+                                    {/* <option value=''>Forma de pago</option> */}
                                     <option value='01'>Efectivo</option>
                                     <option value='28'>Tarjeta de débito</option>
                                     <option value='04'>Tarjeta de crédito</option>
@@ -243,15 +243,15 @@ const Bill = (props) => {
                                  onChange={handleInput}
                               />
                               %
-                              <span>${ivaResult}</span>
+                              <span>${ivaResult.toFixed(2)}</span>
                            </label>
                            <p>
                               <span>Subtotal</span>
-                              <span>${subtotal}</span>
+                              <span>${subtotal.toFixed(2)}</span>
                            </p>
                            <p>
                               <span>Total</span>
-                              <span>${total}</span>
+                              <span>${total.toFixed(2)}</span>
                            </p>
                         </div>
                      </div>
@@ -291,7 +291,7 @@ Bill.propTypes = {
       PropTypes.string,
    ).isRequired,
    customers: PropTypes.objectOf(
-      PropTypes.array
+      PropTypes.any
    ),
    article: PropTypes.objectOf(
       PropTypes.any

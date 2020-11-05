@@ -487,7 +487,7 @@ const Profile = (props) => {
                            <p>{saved &&  'Se guardaron los cambios'}</p>
                            <p>{notSaved &&  'No se se guardaron los cambios'}</p>
                         </div>
-                        <button  type='submit'>Guardar</button>
+                        <button type='submit'>Guardar</button>
                      </div>
                   </div>
                </form>

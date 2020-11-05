@@ -1,0 +1,62 @@
+.History__panel {
+   margin: 100px 0 0 0;
+   input,
+   textarea,
+   select {
+      outline-color: var(--detail-color);
+   }
+}
+.History__header {
+   height: 200px;
+   position: relative;
+   background-color: var(--secundary-color);
+   border-radius: 5px 100px 0 0 ;
+   div {
+      width: 86%;
+      margin: 0 0 20px 0;
+      padding: 0  0 10px 0;
+      display: flex;
+      justify-content: space-around;
+   }
+   p {
+      padding: 16px 0 0 35px;
+      font-family: var(--font-text);
+      font-size: var(--font-small);
+      color: var(--white-color);
+   }
+}
+.History__main {
+   height: auto;
+   padding: 30px 35px 20px 35px;
+   position: relative;
+   top: -150px;
+   font-family: var(--font-text);
+   background-color: var(--white-color);
+   border-radius: 5px 100px 5px 5px;
+   box-shadow: 0 0 50px 0 rgba(3, 36, 35, .25);
+}
+
+.History__item-container {
+   height:  400px;
+   margin: 0 0 50px 0;
+   padding: 10px;
+   border-radius: 5px 50px 5px 5px;
+   box-shadow: inset 0 0 5px 1px rgba(3, 36, 35, .10);
+   overflow-y: scroll;
+   &::-webkit-scrollbar {
+      display: none;
+   }
+}
+.History__item {
+   margin: 0 0 10px 0;
+   display: flex;
+   border-radius: 5px 100px 5px 5px;
+   box-shadow: 0 0 7px 0 rgba(3, 36, 35, .25);
+   span {
+      width: 92%;
+      height: 50px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+   }
+}

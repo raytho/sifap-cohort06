@@ -23,15 +23,25 @@ const BillContainer = () => {
    const [formProduct, setFormProduct] = useState([]);
    const [itemProduct] = useState([]);
    const [loaderCustomer, setLoaderCustomer] = useState(true);
-   const [form, setValues] = useState({
-      comments: '',
-      ivaPorcent: 0,
-   });
+   const [form, setValues] = useState(
+      user?.country === 'MEX'
+      ?  {
+            comments: '',
+            ivaPorcent: 0,
+            paymentMethod: '01',
+            cfdiUse: ''
+         }
+      : {
+         comments: '',
+         ivaPorcent: 0,
+         paymentMethod: '01',
+      }
+   );
    const [client, setClient] = useState({
       fullName: '',
       fiscalId: '',
       email: '',
-      phoneNumber: ''
+      phoneNumber: '',
    });
    // Manage product item
    const [article, setArticle] = useState({
@@ -79,7 +89,7 @@ const BillContainer = () => {
          return i !== item
       }));
    }
-
+      window.console.log(form.paymentMethod.length)
    const validate = () => {
       let email;
       let fullName;
@@ -105,14 +115,14 @@ const BillContainer = () => {
       } else {
          setFiscalIdValidate(true)
       }
-      if(form.paymentMethod !== undefined) {
+      if(form.paymentMethod.length > 0 ) {
          setMethodPayValidate(false);
          paymentMethod = true;
       } else {
          setMethodPayValidate(true)
       }
       if (user?.country === 'MEX') {
-         if (form.cfdiUse !== undefined) {
+         if (form.cfdiUse.length > 0) {
             setCFDIValidate(false)
             CFDI = true;
          } else {

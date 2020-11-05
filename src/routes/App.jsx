@@ -6,10 +6,9 @@ import '../assets/styles/Global.scss';
 
 import Layout from '../components/Layout';
 import BillContainer from '../components/Bill/BillContainer';
-import History from '../components/History/History';
+import HistoryContainer from '../components/History/HistoryContainer';
 import Statistics from '../components/Statistics/Statistics';
 import RoleManageContainer from '../components/RoleManage/RoleManage/RoleManageContainer';
-import ManageCFiscales from '../components/ManageCFiscales/ManageCFiscales';
 import RoleDetailContainer from '../components/RoleManage/RoleDetail/RoleDetailContainer';
 import ProfileContainer from '../components/Profile/ProfileContainer';
 import Register from '../pages/Register';
@@ -37,27 +36,21 @@ const App = () => {
                      <>
                         <Layout>
                            <Route exact path='/emitirfacturas' component={BillContainer} />
-                           <Route exact path='/historial' component={History} />
+                           <Route exact path='/historial' component={HistoryContainer} />
                            <Route exact path='/estadisticas' component={Statistics} />
                            <Route exact path='/roles' component={RoleManageContainer} />
                            <Route exact path='/role-detail/:id' component={RoleDetailContainer} />
-                           <Route exact path='/cfiscales' component={ManageCFiscales} />
                            <Route exact path='/profile' component={ProfileContainer} />
                            <Route exact path='/cpaises' component={InitialConfigContainer} />
                         </Layout>
                      </>
                   ) : (
                      <>
-                     {/* Este va con '/login', así '/ 'es mientra tantos */}
                         <Route exact path='/' component={Login} />
                         <Route exact path='/register' component={Register} />
                         <Route exact path='/resetpassword' component={ResetPassword} />
                         <Route exact path='/newpassword/:id' component={NewPassword} />
                         <Route exact path='/tfauthentication' component={TFAuthentication} />
-                        {/* {
-                           TFA
-                           && <Route exact path='/tfauthentication' component={TFAuthentication} />
-                        } */}
                      </>
                   )
             }
