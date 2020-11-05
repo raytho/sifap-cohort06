@@ -486,7 +486,7 @@ class UsersService {
       clientId: clientId[0].clientId,
       subtotal: amount,
       taxes: tax,
-      currency,
+      currency: currency || "MXN",
       methodPayment: paymentMethod || "01",
       total: (amount + tax),
       emmiterId: userData.userId,
@@ -537,12 +537,9 @@ class UsersService {
 
   async insertProducts(products) {
     const arrayProducts = [];
-   
-
     for (let product in products) {
       const { quantity, total, ...filteredProduct } = products[product];
       arrayProducts.push(Object.values(filteredProduct));
-
     }
     await this.mysqlLib.upsert(TABLE_PRODUCTS, "description, id, price, name, unit", arrayProducts);
   }
