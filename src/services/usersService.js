@@ -503,10 +503,10 @@ class UsersService {
       products,
       cfdiUse,
       paymentMethod: "Pago en una sola exhibición",
-      createdAt: now,
+      createdAt: now.toLocaleString(),
       satCertNumber: satCertNumber(),
       serialNumberCertEmiter: satCertNumber(),
-      dateOfCertification: now,
+      dateOfCertification: now.toLocaleString(),
       expeditionPlace: "24118",
       digitalSingCfdi,
       satDigitalSign,
@@ -582,7 +582,7 @@ class UsersService {
   }
 
   calcTax(amount, taxValue) {
-    return amount * taxValue;
+    return amount * (taxValue/100);
   }
 
   calcTotalAmount(products) {   
