@@ -414,7 +414,7 @@ class UsersService {
   }
 
   async generateInvoceMx(invoiceData, userData) {
-    const {
+    let {
       client,
       products,
       currency,
@@ -422,6 +422,7 @@ class UsersService {
       paymentMethod,
       ivaPorcent,
     } = invoiceData;
+    ivaPorcent = Number(ivaPorcent);
 
     await this.upsertOrUpdateClient(client.fiscalId, client, userData.userId);
     await this.insertProducts(products);
@@ -439,7 +440,10 @@ class UsersService {
     const originalChain= `||1.1|${fiscalUUID}|${now}|SVT110323827|ZCDwrNgcG0bCgvVi8HN5pmPfIk/iyRCKnkwIKLox9uHOf14unlPuKv7OHU6uVpGDI+W0cGfkvAdxh8sBY6b7NmBwfvLq7CbYT088c6phJLm7zuiYJB+ngJ5o0v0Fs8QgBFIxn5quLf4739z3Zbe0J/4v2bAJg2oNp1qECq8w4e1dcIw14SxTGCtJDOfj9QPQOoOFdt6EpjG2544eKn4P1ljx9OGg0kt6w/CDDofvXGr93Zow3mg3yolW8FhlQny8xdX1YaQFDwrKmKEw6UGP6Nempt+mtRVJWQzvGZGD9iTaM6CdCfxfTpnmtCpZCF60KSy1nnYu+VUfGnaNGZMd2Q==|00001000000413073350||`;
     for (let product in products){
       delete products[product].description;
+      products[product].quantity = Number(products[product].quantity);
+      products[product].price = Number(products[product].price);
     }
+    console.log(products);
     const invoiceInputData = {
       emitter: {
         name: emitterData[0].companyName,
