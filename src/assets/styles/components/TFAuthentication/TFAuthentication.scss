@@ -16,6 +16,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      // @include media(tablet) {
+      //    width: 600px;
+      // }
+      // @include media(tablet-small) {
+      //    width: 600px;
+      // }
+      // @include media(cellphone) {
+      //    width: 600px;
+      // }
       p {
          color: red;
       }
@@ -28,6 +37,14 @@
             position: relative;
             border-bottom: 3px solid var(--main-color);
             border-left: 3px solid var(--main-color);
+            @include media(cellphone) {
+               width: 80px;
+               padding: 10px;
+            }
+            @include media(cellphone-small) {
+               width: 60px;
+               padding: 6px;
+            }
             input {
                width: 60px;
                height: 60px;
@@ -38,6 +55,11 @@
                background-color: var(--detail-color);
                border: none;
                outline-color: var(--detail-color);
+               @include media(cellphone-small) {
+                  width: 45px;
+                  height: 45px;
+                  top: -30px;
+               }
             }
          }
          & > div:nth-of-type(6) {
@@ -49,8 +71,14 @@
          margin: 100px 0 0 0;
          display: flex;
          justify-content: space-around;
+         @include media(cellphone-small) {
+            margin: 60px 0 0 0;
+         }
          button {
-            @include btn(150px, 50px, --font-small)
+            @include media(cellphone-small) {
+               @include btn(140px, 45px, --font-smaller);
+            }
+            @include btn(150px, 50px, --font-small);
          }
       }
    }

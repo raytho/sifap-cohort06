@@ -3,48 +3,76 @@
 
 .Bill__item-added {
    width: 99%;
-   height: 50px;
+   height: auto;
+   padding: 10px 0;
    margin: 20px auto 5px;
    display: flex;
    align-items: center;
    border-radius: 5px 100px 5px 5px;
    box-shadow: 0 0 7px 0 rgba(3, 36, 35, 0.25);
    div:nth-of-type(1) {
+      width: 16%;
       margin: 0 0 0 2%;
       p {
-         width: 180px;
+         width: 100%;
+         word-wrap: break-word;
+         overflow-wrap: break-word;
       }
    }
    div:nth-of-type(2) {
+      width: 6.5%;
       margin: 0 0 0 3%;
       p {
-         width: 80px;
+         width: 100%;
+         text-align: center;
       }
    }
    div:nth-of-type(3) {
-      margin: 0 0 0 1%;
+      width: 9%;
+      margin: 0 0 0 2%;
       p {
-         width: 80px;
+         width: 100%;
+         text-align: center;
       }
    }
    div:nth-of-type(4) {
-      margin: 0 0 0 1%;
+      width: 20%;
+      margin: 0 0 0 2%;
       p {
-         width: 230px;
+         width: 100%;
+         display: block;
+         word-wrap: break-word;
+         overflow-wrap: break-word;
       }
    }
    div:nth-of-type(5) {
+      width: 6.5%;
       margin: 0 0 0 3%;
       p {
-         width: 60px;
+         width: 100%;
+         display: block;
+         text-align: center;
+      }
+   }
+   div:nth-of-type(6) {
+      width: 6%;
+      margin: 0 0 0 4%;
+      p {
+         width: 100%;
+         display: block;
+         text-align: center;
+         word-wrap: break-word;
+         overflow-wrap: break-word;
       }
    }
    span {
-      width: 10%;
+      width: 12%;
       display: block;
       text-align: center;
+      margin: 0 0 0 2%;
       p {
          width: 100%;
+         display: block;
       }
    }
    button {

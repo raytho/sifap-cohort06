@@ -35,6 +35,10 @@
       justify-content: space-around;
       button {
          @include btn(120px, 40px, --font-smallest);
+         a {
+            color: var(--white-color);
+            padding: 13px 20px;
+         }
       }
    }
 }

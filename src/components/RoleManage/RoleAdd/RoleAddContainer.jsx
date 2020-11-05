@@ -1,16 +1,15 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable consistent-return */
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types'
-import { Context } from '../../../Context';
 import RoleAddCtrl from './RoleAddCtrl';
 
 const RoleAddContainer = ({ dataLength }) => {
 
    const RegExEmail = /^(([^<>()\\[\]\\.,;:\s@”]+(\.[^<>()\\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
    const token = window.sessionStorage.getItem('token');
-   const API = 'https://ancient-fortress-28096.herokuapp.com/api/'
-   const { userData } = useContext(Context);
+   const API = 'https://ancient-fortress-28096.herokuapp.com/api/';
+   const user = JSON.parse(window.sessionStorage.getItem('user'));
    const [modal, setModal] = useState(false);
    const [emailValidate, setEmailValidate] = useState(false);
    const [roleValidate, setRoleValidate] = useState(false);
@@ -51,7 +50,7 @@ const RoleAddContainer = ({ dataLength }) => {
          setEmailValidate(true);
 
       }
-      if (userData?.role === 'Administrador') {
+      if (user.role === 'Administrador') {
          role = true;
          setRoleValidate(false);
       } else if(form.role === undefined || form.role.length === 0) {
@@ -72,12 +71,12 @@ const RoleAddContainer = ({ dataLength }) => {
       e.preventDefault();
       if (validateForm()) {
          setModal(false);
-         if (userData.role === 'Administrador') {
+         if (user.role === 'Administrador') {
             form.role = 'empleado';
          }
          const postData = async () => {
             try {
-               await fetch(`${API}superAdmin/invite-user`, {
+               const response = await fetch(`${API}superAdmin/invite-user`, {
                   method: 'POST',
                   headers: {
                      'Accept': 'application/json',
@@ -85,16 +84,15 @@ const RoleAddContainer = ({ dataLength }) => {
                      'Authorization': `Bearer ${token}`
                   },
                   body: JSON.stringify(form)
-               }).then(async response => {
-                  const { message } = await response.json();
-                  if (message === 'Invitation sent') {
-                     setInvited(true)
-                     setSent(true)
-                  } else {
-                     setErrorInvited(true);
-                     setSent(true)
-                  }
-               });
+               })
+               const { message } = await response.json();
+               if (message === 'Invitation sent') {
+                  setInvited(true)
+                  setSent(true)
+               } else {
+                  setErrorInvited(true);
+                  setSent(true)
+               }
                form.email = '';
                form.role = '';
             } catch (error) {

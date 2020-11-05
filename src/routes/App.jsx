@@ -36,14 +36,14 @@ const App = () => {
                   ? (
                      <>
                         <Layout>
-                           <Route exact path='/emitir-facturas' component={BillContainer} />
+                           <Route exact path='/emitirfacturas' component={BillContainer} />
                            <Route exact path='/historial' component={History} />
                            <Route exact path='/estadisticas' component={Statistics} />
                            <Route exact path='/roles' component={RoleManageContainer} />
                            <Route exact path='/role-detail/:id' component={RoleDetailContainer} />
-                           <Route exact path='/c.-fiscales' component={ManageCFiscales} />
+                           <Route exact path='/cfiscales' component={ManageCFiscales} />
                            <Route exact path='/profile' component={ProfileContainer} />
-                           <Route exact path='/c.-paises' component={InitialConfigContainer} />
+                           <Route exact path='/cpaises' component={InitialConfigContainer} />
                         </Layout>
                      </>
                   ) : (

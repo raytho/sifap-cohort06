@@ -24,7 +24,12 @@
    @extend %reset-btn;
 }
 @mixin media($breakpoint) {
-   @if $breakpoint == cellphone {
+   @if $breakpoint == cellphone-small {
+      @media screen and (min-width: 370px) and (max-width: 479px) {
+        @content;
+      }
+   }
+   @else if $breakpoint == cellphone {
      @media screen and (min-width: 480px) and (max-width: 599px) {
        @content;
      }
@@ -44,4 +49,54 @@
        @content;
      }
    }
- }
+}
+
+@mixin authContainerQuery {
+   @include media(tablet) {
+      grid-template-columns: 100%;
+      grid-template-areas: "Aside Aside";
+   }
+   @include media(tablet-small) {
+      grid-template-columns: 100%;
+      grid-template-areas: "Aside Aside";
+   }
+   @include media(cellphone) {
+      grid-template-columns: 100%;
+      grid-template-areas: "Aside Aside";
+   }
+   @include media(cellphone-small) {
+      grid-template-columns: 100%;
+      grid-template-areas: "Aside Aside";
+   }
+}
+
+@mixin authFormContainerQuery {
+   @include media(tablet) {
+      @include size(100%, 770px);
+   }
+   @include media(tablet-small) {
+      @include size(100%, 770px);
+   }
+   @include media(cellphone) {
+      @include size(100%, 770px);
+   }
+   @include media(cellphone-small) {
+      @include size(100%, 770px);
+   }
+}
+
+@mixin authFormQuery($height: 580px) {
+   @include media(tablet) {
+      @include size(80%, $height);
+   }
+   @include media(tablet-small) {
+      @include size(80%, $height);
+   }
+   @include media(cellphone) {
+      @include size(80%, $height);
+   }
+   @include media(cellphone-small) {
+      padding: 20px 30px;
+      @include size(80%, $height);
+   }
+}

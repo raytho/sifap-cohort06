@@ -31,6 +31,9 @@ const BillItemAdded = (props) => {
          <div>
             <p>{item.quantity}</p>
          </div>
+         <div>
+            <p>{item.unit}</p>
+         </div>
          <span>
             <p>${total}</p>
          </span>

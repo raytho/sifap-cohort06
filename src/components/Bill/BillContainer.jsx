@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable consistent-return */
 import React, { useState } from 'react';
 import Bill from './Bill';
@@ -14,40 +15,63 @@ const BillContainer = () => {
    const [fullNameValidate, setFullNameValidate] = useState(false);
    const [fiscalIdValidate, setFiscalIdValidate] = useState(false);
    const [CFDIValidate, setCFDIValidate] = useState(false);
+   const [methodPayValidate, setMethodPayValidate] = useState(false);
    const [modal, setModal] = useState(false);
+   const [sendBillModal, setSendBillModal] = useState(false);
+   const [billPDF, setBillPDF] = useState('')
    const [count, setCount] = useState(0);
    const [formProduct, setFormProduct] = useState([]);
    const [itemProduct] = useState([]);
    const [loaderCustomer, setLoaderCustomer] = useState(true);
    const [form, setValues] = useState({
+      comments: '',
+      ivaPorcent: 0,
+   });
+   const [client, setClient] = useState({
       fullName: '',
       fiscalId: '',
       email: '',
-      phoneNumber: '',
-      comments: '',
-      ivaPorcent: '',
-      subtotal: '',
-      total: ''
+      phoneNumber: ''
    });
    // Manage product item
    const [article, setArticle] = useState({
       description: '',
       id: '',
-      price: '',
+      price: 0,
       product: '',
-      quantity: '',
-      total: ''
+      quantity: 0,
+      unit: '',
+      total: 0
    });
+   const handleInput = e => {
+      setValues({
+         ...form,
+         [e.target.name]: e.target.value,
+      });
+   }
+   const handleInputClient = e => {
+      setClient({
+         ...client,
+         [e.target.name]: e.target.value,
+      });
+   }
+   const handleInputProduct = e => {
+      setArticle({
+         ...article,
+         [e.target.name]: e.target.value,
+      })
+   }
    const addItem = () => {
       setCount(count + 1);
       itemProduct.push(count);
-      formProduct.push(article);
+      formProduct.unshift(article);
       setArticle({
          description: '',
          id: '',
-         price: '',
+         price: 0,
          product: '',
-         quantity: ''
+         quantity: 0,
+         unit: ''
       })
    }
    const removeItem = (item) => {
@@ -61,27 +85,34 @@ const BillContainer = () => {
       let fullName;
       let fiscalId;
       let CFDI;
+      let paymentMethod;
 
-      if (RegExEmail.test(form.email)) {
+      if (RegExEmail.test(client.email)) {
          setEmailValidate(false);
          email = true;
       } else {
          setEmailValidate(true);
       }
-      if(form.fullName.length > 1) {
+      if(client.fullName.length > 1) {
          setFullNameValidate(false);
          fullName = true;
       } else {
          setFullNameValidate(true);
       }
-      if(form.fiscalId.length > 5) {
+      if(client.fiscalId.length > 5) {
          setFiscalIdValidate(false);
          fiscalId = true;
       } else {
          setFiscalIdValidate(true)
       }
+      if(form.paymentMethod !== undefined) {
+         setMethodPayValidate(false);
+         paymentMethod = true;
+      } else {
+         setMethodPayValidate(true)
+      }
       if (user?.country === 'MEX') {
-         if (form.CFDI !== undefined) {
+         if (form.cfdiUse !== undefined) {
             setCFDIValidate(false)
             CFDI = true;
          } else {
@@ -92,35 +123,48 @@ const BillContainer = () => {
          CFDI = true;
       }
 
-      if(email && fullName && fiscalId && CFDI) {
+      if(email && fullName && fiscalId && CFDI && paymentMethod) {
          return true
       }
    }
-   const handleInput = e => {
-      setValues({
-         ...form,
-         [e.target.name]: e.target.value,
-      });
-   }
-   const handleInputProduct = e => {
-      setArticle({
-         ...article,
-         [e.target.name]: e.target.value,
-      })
+
+   const handleModalBill = () => {
+      if (sendBillModal) {
+         setSendBillModal(false);
+         setTimeout(() => {
+            window.location.reload();
+         }, 100);
+      }
    }
    const handleSubmit = e => {
       e.preventDefault();
-      form.products = formProduct;
-      window.console.log(form, 'form');
       const postData = async () => {
+         form.products = formProduct;
+         form.client = client;
+         window.console.log(form, 'form');
          try {
-            const request = await fetch(`sa`, {
+            const response = await fetch(`${API}user/invoices`, {
                method: 'POST',
+               headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+               },
                body: JSON.stringify(form)
             });
-            window.console.log(request)
+            const { message, invoiceUrl } = await response.json();
+            window.console.log(response);
+            window.console.log(message);
+            if (message === 'Factura generada correctamente') {
+               window.console.log(invoiceUrl);
+               setSendBillModal(true);
+               setBillPDF(invoiceUrl)
+            }
+            if (message === 'Ocurrió un error') {
+               window.console.log('Hubo un error al generar la factura, vuelve a intentarlo');
+            }
          } catch(error) {
-            window.console.log(error);
+            window.console.log(error.message);
          }
       }
       if(validate()) {
@@ -163,10 +207,10 @@ const BillContainer = () => {
             }
          });
          const data = await response.json();
-         form.fullName = data.clients[0]?.fullName
-         form.fiscalId = data.clients[0]?.fiscalId
-         form.email = data.clients[0]?.email
-         form.phoneNumber = data.clients[0]?.phoneNumber
+         client.fullName = data.clients[0]?.fullName
+         client.fiscalId = data.clients[0]?.fiscalId
+         client.email = data.clients[0]?.email
+         client.phoneNumber = data.clients[0]?.phoneNumber
       } catch(error) {
          window.console.error(error);
       }
@@ -180,23 +224,30 @@ const BillContainer = () => {
          fullNameValidate={fullNameValidate}
          fiscalIdValidate={fiscalIdValidate}
          CFDIValidate={CFDIValidate}
+         methodPayValidate={methodPayValidate}
          modal={modal}
+         sendBillModal={sendBillModal}
+         billPDF={billPDF}
          itemProduct={itemProduct}
          form={form}
          customers={customers}
          formProduct={formProduct}
+         client={client}
          article={article}
          loaderCustomer={loaderCustomer}
          addItem={addItem}
          removeItem={removeItem}
          handleInput={handleInput}
+         handleInputClient={handleInputClient}
          handleInputProduct={handleInputProduct}
          handleSubmit={handleSubmit}
          handleModal={handleModal}
+         handleModalBill={handleModalBill}
          handleInputCustomer={handleInputCustomer}
          getDataCustomerId={getDataCustomerId}
       />
    );
 }
+
 
 export default BillContainer;

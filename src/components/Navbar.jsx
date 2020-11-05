@@ -10,7 +10,7 @@ const Navbar = () => {
    const [element, setElement] = useState(1);
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    const normalizeString = text =>
-      text.replace(' ', '-').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+      text.replace(' ', '').replace('.','').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
    const history = useHistory();
 
    const handleClick = (id) => {
@@ -28,7 +28,7 @@ const Navbar = () => {
    useEffect(() => {
       user.permissions.forEach(item => {
          switch (history.location.pathname) {
-            case `/${item.name.replace(' ', '-').toLowerCase()}`:
+            case `/${item.name.replace(' ', '').replace('.', '').toLowerCase()}`:
                document.getElementById(`item-functionality-${item.idPermission}`)
                   .classList.add('isSelect');
                setElement(item.idPermission);

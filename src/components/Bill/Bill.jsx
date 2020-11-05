@@ -3,12 +3,14 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import Title from '../Title';
 import BillItem from './BillItem';
 import BillItemAdded from './BillItemAdded';
 import BillCustomerModal from './BillCustomerModal';
+import BillSendModal from './BillSendModal';
+
 import iconBill from '../../assets/static/icon/bill.png';
 import iconSearch from '../../assets/static/icon/search.png';
 import '../../assets/styles/components/Bill/Bill.scss';
@@ -25,18 +27,24 @@ const Bill = (props) => {
       fullNameValidate,
       fiscalIdValidate,
       CFDIValidate,
+      methodPayValidate,
       modal,
+      sendBillModal,
+      billPDF,
       form,
       customers,
       formProduct,
       article,
+      client,
       loaderCustomer,
       addItem,
       removeItem,
       handleInput,
+      handleInputClient,
       handleInputProduct,
       handleSubmit,
       handleModal,
+      handleModalBill,
       handleInputCustomer,
       getDataCustomerId
    } = props;
@@ -53,9 +61,8 @@ const Bill = (props) => {
       sumProduct += formProduct[i].total
    }
    const ivaResult = sumProduct * form.ivaPorcent / 100;
-   form.subtotal = sumProduct;
-   form.total = sumProduct + ivaResult;
-   window.console.log(form);
+   const subtotal = sumProduct;
+   const total = sumProduct + ivaResult;
 
    return (
       <>
@@ -115,10 +122,10 @@ const Bill = (props) => {
                               Nombre:
                               <input
                                  type='text'
-                                 value={form.fullName}
+                                 value={client.fullName}
                                  name='fullName'
                                  placeholder='Nombre'
-                                 onChange={handleInput}
+                                 onChange={handleInputClient}
                               />
                               {fullNameValidate && <p className='alert-form'>Debes ingresar un nombre</p>}
                            </label>
@@ -128,42 +135,52 @@ const Bill = (props) => {
                                  : 'Identificador fiscal:'}
                               <input
                                  type='text'
-                                 value={form.fiscalId}
+                                 value={client.fiscalId}
                                  name='fiscalId'
                                  placeholder='00-010293-12'
-                                 onChange={handleInput}
+                                 onChange={handleInputClient}
                               />
                               {fiscalIdValidate && <p className='alert-form'>Debes ingresar el indentificador fiscal</p>}
                            </label>
-                        </div>
-                        <div>
                            <label htmlFor='email'>
                               Correo electrónico:
                               <input
                                  type='text'
-                                 value={form.email}
+                                 value={client.email}
                                  name='email'
                                  placeholder='ejemplo@correo.com'
-                                 onChange={handleInput}
+                                 onChange={handleInputClient}
                               />
                                  {emailValidate && <p className='alert-form'>Debes ingresar un correo electrónico</p>}
                            </label>
+                        </div>
+                        <div>
                            <label htmlFor='phoneNumber'>
                               Teléfono:
                               <input
                                  type='text'
-                                 value={form.phoneNumber}
+                                 value={client.phoneNumber}
                                  name='phoneNumber'
                                  placeholder='Teléfono'
-                                 onChange={handleInput}
+                                 onChange={handleInputClient}
                               />
                            </label>
+                           <label htmlFor='paymentMethod'>
+                                 Forma de pago:
+                                 <select name='paymentMethod' onChange={handleInput}>
+                                    <option value=''>Form de pago</option>
+                                    <option value='01'>Efectivo</option>
+                                    <option value='28'>Tarjeta de débito</option>
+                                    <option value='04'>Tarjeta de crédito</option>
+                                 </select>
+                                 {methodPayValidate && <p className='alert-form'>Debes elegir una forma de pago</p>}
+                              </label>
                            {user?.country === 'MEX' &&
-                              <label htmlFor='CFDI'>
+                              <label htmlFor='cfdiUse'>
                                  CFDI:
-                                 <select name='CFDI' onChange={handleInput}>
+                                 <select name='cfdiUse' onChange={handleInput}>
                                     <option value=''>CFDI</option>
-                                    <option value='G01'>G01 Gastos generales</option>
+                                    <option value='G01'>G01 Adquisición de Mercancías</option>
                                     <option value='G03'>G03 Gastos generales</option>
                                  </select>
                                  {CFDIValidate && <p className='alert-form'>Debes elegir un CFDI</p>}
@@ -179,11 +196,11 @@ const Bill = (props) => {
                         <p>Precio unitario</p>
                         <p>Descripción</p>
                         <p>Cantidad</p>
+                        <p>Unidad</p>
                         <p>Total</p>
                      </div>
                      <div>
                         <BillItem
-                              removeItem={removeItem}
                               handleInputProduct={handleInputProduct}
                               addItem={addItem}
                               article={article}
@@ -230,11 +247,11 @@ const Bill = (props) => {
                            </label>
                            <p>
                               <span>Subtotal</span>
-                              <span>${form.subtotal}</span>
+                              <span>${subtotal}</span>
                            </p>
                            <p>
                               <span>Total</span>
-                              <span>${form.total}</span>
+                              <span>${total}</span>
                            </p>
                         </div>
                      </div>
@@ -245,6 +262,11 @@ const Bill = (props) => {
                </form>
             </article>
          </section>
+         <BillSendModal
+            handleModalBill={handleModalBill}
+            sendBillModal={sendBillModal}
+            billPDF={billPDF}
+         />
       </>
    );
 };
@@ -255,13 +277,19 @@ Bill.propTypes = {
    fiscalIdValidate: PropTypes.bool,
    modal: PropTypes.bool,
    CFDIValidate: PropTypes.bool,
+   methodPayValidate: PropTypes.bool,
+   sendBillModal: PropTypes.bool,
    loaderCustomer: PropTypes.bool.isRequired,
+   billPDF: PropTypes.string,
    form: PropTypes.objectOf(
-      PropTypes.string || object
+      PropTypes.any
    ),
    formProduct: PropTypes.arrayOf(
       PropTypes.object
    ),
+   client: PropTypes.objectOf(
+      PropTypes.string,
+   ).isRequired,
    customers: PropTypes.objectOf(
       PropTypes.array
    ),
@@ -276,6 +304,8 @@ Bill.propTypes = {
    handleModal: PropTypes.func,
    handleInputCustomer: PropTypes.func,
    getDataCustomerId: PropTypes.func,
+   handleInputClient: PropTypes.func,
+   handleModalBill: PropTypes.func,
 }
 
 export default Bill;

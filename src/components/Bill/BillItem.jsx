@@ -7,18 +7,18 @@ import '../../assets/styles/components/Bill/BillItem.scss';
 const BillItem = (props) => {
 
    const {
-      i,
-      removeItem,
       article,
       addItem,
       handleInputProduct
    } = props;
 
+   window.console.log(article)
+
    const total = article.price * article.quantity;
    article.total = total;
 
    return (
-      <>
+      <div className='Bill__item-container'>
          <div className='Bill__item'>
             <label htmlFor='product'>
                <input
@@ -66,23 +66,30 @@ const BillItem = (props) => {
                   onChange={handleInputProduct}
                />
             </label>
+            <label htmlFor='unit'>
+               <input
+                  type='text'
+                  value={article.unit}
+                  name='unit'
+                  placeholder='kg, lb, gr'
+                  onChange={handleInputProduct}
+               />
+            </label>
             <span>
                <p>${article.total}</p>
             </span>
-            <button type='button' onClick={() => removeItem(i)}>X</button>
+            {/* <button type='button' onClick={() => removeItem(i)}>X</button> */}
          </div>
          <button
             className='Bill__add-item'
             type='button'
             onClick={addItem}
          >+</button>
-      </>
+      </div>
    );
 }
 
 BillItem.propTypes = {
-   i: PropTypes.number,
-   removeItem: PropTypes.func,
    handleInputProduct: PropTypes.func,
    addItem: PropTypes.func,
    article: PropTypes.objectOf(
