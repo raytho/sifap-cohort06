@@ -420,12 +420,14 @@ class UsersService {
       currency,
       cfdiUse,
       paymentMethod,
+      ivaPorcent,
     } = invoiceData;
+
     await this.upsertOrUpdateClient(client.fiscalId, client, userData.userId);
     await this.insertProducts(products);
+    const clientId = await this.mysqlLib.get("clientId", TABLE_CLIENTS, "fiscalId", client.fiscalId);
     const amount = this.calcTotalAmount(products);
-    const IVA = 0.16;
-    const tax = +this.calcTax(amount, IVA).toFixed(2);
+    const tax = +this.calcTax(amount, ivaPorcent).toFixed(2);
     const fiscalUUID = this.generateHexUUID();
     const fiscalTax = await this.generateFiscalTax(userData.idCountry);
     const totalWithLetter= numberToLetter(amount + tax);
@@ -434,9 +436,11 @@ class UsersService {
     const satCertNumber = customAlphabet("000001234567589", 20);
     const digitalSingCfdi = "ZCDwrNgcG0bCgvVi8HN5pmPfIk/iyRCKnkwIKLox9uHOf14unlPuKv7OHU6uVpGDI+W0cGfkvAdxh8sBY6b7NmBwfvLq7CbYT088c6phJLm7zuiYJB+ngJ5o0v0Fs8QgBFIxn5quLf4739z3Zbe0J/4v2bAJg2oNp1qECq8w4e1dcIw14SxTGCtJDOfj9QPQOoOFdt6EpjG2544eKn4P1ljx9OGg0kt6w/CDDofvXGr93Zow3mg3yolW8FhlQny8xdX1YaQFDwrKmKEw6UGP6Nempt+mtRVJWQzvGZGD9iTaM6CdCfxfTpnmtCpZCF60KSy1nnYu+VUfGnaNGZMd2Q==";
     const satDigitalSign = "hNl+BdleVrXeAMgtTeKADtcqjaSylq3FUjYUmDDhEnYVDEsBfEO/ZNkP0f7NtEA7o5lY9AIS5OXJU8HaojhKri63djPzoxHGBXDjYzvTIlUgpx0ZI3JhDz+qjbWLaTIOddQZ80ElCTyEToofbB4LPg845X/LMNIN3d2h8amVdxotF0/ZWIGF3x0JeEssest6VvJ5HNSQYD8bxR3/CXQKK2670husLzBXKAYY2Twucd22V4FCIRNaUAq80/+LtQRlvC1Zzv+3o5SPm2GevLVMN67iawr6nk3tRJyoN/pfjtmNLyqyk6bpBvIy+JwMO+upTc3z1DD9OP+PSsWwQbtLOQ==";
-    const originalChain= "||1.1|B1C48A08-56BF-4B3A-BE81-2D7500AC29DA|2020-10-26T15:20:15|SVT110323827|ZCDwrNgcG0bCgvVi8HN5pmPfIk/iyRCKnkwIKLox9uHOf14unlPuKv7OHU6uVpGDI+W0cGfkvAdxh8sBY6b7NmBwfvLq7CbYT088c6phJLm7zuiYJB+ngJ5o0v0Fs8QgBFIxn5quLf4739z3Zbe0J/4v2bAJg2oNp1qECq8w4e1dcIw14SxTGCtJDOfj9QPQOoOFdt6EpjG2544eKn4P1ljx9OGg0kt6w/CDDofvXGr93Zow3mg3yolW8FhlQny8xdX1YaQFDwrKmKEw6UGP6Nempt+mtRVJWQzvGZGD9iTaM6CdCfxfTpnmtCpZCF60KSy1nnYu+VUfGnaNGZMd2Q==|00001000000413073350||";
-    delete products.description;
-    const valuesObj = {
+    const originalChain= `||1.1|${fiscalUUID}|${now}|SVT110323827|ZCDwrNgcG0bCgvVi8HN5pmPfIk/iyRCKnkwIKLox9uHOf14unlPuKv7OHU6uVpGDI+W0cGfkvAdxh8sBY6b7NmBwfvLq7CbYT088c6phJLm7zuiYJB+ngJ5o0v0Fs8QgBFIxn5quLf4739z3Zbe0J/4v2bAJg2oNp1qECq8w4e1dcIw14SxTGCtJDOfj9QPQOoOFdt6EpjG2544eKn4P1ljx9OGg0kt6w/CDDofvXGr93Zow3mg3yolW8FhlQny8xdX1YaQFDwrKmKEw6UGP6Nempt+mtRVJWQzvGZGD9iTaM6CdCfxfTpnmtCpZCF60KSy1nnYu+VUfGnaNGZMd2Q==|00001000000413073350||`;
+    for (let product in products){
+      delete products[product].description;
+    }
+    const invoiceInputData = {
       emitter: {
         name: emitterData[0].companyName,
         address: "",
@@ -447,8 +451,8 @@ class UsersService {
         address: client.fiscalAddress,
         fiscalId: client.fiscalId
       },
-      currency: currency,
-      wayToPay: paymentMethod || "Efectivo",
+      currency,
+      wayToPay: paymentMethod || "01",
       folio: fiscalTax,
       logoUrl: "https://i.imgur.com/FjzAcjI.png",
       subtotal: amount,
@@ -469,15 +473,25 @@ class UsersService {
       originalChain,
       certProvider: "SVT110323827",
     };
-    const pdfInvoice = await createInvoice(valuesObj);
-    const uploadeInvoice = await uploadPdf(pdfInvoice);
+    console.log(invoiceInputData);
+    const pdfInvoice = await createInvoice(invoiceInputData);
+    const uploadedInvoice = await uploadPdf(pdfInvoice);
     
-    // const insertedTaxReceipt = await this.mysqlLib.singleUpsert(
-    //   TABLE_TAX_RECEIPT,
-    //   valuesObj
-    // );
+    const invoiceSavedData = {
+      taxReceiptId: nanoid(8),
+      clientId: clientId[0].clientId,
+      subtotal: amount,
+      taxes: tax,
+      currency,
+      methodPayment: paymentMethod || "01",
+      total: (amount + tax),
+      emmiterId: userData.userId,
+      countryId: userData.idCountry,
+      taxReceiptNumber: fiscalTax,
+    };
+    await this.mysqlLib.singleUpsert( TABLE_TAX_RECEIPT, invoiceSavedData);
 
-    return uploadeInvoice;
+    return uploadedInvoice;
   }
 
   async generateInvoceCol(invoiceData, userData) {
@@ -518,16 +532,15 @@ class UsersService {
   }
 
   async insertProducts(products) {
-    const newProducts = Object.assign({}, products);
     const arrayProducts = [];
-    const columns = [];
-    for (let product in newProducts) {
-      const { qty, ...filteredProduct } = newProducts[product];
+   
+
+    for (let product in products) {
+      const { quantity, ...filteredProduct } = products[product];
       arrayProducts.push(Object.values(filteredProduct));
-      columns.push(Object.keys(filteredProduct));
+
     }
-    //ITS OK
-    //await this.mysqlLib.upsert(TABLE_PRODUCTS, columns[0], arrayProducts);
+    await this.mysqlLib.upsert(TABLE_PRODUCTS, "id, name, description, unit, price", arrayProducts);
   }
 
   calcTax(amount, taxValue) {
@@ -661,7 +674,6 @@ class UsersService {
 
   async upsertOrUpdateClient(clientId, clientData, userId) {
     const client = await this.getClientByFiscalID(clientId);
-  
     if (client.length) {
       await this.updateClient(client[0].clientId, clientData );
     } else {
@@ -678,15 +690,11 @@ class UsersService {
 
   async generateFiscalTax(countryId) {
     const lastTaxReceipt = await this.getLastTaxReceipt(countryId);
-    if (
-      !lastTaxReceipt[0] ||
-      lastTaxReceipt[0] === "" ||
-      !lastTaxReceipt[0].length
-    ) {
+    if (!lastTaxReceipt) {
       const newTaxReceipt = await this.generateTaxReceipt(countryId);
       return newTaxReceipt;
     } else {
-      return await this.generateNewTaxReceiptFromLast(lastTaxReceipt);
+      return await this.generateNewTaxReceiptFromLast(lastTaxReceipt.taxReceiptNumber);
     }
   }
 

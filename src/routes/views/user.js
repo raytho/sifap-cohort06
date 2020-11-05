@@ -413,7 +413,6 @@ function userView(app) {
         } else {
           const invoiceInputData = req.body;
           const userData = user;
-          console.log(invoiceInputData, userData);
 
           switch (user.country) {
           case "MEX":

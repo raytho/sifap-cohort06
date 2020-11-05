@@ -76,6 +76,7 @@ function generateCustomerInformation(doc, invoice) {
 
 function generateInvoiceTable(doc, invoice) {
   let i;
+  axisY(0, doc, true);
   let invoiceTableTop = axisY(300, doc);
 
   doc.font("Helvetica-Bold")
@@ -243,12 +244,15 @@ function formatCurrency(amount) {
 
 function addYAxe() {
   let i = 0;
-  const add = (amount, doc) => {
+  const add = (amount, doc, reset = false) => {
     if (i >= 750) {
       doc.addPage();
       i = 0;
       return i += amount;
-    } else {
+    }if (reset) {
+      return i = 0;
+    } 
+    else {
       return i += amount;
     }
   };
