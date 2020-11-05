@@ -34,6 +34,13 @@ class UsersService {
     const createdBy = userInvitation.createdBy;
     const userId = nanoid(4);
 
+    const idCountry =
+      country === "COL"
+        ? 1
+        : country === "MEX"
+          ? 2
+          : country === "DOM" ? 3 : 0;
+
     const response = await this.mysqlLib.createSuperAdminUser({
       firstName,
       userId,
@@ -41,6 +48,7 @@ class UsersService {
       password: hashedPassword,
       typeEmail,
       country,
+      idCountry,
       role,
       createdBy,
     });
