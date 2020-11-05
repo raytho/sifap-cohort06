@@ -683,6 +683,7 @@ function MysqlLib() {
         );
       });
     },
+
     getAll(columns, table) {
       return new Promise(function (resolve, reject) {
         connection.query(`SELECT ${columns} FROM ${table}`, function (
@@ -697,11 +698,30 @@ function MysqlLib() {
         });
       });
     },
+
     delete(table, condition, conditionValue) {
       return new Promise(function (resolve, reject) {
         connection.query(
           `DELETE FROM ${table} WHERE ${condition} = ?`,
           conditionValue,
+          function (err, rows) {
+            if (err) {
+              reject(new Error(err));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    getInvoiceHistory(userId) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `SELECT a.createdAt, b.fullName, b.fiscalId, a.url FROM taxReceipt AS a
+          JOIN clients AS b
+          ON a.clientId = b.clientId WHERE a.emmiterId = ?`,
+          [userId],
           function (err, rows) {
             if (err) {
               reject(new Error(err));

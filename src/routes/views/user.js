@@ -313,7 +313,6 @@ function userView(app) {
               });
             }
           }
-
         } catch (error) {
           res.status(500).json({ message: "Internal Error" });
         }
@@ -437,6 +436,33 @@ function userView(app) {
       } catch (err) {
         console.log(err);
         next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.get("/invoice-history", (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const { userId } = user;
+          const invoiceList = await usersService.getInvoiceHistory(userId);
+          if (invoiceList.length) {
+            res.status(200).json({
+              invoices: invoiceList,
+              message: "Ok"
+            });
+          } else {
+            res.status(200).json({
+              message: "El usuario no ha emitido facturas",
+            });
+          }
+        } catch (error) {
+          res.status(500).json({ message: "Internal Error" });
+        }
       }
     })(req, res, next);
   });

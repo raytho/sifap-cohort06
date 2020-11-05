@@ -528,6 +528,7 @@ class UsersService {
       emmiterId: userData.userId,
       countryId: userData.idCountry,
       taxReceiptNumber: fiscalTax,
+      url: uploadedInvoice,
     };
     await this.mysqlLib.singleUpsert( TABLE_TAX_RECEIPT, invoiceSavedData);
 
@@ -778,6 +779,12 @@ class UsersService {
       }
     }
     return response;
+  }
+
+  async getInvoiceHistory(userId){
+    console.log(userId);
+    const invoiceHistory = await this.mysqlLib.getInvoiceHistory(userId);
+    return invoiceHistory;
   }
 }
 
