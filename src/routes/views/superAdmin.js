@@ -256,7 +256,7 @@ const inviteNewUser = (app) => {
         const data = req.body;
         const userService = new usersService();
         try {
-          if (data.rol) {
+          if (data.role) {
             const updatedUser = await userService.updateRolByUserId(id, data);
             if (updatedUser) {
               res.status(200).send({
