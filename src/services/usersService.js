@@ -8,7 +8,6 @@ const invoiceMxData = require("../utils/mocks/invoice");
 const { createInvoice } = require("../services/files/createInvoiceMx");
 const { uploadPdf } = require("../services/storage/profilePicturesUpload");
 const numberToLetter = require("../lib/numbersToLetter");
-const multer = require("multer");
 
 const TABLE_PRODUCTS = "product";
 const TABLE_FISCAL_DATA = "fiscal_data";
@@ -449,7 +448,14 @@ class UsersService {
     }
   }
 
-  async generateInvoceMx(invoiceData, userData) {
+  async generateInvoceMx(invoiceData, userLoginData) {
+    let userData = await this.mysqlLib.get("userId, idCountry, fiscalId", TABLE_USER, "userId", userLoginData.userId);
+    userData = userData[0];
+
+    if (!userData.fiscalId || !userData.idCountry){
+      return false;
+    }
+
     let {
       client,
       products,
@@ -531,11 +537,11 @@ class UsersService {
       url: uploadedInvoice,
     };
     await this.mysqlLib.singleUpsert( TABLE_TAX_RECEIPT, invoiceSavedData);
-
     await this.sendinvoiceToMail(client.email, uploadedInvoice);
     return uploadedInvoice;
   }
 
+  // Future feature
   async generateInvoceCol(invoiceData, userData) {
     const {
       firstName,
@@ -569,6 +575,7 @@ class UsersService {
     return undefined;
   }
 
+  // Future feature
   async generateInvoceRd(invoiceData, userData) {
     console(invoiceData, userData);
   }
@@ -782,7 +789,6 @@ class UsersService {
   }
 
   async getInvoiceHistory(userId){
-    console.log(userId);
     const invoiceHistory = await this.mysqlLib.getInvoiceHistory(userId);
     return invoiceHistory;
   }

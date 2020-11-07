@@ -20,26 +20,6 @@ function userView(app) {
 
   const usersService = new UsersService();
 
-  router.get("/settings/send-qr", async (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, async (error, user) => {
-      try {
-        if (error || !user) {
-          res.status(500).json({
-            message: "No autorizado",
-          });
-        } else {
-          twoFactorAuth.generateQr().then((qrCode) => {
-            res.status(200).json({
-              message: qrCode,
-            });
-          });
-        }
-      } catch (error) {
-        next(error);
-      }
-    })(req, res, next);
-  });
-
   router.get("/data/user-info", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
       try {
@@ -412,7 +392,6 @@ function userView(app) {
         } else {
           const invoiceInputData = req.body;
           const userData = user;
-
           switch (user.country) {
           case "MEX":
             generateInvoceMX(invoiceInputData, userData, res);
