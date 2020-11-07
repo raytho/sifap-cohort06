@@ -247,7 +247,7 @@ const inviteNewUser = (app) => {
 
   //Pendiente
   // eslint-disable-next-line no-unused-vars
-  router.put("/userEditRol", async (req, res, next) => {
+  router.put("/userEditRol/:id", async (req, res, next) => {
     passport.authenticate(
       "jwt",
       { session: false },
@@ -257,10 +257,7 @@ const inviteNewUser = (app) => {
         const userService = new usersService();
         try {
           if (data.rol) {
-            const updatedUser = await userService.updateRolByUserId(
-              userToken.userId,
-              data
-            );
+            const updatedUser = await userService.updateRolByUserId(id, data);
             if (updatedUser) {
               res.status(200).send({
                 data: updatedUser,
