@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import FormModalTFA from './FormModalTFA';
+import Modal from '../Modal';
 
 import '../../assets/styles/layout/Modal.scss';
 
@@ -73,7 +74,10 @@ const FormLogin = (props) => {
             <div className='Login__buttons'>
                <button type='submit' disabled={!loader}>Iniciar</button>
             </div>
-            {!loader && <p>Cargando...</p>}
+            {/* {!loader && <p>Cargando...</p>} */}
+            <Modal isOpen={!loader}>
+            <p className='Modal__loader'>Cargando...</p>
+            </Modal>
             <div className='Login__forgot'>
                <p className='Login__redirect'> <Link to='/resetpassword'>¿Olvidaste tu contraseña? </Link></p>
             {/* <p className='Login__redirect'>¿Aún no tienes cuenta? <span> <Link to='/Register'>Crear cuenta</Link> </span> </p> */}

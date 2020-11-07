@@ -198,7 +198,7 @@ const BillContainer = () => {
                setLoaderCustomer(false)
                setCustomers(data);
             } catch(error) {
-               window.console.log(error);
+               window.console.log(error.message);
             }
          }
          getDataCustomer();

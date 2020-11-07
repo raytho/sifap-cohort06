@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
@@ -20,9 +21,11 @@ const RoleDetail = (props) =>  {
       goBack,
       handleClickEdit,
       editRole,
+      loader,
+      saved,
       handleSubmit
    } = props;
-   window.console.log(user)
+
    return (
       <Roles>
           <div className='Role__manage-panel-detail'>
@@ -52,7 +55,7 @@ const RoleDetail = (props) =>  {
                               name='role'
                               onChange={handleChangeInput}
                            >
-                              <option value={user.role}>Role</option>
+                              <option value={user.role.toLowerCase()}>Role</option>
                               <option value='empleado'>Empleado</option>
                               <option value='administrador'>Administrador</option>
                            </select>
@@ -69,12 +72,19 @@ const RoleDetail = (props) =>  {
                            <input  type='checkbox'
                               name='twoFactorActive'
                               onChange={handleChangeInput}
+                              checked={form.twoFactorActive ? true : false}
                            />
                            <span className='checkmark' />
                            Autenticación al iniciar sesión
                         </label>
                      </div>
-               <button type='submit' className='Role__detail-btn'>Guardar</button>
+                     <div>
+                        <div>
+                           {loader && <p>Cargando...</p>}
+                           {saved && <p>Se guardaron los cambios</p>}
+                        </div>
+                        <button type='submit' className='Role__detail-btn'>Guardar</button>
+                     </div>
                   </form>
                </div>
                <RoleDetailModal
