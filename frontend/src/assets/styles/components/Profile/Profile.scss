@@ -1,0 +1,196 @@
+@import '../../utils/Placeholder.scss';
+@import '../../utils/Mixin.scss';
+.Profile__panel {
+   margin: 100px 0 0 0;
+}
+.Profile__header {
+   height: 200px;
+   position: relative;
+   background-color: var(--secundary-color);
+   border-radius: 5px 100px 0 0 ;
+   p {
+      padding: 16px 0 0 35px;
+      font-family: var(--font-text);
+      font-size: var(--font-small);
+      color: var(--white-color);
+   }
+}
+.Profile__main {
+   height: auto;
+   padding: 30px 35px 20px 35px;
+   position: relative;
+   top: -150px;
+   font-family: var(--font-text);
+   background-color: var(--white-color);
+   border-radius: 5px 100px 5px 5px;
+   box-shadow: 0 0 50px 0 rgba(3, 36, 35, .25);
+   form {
+      display: flex;
+      justify-content: space-between;
+      input {
+         height: 30px;
+         font-family: var(--font-text);
+         font-size: var(--font-smaller);
+         background-color: rgba(3, 36, 35, .030);
+         border: none;
+         border-bottom: 1px solid var(--secundary-color);
+         outline-color: var(--detail-color);
+      }
+      select {
+         height: 30px;
+         outline-color: var(--detail-color);
+      }
+      div {
+         width: 94%;
+         margin: 0 auto;
+      }
+      & > div:nth-of-type(2) {
+         margin: -190px 0 0 0;
+      }
+      & > div:nth-of-type(1) {
+         width: 80%;
+      }
+   }
+
+}
+.Profile__img {
+   width: 250px;
+   height: auto;
+   margin: 0 0 30px 0;
+   position: relative;
+   & > img {
+      width: 140px;
+      height: 140px;
+      background-color: #c4c4c4;
+      border-radius: 50%;
+      margin: 0 0 20px 0;
+   }
+   & > button {
+      width: 25px;
+      height: 25px;
+      padding: 0;
+      margin: 0;
+      position: relative;
+      top: -20px;
+      font-size: 25px;
+      color: var(--white-color);
+      line-height: 1;
+      background-color: var(--secundary-color);
+      border-radius: 50%;
+      border: none;
+      @extend %reset-btn;
+   }
+   & > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      input {
+         cursor: pointer;
+      }
+      button {
+         background-color: transparent;
+         border: none;
+         @extend %reset-btn;
+         img {
+            width: 20px;
+            height: 20px;
+            // opacity: .5;
+         }
+      }
+   }
+   p {
+      width: 300px;
+      font-family: var(--font-title);
+   }
+}
+.Profile__item {
+   div:nth-of-type(1) {
+      width: 100%;
+      p {
+         margin: 0 0 8px 0;
+         font-weight: 600;
+      }
+   }
+   div:nth-of-type(2) {
+      width: 100%;
+      height: 50px;
+      padding: 0 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin:  0 0 18px 0;
+      border-radius: 5px 40px 5px 5px;
+      box-shadow: 0 2px 10px 2px rgba(3, 36, 35, .25);
+   }
+}
+.Profile__edit {
+   background-color: transparent;
+   border: none;
+   @extend %reset-btn;
+   img {
+      width: 16px;
+      height: 16px;
+      opacity: .5;
+   }
+}
+.Profile__authentication {
+   width: 420px;
+   height: 600px;
+   margin: 0 0 0px 0;
+   // left: calc(100% - 500px);
+   & > div:nth-of-type(1) {
+      width: 100%;
+      padding: 20px;
+      box-shadow: 0 2px 15px 0  rgba(3, 36, 35, .3);
+      border-radius: 5px 40px 5px 5px;
+   }
+   h3 {
+      margin: 0 0 10px 0;
+      font-weight: 600;
+   }
+   p {
+      margin: 0 0 10px 0;
+      line-height: 18px;
+   }
+   span {
+      font-weight: 600;
+   }
+   label {
+      font-weight: 600;
+   }
+}
+.Profile__button-container {
+   width: 420px;
+   margin: 10px 0 10px 0;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   button {
+      margin: 50px 0 0 0;
+      @include btn(120px, 50px, --font-small);
+   }
+}
+.Profile__result {
+   p {
+      font-family: var(--font-title);
+      font-size: var(--font-small);
+   }
+}
+.Profile__QR {
+   height: 150px;
+   margin: 20px 0 0 0;
+   font-size: var(--font-smaller);
+   P:nth-of-type(2) {
+      margin: 5px 0 0 0;
+   }
+   div {
+      width: 120px;
+      height: 120px;
+      // margin: 10px 0 0 0;
+      img {
+         background-color: var(--secundary-color);
+         width: 120px;
+         height: 120px;
+      }
+   }
+}

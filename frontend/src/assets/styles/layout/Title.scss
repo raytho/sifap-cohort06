@@ -1,0 +1,16 @@
+.Title {
+   width: fit-content;
+   padding: 0 10px 0 0;
+   display: flex;
+   align-items: center;
+   img {
+      width: 70px;
+      height: 70px;
+   }
+   h2 {
+      margin-left: 20px;
+      font-family: var(--font-title);
+      font-size: var(--font-big);
+      color: var(--secundary-color);
+   }
+}

@@ -1,0 +1,205 @@
+@import '../../utils/Placeholder.scss';
+@import '../../utils/Mixin.scss';
+.Bill__panel {
+   margin: 100px 0 0 0;
+   input,
+   textarea,
+   select {
+      outline-color: var(--detail-color);
+   }
+}
+.Bill__header {
+   height: 200px;
+   position: relative;
+   background-color: var(--secundary-color);
+   border-radius: 5px 100px 0 0 ;
+   h2 {
+      padding: 16px 0 0 35px;
+      font-family: var(--font-text);
+      font-size: var(--font-small);
+      color: var(--white-color);
+   }
+}
+.Bill__main {
+   height: auto;
+   padding: 30px 35px 20px 35px;
+   position: relative;
+   top: -150px;
+   font-family: var(--font-text);
+   background-color: var(--white-color);
+   border-radius: 5px 100px 5px 5px;
+   box-shadow: 0 0 50px 0 rgba(3, 36, 35, .25);
+}
+.Bill__tax-data {
+   margin: 0 0 40px 0;
+}
+.Bill__own-data {
+   height: 160px;
+   display: flex;
+   justify-content: space-between;
+   border-bottom: 1px solid var(--secundary-color);
+   p {
+      margin: 0 0 20px 0;
+   }
+   span {
+      font-weight: 600;
+   }
+   div:nth-of-type(2) {
+      p:nth-of-type(1) {
+         font-size: var(--font-big);
+      }
+   }
+}
+.Bill__customer-data {
+   margin: 30px 0 0 0;
+   display: flex;
+   justify-content: space-between;
+   & > div {
+      width: 45%;
+   }
+   label {
+      width: 100%;
+      display: block;
+      margin: 10px 30px 20px 0;
+      font-weight: 600;
+      input,
+      select  {
+         width: 100%;
+         height: 30px;
+         margin: 5px 0 0 0;
+      }
+      input {
+         border-radius: 5px;
+         border: 1px solid var(--secundary-color);
+      }
+   }
+}
+.Bill__buttons-customers {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   img {
+      width: 15px;
+      height: 15px;
+   }
+   @include btn(100px, 25px, --font-smallest);
+}
+.Bill__product {
+
+}
+.Bill-product-header {
+   height: 50px;
+   margin:  0 0 10px 0;
+   display: flex;
+   align-items: center;
+   background-color:  rgba(3, 36, 35, .05);
+   border-bottom: 1px solid var(--secundary-color);
+   p:nth-of-type(1) {
+      width: 17%;
+      margin: 0 0 0 2%;
+   }
+   p:nth-of-type(2) {
+      width: 6%;
+      margin: 0 0 0 3%;
+   }
+   p:nth-of-type(3) {
+      width: 9%;
+      margin: 0 0 0 2%;
+   }
+   p:nth-of-type(4) {
+      width: 20%;
+      margin: 0 0 0 2%;
+   }
+   p:nth-of-type(5) {
+      width: 8%;
+      margin: 0 0 0 3%;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+   }
+   p:nth-of-type(6) {
+      width: 6%;
+      margin: 0 0 0 1.5%;
+   }
+   p:nth-of-type(7) {
+      width: 7%;
+      margin: 0 0 0 5%;
+   }
+}
+.Bill__container-items {
+   height: 350px;
+   overflow-y: scroll;
+   margin: 0 0 20px;
+   box-shadow: inset 0 0 5px 1px rgba(3, 36, 35, .10);
+   &::-webkit-scrollbar {
+      display: none;
+   }
+   ul {
+      padding-top: 1px;
+   }
+}
+.Bill__total {
+   display: flex;
+   justify-content: space-between;
+   label {
+      width: 300px;
+      font-weight: 600;
+      textarea {
+         width: 300px;
+         height: 80px;
+         margin: 10px 0 0 0;
+         border-radius: 5px;
+         border: 1px solid var(--secundary-color);
+      }
+   }
+   div {
+      width: 300px;
+      label {
+         font-weight: 400;
+         margin: 0 0 0 50px;
+         input {
+            width: 30px;
+            margin: 0 5px 0 34px;
+            &[type=number]::-webkit-inner-spin-button,
+            &[type=number]::-webkit-outer-spin-button {
+               appearance: none;
+            }
+         }
+         span {
+            margin: 0 0 0 50px;
+         }
+      }
+      p {
+         display: flex;
+         align-items: center;
+         height: 50px;
+      }
+      span {
+         width: 60px;
+      }
+      p:nth-of-type(1) {
+         border-bottom: 2px solid var(--secundary-color);
+         span {
+            display: block;
+            margin: 0 48px 0 50px;
+         }
+      }
+      p:nth-of-type(2) {
+         height: 50px;
+         span {
+            display: block;
+            margin: 0 50px 0 50px;
+         }
+         span:nth-of-type(2) {
+            margin: 0 36px 0 50px;
+         }
+      }
+   }
+}
+.Bill__buttons {
+   margin: 50px 0 20px 0;
+   display: flex;
+   justify-content: flex-end;
+   button {
+      @include btn(130px, 50px, --font-small);
+   }
+}

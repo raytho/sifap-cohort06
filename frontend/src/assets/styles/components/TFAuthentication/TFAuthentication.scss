@@ -1,0 +1,85 @@
+@import '../../utils/Placeholder.scss';
+@import '../../utils/Mixin.scss';
+
+.TFA {
+   height: 100vh;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-evenly;
+   align-items: center;
+   img {
+      width: 150px;
+      height: 150px;
+   }
+   form {
+      width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      // @include media(tablet) {
+      //    width: 600px;
+      // }
+      // @include media(tablet-small) {
+      //    width: 600px;
+      // }
+      // @include media(cellphone) {
+      //    width: 600px;
+      // }
+      p {
+         color: red;
+      }
+      .TFA__container-input {
+         display: flex;
+         & > div {
+            width: 100px;
+            height: 30px;
+            padding: 20px;
+            position: relative;
+            border-bottom: 3px solid var(--main-color);
+            border-left: 3px solid var(--main-color);
+            @include media(cellphone) {
+               width: 80px;
+               padding: 10px;
+            }
+            @include media(cellphone-small) {
+               width: 60px;
+               padding: 6px;
+            }
+            input {
+               width: 60px;
+               height: 60px;
+               padding: 0 0 0 10px;
+               font-size: 70px;
+               position: absolute;
+               top: -40px;
+               background-color: var(--detail-color);
+               border: none;
+               outline-color: var(--detail-color);
+               @include media(cellphone-small) {
+                  width: 45px;
+                  height: 45px;
+                  top: -30px;
+               }
+            }
+         }
+         & > div:nth-of-type(6) {
+            border-right: 3px solid var(--main-color);
+         }
+      }
+      .TFA__container-button {
+         width: 400px;
+         margin: 100px 0 0 0;
+         display: flex;
+         justify-content: space-around;
+         @include media(cellphone-small) {
+            margin: 60px 0 0 0;
+         }
+         button {
+            @include media(cellphone-small) {
+               @include btn(140px, 45px, --font-smaller);
+            }
+            @include btn(150px, 50px, --font-small);
+         }
+      }
+   }
+}

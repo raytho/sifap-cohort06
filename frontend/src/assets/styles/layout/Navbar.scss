@@ -1,0 +1,67 @@
+@import '../utils/Mixin.scss';
+
+.Navbar {
+   grid-area: Navbar;
+   position: fixed;
+   top: 0;
+   font-family: var(--font-text);
+   @include size(250px, initial);
+}
+.Navbar__nav {
+   display: flex;
+   justify-content: center;
+   position: absolute;
+   top: 153px;
+   background-color: var(--main-color);
+   border-radius: 0 100px 0 0;
+   @include size(250px, 100vh);
+}
+.Navbar ul {
+   margin-top: 80px;
+   @include size(230px, 400px);
+   li {
+      margin-bottom: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 7px 2px rgba(255, 255, 255, .2);
+      cursor: pointer;
+      @include size(100%, 50px);
+      a {
+         width: 100%;
+         height: 100%;
+         display: flex;
+         align-items: center;
+         justify-content: space-around;
+         text-decoration: none;
+         &::after {
+            content: '';
+            border: 9px solid transparent;
+            border-bottom-color: rgb(255, 255, 255);
+            transform: rotate(90deg);
+            @include size(0, 0);
+            @include icon-arrow(static, unset, unset, 9px, var(--white-color), 90deg)
+         }
+      }
+      img {
+         width: 30px;
+         height: 30px;
+         margin-right: 10px;
+      }
+      p {
+         width: 120px;
+         display: inline-block;
+         color: var(--white-color);
+      }
+   }
+   li:active {
+      transform: scale(.98);
+   }
+}
+
+/*Reglas que interactuan con JS*/
+.liHover:hover {
+   background-color: var(--hover-color);
+}
+.isSelect {
+   background-color: var(--selection-color);
+}
+

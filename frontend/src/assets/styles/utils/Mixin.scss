@@ -1,0 +1,102 @@
+// @import './Placeholder.scss';
+@mixin size($width, $height) {
+   width: $width;
+   height: $height;
+}
+@mixin icon-arrow($position, $top, $right, $size-border, $color, $deg) {
+   content: '';
+   position: $position;
+   top: $top;
+   right: $right;
+   border: $size-border solid transparent;
+   border-bottom-color:$color;
+   transform: rotate($deg);
+   cursor: pointer;
+   @include size(0, 0);
+}
+@mixin btn($width, $height, $font-size) {
+   width: $width;
+   height: $height;
+   font-size: var($font-size);
+   color: var(--white-color);
+   background-color: var(--secundary-color);
+   border-radius: 5px;
+   @extend %reset-btn;
+}
+@mixin media($breakpoint) {
+   @if $breakpoint == cellphone-small {
+      @media screen and (min-width: 370px) and (max-width: 479px) {
+        @content;
+      }
+   }
+   @else if $breakpoint == cellphone {
+     @media screen and (min-width: 480px) and (max-width: 599px) {
+       @content;
+     }
+   }
+   @else if $breakpoint == tablet-small {
+     @media screen and (min-width: 600px) and (max-width: 799px) {
+       @content;
+     }
+   }
+   @else if $breakpoint == tablet {
+     @media screen and (min-width: 800px) and (max-width: 1023px) {
+       @content;
+     }
+   }
+   @else if $breakpoint == laptop {
+     @media screen and (min-width: 1024px){
+       @content;
+     }
+   }
+}
+
+@mixin authContainerQuery {
+   @include media(tablet) {
+      grid-template-columns: 100%;
+      grid-template-areas: "Aside Aside";
+   }
+   @include media(tablet-small) {
+      grid-template-columns: 100%;
+      grid-template-areas: "Aside Aside";
+   }
+   @include media(cellphone) {
+      grid-template-columns: 100%;
+      grid-template-areas: "Aside Aside";
+   }
+   @include media(cellphone-small) {
+      grid-template-columns: 100%;
+      grid-template-areas: "Aside Aside";
+   }
+}
+
+@mixin authFormContainerQuery {
+   @include media(tablet) {
+      @include size(100%, 770px);
+   }
+   @include media(tablet-small) {
+      @include size(100%, 770px);
+   }
+   @include media(cellphone) {
+      @include size(100%, 770px);
+   }
+   @include media(cellphone-small) {
+      @include size(100%, 770px);
+   }
+}
+
+@mixin authFormQuery($height: 580px) {
+   @include media(tablet) {
+      @include size(80%, $height);
+   }
+   @include media(tablet-small) {
+      @include size(80%, $height);
+   }
+   @include media(cellphone) {
+      @include size(80%, $height);
+   }
+   @include media(cellphone-small) {
+      padding: 20px 30px;
+      @include size(80%, $height);
+   }
+}

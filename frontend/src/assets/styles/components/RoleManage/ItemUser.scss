@@ -1,0 +1,78 @@
+@import '../../utils/Placeholder.scss';
+
+.Role__item {
+   // width: 900px;
+   margin: 0 0 10px 0;
+   display: flex;
+   justify-content: center;
+   border-radius: 5px 100px 5px 5px;
+   box-shadow: 0 0 7px 0 rgba(3, 36, 35, .25);
+   div {
+      width: 92%;
+      height: 50px;
+      display: flex;
+      justify-content: space-between;
+      a {
+         width:65%;
+         display: flex;
+         text-decoration: none;
+      }
+      span {
+         width: 100%;
+         display: flex;
+         align-items: center;
+         cursor: pointer;
+         p:nth-of-type(1) {
+            width: 90px;
+            margin: 0 50px 0 0;
+         }
+         p:nth-of-type(2) {
+            width: 45px;
+            margin: 0 90px 0 0;
+         }
+         &:active {
+            transform: scale(.99);
+         }
+      }
+   }
+   button {
+      position: relative;
+      font-size: var(--font-small);
+      font-weight: 600;
+      background-color: transparent;
+      z-index: 1000;
+      @extend %reset-btn;
+   }
+   .Role__item-body {
+      cursor: auto;
+      p:nth-of-type(1) {
+         width: 90px;
+         margin: 0 50px 0 0;
+      }
+      p:nth-of-type(2) {
+         width: 60px;
+         margin: 0 90px 0 0;
+      }
+      p:nth-of-type(3) {
+         width: 270px;
+         margin: 0 80px 0 0;
+      }
+      span {
+         width: 80px;
+         height: 20px;
+         padding: 2px 0 0 0;
+         display: block;
+         background-color: rgba(3, 36, 35, .25);
+         border-radius: 10px;
+         cursor: auto;
+      text-align: center;
+      }
+      &:hover {
+         transform: scale(1);
+      }
+      &:active {
+         transform: scale(1);
+      }
+   }
+
+}

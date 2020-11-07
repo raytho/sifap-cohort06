@@ -1,0 +1,123 @@
+
+@import '../../utils/Mixin.scss';
+@import '../../utils/Checboxes.scss';
+
+.Role__main--detail {
+   padding: 60px 60px 0 60px ;
+}
+.Role__manage-panel-detail {
+   margin: 100px 0 0 0;
+}
+.Role__header--detail {
+   font-family: var(--font-text);
+   display: flex;
+   justify-content: flex-start;
+   button {
+      height: 30px;
+      margin: 10px 0 0 0;
+      display: flex;
+      justify-content: flex-start;
+      font-size: var(--font-big);
+      background-color: transparent;
+      @extend %reset-btn;
+      &::after {
+         @include icon-arrow(static, 0, 0, 13px, var(--white-color), -90deg);
+         z-index: 10;
+      }
+   }
+   span {
+      width: 900px;
+      height: 50px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+   }
+   p {
+      // font-size: var(--font-small);
+      color: var(--white-color);
+   }
+   p:nth-of-type(1) {
+      width: 110px;
+   }
+   p:nth-of-type(2) {
+      width: 50px;
+   }
+   p:nth-of-type(3) {
+      width: 250px;
+   }
+   p:nth-of-type(4) {
+      width: 250px;
+   }
+}
+
+.Role__detail-functionality {
+   height:  auto;
+   margin: 0 0 50px 0;
+   font-family: var(--font-text);
+   h2 {
+      margin: 0 0 40px 0;
+      font-size: var(--font-big);
+      font-weight: 600;
+   }
+   & > label {
+      p {
+         margin: 10px 0 0 0;
+         font-size: var(--font-smallest);
+         font-weight: 600;
+      }
+   }
+   p button {
+      background-color: transparent;
+      border: none;
+      @extend %reset-btn;
+      img {
+         width: 16px;
+         height: 16px;
+         opacity: .5;
+      }
+   }
+   select {
+      width: 200px;
+      height: 33px;
+      margin: 10px 0 20px 0;
+      padding: 0 0 0 10px;
+      display: flex;
+      background-color: var(--white-color);
+      border-radius: 2px;
+      border: 1px solid  rgba(3, 36, 35, .25);
+      outline-color: var(--secundary-color);
+   }
+   form p {
+      margin: 20px 0 10px 0;
+      font-size: var(--font-small);
+      span {
+         font-weight: 600;
+      }
+   }
+   form > div:nth-of-type(1) {
+      margin: 20px 0 0 0;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0px 10px 0 rgba(3, 36, 35, .25);
+      h3  {
+         margin: 0 0 20px 0;
+         font-weight: 600;
+      }
+      p {
+         line-height: 16px;
+      }
+      label {
+         font-weight: 600;
+      }
+   }
+   form div:nth-of-type(2) {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-title);
+   }
+}
+.Role__detail-btn {
+   margin: 30px 0 30px 0;
+   @include btn(150px, 50px, --font-small);
+}
+
