@@ -5,8 +5,8 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const config = require("../config");
 const invoiceMxData = require("../utils/mocks/invoice");
-const { createInvoice } = require("../services/files/createInvoiceMx");
-const { uploadPdf } = require("../services/storage/profilePicturesUpload");
+const { createInvoice } = require("./files/createInvoiceMx");
+const { uploadPdf } = require("./storage/profilePicturesUpload");
 const numberToLetter = require("../lib/numbersToLetter");
 
 const TABLE_PRODUCTS = "product";
@@ -356,13 +356,9 @@ class UsersService {
     }
 
     const idCountry =
-      user.country === "COL"
-        ? 1
-        : user.country === "MEX"
-        ? 2
-        : user.country === "DOM"
-        ? 3
-        : 0;
+      user.country === "COL" ? 1
+        : user.country === "MEX" ? 2
+          : user.country === "DOM" ? 3 : 0;
     const userProfile = {
       phoneNumber: user.phoneNumber,
       firstName: user.firstName,
@@ -404,11 +400,8 @@ class UsersService {
     const idCountry =
       data.country === "COL"
         ? 1
-        : data.country === "MEX"
-        ? 2
-        : data.country === "DOM"
-        ? 3
-        : 0;
+        : data.country === "MEX" ? 2
+          : data.country === "DOM" ? 3 : 0;
     delete data.firstName;
     delete data.lastName;
     delete data.dateOfBirth;
