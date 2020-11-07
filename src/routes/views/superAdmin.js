@@ -256,19 +256,14 @@ const inviteNewUser = (app) => {
         const data = req.body;
         const userService = new usersService();
         try {
-          console.log("Data de userEditRol => ", data);
-          if (data.rol) {
-            const updatedUser = await userService.updateRolByUserId(id, data);
-            if (updatedUser) {
-              res.status(200).send({
-                data: updatedUser,
-                message: "User updated",
-              });
-            } else {
-              res.status(500).json({ message: "Error to get user" });
-            }
+          const updatedUser = await userService.updateRolByUserId(id, data);
+          if (updatedUser) {
+            res.status(200).send({
+              data: updatedUser,
+              message: "User updated",
+            });
           } else {
-            res.status(500).json({ message: "Rol is required" });
+            res.status(500).json({ message: "Error to get user" });
           }
         } catch (error) {
           console.log(error);
