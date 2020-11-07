@@ -2,7 +2,8 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Title from '../Title';
@@ -10,6 +11,7 @@ import BillItem from './BillItem';
 import BillItemAdded from './BillItemAdded';
 import BillCustomerModal from './BillCustomerModal';
 import BillSendModal from './BillSendModal';
+import BillDataProfileModal from './BillDataProfileModal';
 
 import iconBill from '../../assets/static/icon/bill.png';
 import iconSearch from '../../assets/static/icon/search.png';
@@ -55,6 +57,8 @@ const Bill = (props) => {
    const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
    const year = date.getFullYear();
    const dateBill = `${month}-${day}-${year}`;
+   const [dataProfileModal, setDataProfileModal] = useState(false);
+   const history = useHistory();
 
    let sumProduct = 0;
    for (let i = 0; i < formProduct.length; i++) {
@@ -63,10 +67,30 @@ const Bill = (props) => {
    const ivaResult = sumProduct * form.ivaPorcent / 100;
    const subtotal = sumProduct;
    const total = sumProduct + ivaResult;
+   window.console.log(user.companyName);
+   useEffect(() => {
+      if (user.fiscalId === undefined && user.companyName === undefined) {
+            window.console.log('no hay fiscal id, ni empresa, ponlo');
+            setDataProfileModal(true)
+      } else {
+         window.console.log('puedes facturar');
+      }
+   }, [])
+
+   const handleModalProfile = () => {
+      if (dataProfileModal) {
+         setDataProfileModal(false);
+         history.push('/profile');
+      }
+   }
 
    return (
       <>
          <Title {...propsBill} />
+         <BillDataProfileModal
+            dataProfileModal={dataProfileModal}
+            handleModalProfile={handleModalProfile}
+         />
          <section className='Bill__panel'>
             <div className='Bill__header'>
                <h2>Factura</h2>

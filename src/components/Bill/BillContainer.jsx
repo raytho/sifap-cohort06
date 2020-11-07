@@ -89,7 +89,6 @@ const BillContainer = () => {
          return i !== item
       }));
    }
-      window.console.log(form.paymentMethod.length)
    const validate = () => {
       let email;
       let fullName;
