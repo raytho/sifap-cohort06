@@ -1,7 +1,6 @@
 @import '../utils/Mixin.scss';
 @import '../utils/Placeholder.scss';
 @import '../components/RoleManage/AddRoleModal.scss';
-// @import '../utils/ConfirmateModal.scss';
 
 .close {
    width: 100%;
@@ -23,9 +22,5 @@
 }
 
 .Modal {
-   // Aquí vamos hacer un modal más generico para esos que son casí iguales
-   // Por ahora hacemos el que estamos necesitanado
    position: relative;
 }
-
-/* Validate Modals */

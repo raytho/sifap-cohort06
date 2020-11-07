@@ -1,6 +1,10 @@
 @import '../../utils/Placeholder.scss';
 @import '../../utils/Mixin.scss';
 
+.Bill__item-container {
+   position: relative;
+}
+
 .Bill__item {
    width: 99%;
    height: 50px;
@@ -15,21 +19,24 @@
       border-bottom: 1px solid var(--secundary-color);
    }
    label:nth-of-type(1) {
+      width: 16%;
       margin: 0 0 0 2%;
       input {
-         width: 180px;
+         width: 100%;
       }
    }
    label:nth-of-type(2) {
+      width: 6.5%;
       margin: 0 0 0 3%;
       input {
-         width: 80px;
+         width: 100%;
       }
    }
    label:nth-of-type(3) {
-      margin: 0 0 0 1%;
+      width: 9%;
+      margin: 0 0 0 2%;
       input {
-         width: 80px;
+         width: 100%;
          &[type=number]::-webkit-inner-spin-button,
          &[type=number]::-webkit-outer-spin-button {
             appearance: none;
@@ -37,33 +44,52 @@
       }
    }
    label:nth-of-type(4) {
-      margin: 0 0 0 1%;
+      width: 20%;
+      margin: 0 0 0 2%;
       input {
-         width: 230px;
+         width: 100%;
       }
    }
    label:nth-of-type(5) {
+      width: 6.5%;
       margin: 0 0 0 3%;
       input {
-         width: 60px;
+         width: 100%;
          &[type=number]::-webkit-inner-spin-button,
          &[type=number]::-webkit-outer-spin-button {
             height: 25px;
          }
       }
    }
+   label:nth-of-type(6) {
+      width: 5%;
+      margin: 0 0 0 4%;
+      input {
+         width: 100%;
+      }
+   }
    span {
-      width: 10%;
+      width: 14%;
       display: block;
       text-align: center;
+      margin: 0 0 0 2%;
       p {
          width: 100%;
       }
    }
-   button {
-      font-size: var(--font-small);
-      font-weight: 600;
-      background-color: transparent;
-      @extend %reset-btn;
-   }
+}
+
+.Bill__add-item {
+   width: 30px;
+   height: 30px;
+   position: absolute;
+   top: 35px;
+   left: -5px;
+   font-size: var(--font-big);
+   color: var(--white-color);
+   line-height: 0;
+   background-color: var(--secundary-color);
+   border-radius: 50%;
+   border: none;
+   @extend %reset-btn;
 }

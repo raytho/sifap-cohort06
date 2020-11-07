@@ -62,34 +62,29 @@ const LoginContainer = () => {
       if (validateForm()) {
          const postData = async () => {
             try {
-               await fetch(`${API}auth/sign-in`, {
+               const response = await fetch(`${API}auth/sign-in`, {
                   method: 'POST',
                   headers: {
                      'Accept': 'application/json',
                      'Content-Type': 'application/json',
                      'Authorization': `Basic ${dataLogin}`,
                   },
-               }).then(async response => {
-                  if(response.status === 500) {
-                     setLoader(true);
-                     setCredentials(true)
+               })
+               if(response.status === 500) {
+                  setLoader(true);
+                  setCredentials(true)
+               }
+               const { token, user } = await response.json();
+               if (loader) {
+                  if (user.twoFactorActive) {
+                     activeTFAToken(token);
+                     handleModalOpen();
+                  } else {
+                     setUser(JSON.stringify(user));
+                     activateAuth(token);
+                     history.push('/emitirfacturas');
                   }
-                  const { token, user } = await response.json();
-                  if (loader) {
-                     if (user.twoFactorActive) {
-                        activeTFAToken(token);
-                        handleModalOpen();
-                     } else {
-                        setUser(JSON.stringify(user));
-                        activateAuth(token);
-                        if (user.hasConfigured) {
-                           history.push('/emitir-facturas');
-                        } else {
-                           history.push('/config-inicial');
-                        }
-                     }
-                  }
-               }).catch(error => window.console.error(error));
+               }
             } catch (error) {
                window.console.log(error)
             }

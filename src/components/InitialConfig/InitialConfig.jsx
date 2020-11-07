@@ -72,13 +72,11 @@ const InitialConfig = (props) => {
                   </span>
                </div>
                <div className='InitialConfig__main'>
-
                   <InitialConfigModalConfirm
                      modal={modal}
                      handleModal={handleModal}
+                     formCF={formCF}
                   />
-
-
                {slide
                   ? <InitialConfigFirst
                      handleChangeInputConfig={handleChangeInputConfig}

@@ -94,7 +94,7 @@
          font-weight: 600;
       }
    }
-   form div {
+   form > div:nth-of-type(1) {
       margin: 20px 0 0 0;
       padding: 20px;
       border-radius: 5px;
@@ -110,11 +110,14 @@
          font-weight: 600;
       }
    }
+   form div:nth-of-type(2) {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-title);
+   }
 }
 .Role__detail-btn {
    margin: 30px 0 30px 0;
-   position: relative;
-   right: calc( -100% + 150px);
    @include btn(150px, 50px, --font-small);
 }
 

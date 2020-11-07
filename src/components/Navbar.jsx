@@ -7,18 +7,20 @@ import '../assets/styles/Global.scss';
 
 const Navbar = () => {
 
-   const [element, setElement] = useState(1);
+   const [element, setElement] = useState(0);
    const user = JSON.parse(window.sessionStorage.getItem('user'));
    const normalizeString = text =>
-      text.replace(' ', '-').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+      text.replace(' ', '').replace('.','').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
    const history = useHistory();
 
    const handleClick = (id) => {
       setElement(id !== element ? id : element);
       document.getElementById(`item-functionality-${id}`).classList.add('isSelect');
       document.getElementById(`item-functionality-${id}`).classList.remove('liHover');
-      if(element !== id) {
+
+      if(element !== id && element !== 0) {
          document.getElementById(`item-functionality-${element}`).classList.remove('isSelect');
+         document.getElementById(`item-functionality-${element}`).classList.add('liHover');
       }
       if (element === id) {
          document.getElementById(`item-functionality-${id}`).classList.add('isSelect');
@@ -28,7 +30,7 @@ const Navbar = () => {
    useEffect(() => {
       user.permissions.forEach(item => {
          switch (history.location.pathname) {
-            case `/${item.name.replace(' ', '-').toLowerCase()}`:
+            case `/${item.name.replace(' ', '').replace('.', '').toLowerCase()}`:
                document.getElementById(`item-functionality-${item.idPermission}`)
                   .classList.add('isSelect');
                setElement(item.idPermission);

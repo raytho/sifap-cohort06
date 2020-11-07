@@ -35,6 +35,7 @@ const Profile = (props) => {
       uploadedImg,
       loaderImg
    } = props;
+
    const [name, setName] = useState(false);
    const [dateOfBirth, setDateOfBirth] = useState(false);
    const [city, setCity] = useState(false);
@@ -88,6 +89,7 @@ const Profile = (props) => {
          }
       })
    }, []);
+
    return (
       <>
          <Title icon={userProfile} title='Perfil' />
@@ -485,7 +487,7 @@ const Profile = (props) => {
                            <p>{saved &&  'Se guardaron los cambios'}</p>
                            <p>{notSaved &&  'No se se guardaron los cambios'}</p>
                         </div>
-                        <button  type='submit'>Guardar</button>
+                        <button type='submit'>Guardar</button>
                      </div>
                   </div>
                </form>
@@ -502,7 +504,9 @@ Profile.propTypes = {
    handleSubmitImg: PropTypes.func.isRequired,
    handleClickAdd: PropTypes.func.isRequired,
    handleInputImg: PropTypes.func.isRequired,
-   countries: PropTypes.func.isRequired,
+   countries: PropTypes.arrayOf(
+      PropTypes.object
+   ).isRequired,
    form: PropTypes.object.isRequired,
    inputFile: PropTypes.object.isRequired,
    image: PropTypes.string || undefined.isRequired,

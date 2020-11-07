@@ -22,4 +22,16 @@
 }
 .SignUpLogo {
    @include size(500px, 300px);
+   @include media(tablet) {
+      @include size(100%, 300px);
+   }
+   @include media(tablet-small) {
+      @include size(100%, 300px);
+   }
+   @include media(cellphone) {
+      @include size(100%, 300px);
+   }
+   @include media(cellphone-small) {
+      @include size(100%, 300px);
+   }
 }

@@ -57,19 +57,14 @@ const TFAuthentication = () => {
                }).then(async response => {
                   if (response.status === 500) setCodeValidate(false)
                   const { token, user, message } = await response.json();
-                  window.console.log(message)
-                  if (message === 'Invalide code') {
-                     history.push('/login');
+                  if (message === 'Invalid Token') {
+                     history.push('/');
                   }
                   setUser(JSON.stringify(user));
                   setResend(true);
                   activateAuth(token);
                   removeTFAToken();
-                  if (user.hasConfigured) {
-                     history.push('/emitir-facturas');
-                  } else {
-                     history.push('/config-inicial');
-                  }
+                  history.push('/emitirfacturas');
                })
             } catch(error) {
                window.console.log(error);
@@ -81,29 +76,46 @@ const TFAuthentication = () => {
 
    const sendMail = async () => {
       try {
-         await fetch(`${API}auth/send-mail-code`, {
+         const response = await fetch(`${API}auth/send-mail-code`, {
             method: 'POST',
             headers: {
                'Access-Control-Allow-Headers': 'content-type',
                'Authorization': `bearer ${TFAToken}`
             }
-         }).then(response => {
-            if(response.status === 200) {
-               setResend(false);
-               window.console.log('Revisa tu correo');
-            }
-         });
+         })
+         if(response.status === 200) {
+            setResend(false);
+            window.console.log('Revisa tu correo');
+         }
       } catch(error) {
-         window.console.log(error);
+         window.console.log(error, 'este');
       }
    }
 
    useEffect(() => {
       if(!TFAToken) {
-         history.push('/login');
+         history.push('/');
       }
       return () => removeTFAToken();
-   }, [])
+   }, []);
+
+   useEffect(() => {
+      if (form.one.length === 1) {
+         document.getElementById('input-two').focus();
+      }
+      if (form.two.length === 1) {
+         document.getElementById('input-three').focus();
+      }
+      if (form.three.length === 1) {
+         document.getElementById('input-four').focus();
+      }
+      if (form.four.length === 1) {
+         document.getElementById('input-five').focus();
+      }
+      if (form.five.length === 1) {
+         document.getElementById('input-six').focus();
+      }
+   }, [form])
 
    return (
       <main className='TFA'>
@@ -123,6 +135,7 @@ const TFAuthentication = () => {
                </div>
                <div>
                   <input
+                     id='input-two'
                      type='text'
                      value={form.two}
                      name='two'
@@ -132,6 +145,7 @@ const TFAuthentication = () => {
                </div>
                <div>
                   <input
+                     id='input-three'
                      type='text'
                      value={form.three}
                      name='three'
@@ -141,6 +155,7 @@ const TFAuthentication = () => {
                </div>
                <div>
                   <input
+                     id='input-four'
                      type='text'
                      value={form.four}
                      name='four'
@@ -150,6 +165,7 @@ const TFAuthentication = () => {
                </div>
                <div>
                   <input
+                     id='input-five'
                      type='text'
                      value={form.five}
                      name='five'
@@ -159,6 +175,7 @@ const TFAuthentication = () => {
                </div>
                <div>
                   <input
+                     id='input-six'
                      type='text'
                      value={form.six}
                      name='six'

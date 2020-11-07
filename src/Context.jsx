@@ -16,6 +16,7 @@ const Provider = ({ children }) => {
    const [userImg, setUserImg] = useState();
    const [userDeleted, setUserDeleted] = useState();
    const [initialConfig, setInitialConfig] = useState(false);
+   const [userDetail, setUserDetail] = useState('');
    // Value va a ser le objeto que vamos a poder acceder en toda la app
    const value = {
       isAuth,
@@ -61,6 +62,10 @@ const Provider = ({ children }) => {
       initialConfig,
       setInitialConfig: config => {
          setInitialConfig(config)
+      },
+      userDetail,
+      getUserDetail: userDetailData => {
+         setUserDetail(userDetailData)
       }
    }
 

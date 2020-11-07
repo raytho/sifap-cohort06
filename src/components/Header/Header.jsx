@@ -11,9 +11,6 @@ const Header = () => {
    <header className='Header'>
 
       <div className='Header__container'>
-         <a href='/'>
-            Ayuda
-         </a>
 
          <div  className='Header__user'>
          {isAuth ? <HeaderUserContainer/> : null}

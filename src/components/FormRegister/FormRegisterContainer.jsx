@@ -91,27 +91,26 @@ const SignUpContainer = () => {
       if (validateForm()) {
          const postData = async () => {
             try {
-               await fetch(`${API}auth/sign-up`, {
+               const response = await fetch(`${API}auth/sign-up`, {
                   method: 'POST',
                   headers: {
                      'Accept': 'application/json',
                      'Content-Type': 'application/json',
                   },
                   body: JSON.stringify(form)
-               }).then(async response => {
-                  const { message } = await response.json();
-                  window.console.log(message)
-                  if(message === 'No se puede registrar un usuario sin invitacion, favor de validar') {
-                     setInvited(true);
-                  } else {
-                     setInvited(false);
-                  }
-                  if (response.status === 200) {
-                     setEmailUsed(true)
-                  } else if (response.status === 201) {
-                     setModalConfirm(true)
-                  }
-               }).catch(error => window.console.log(error))
+               })
+               const { message } = await response.json();
+               window.console.log(message)
+               if(message === 'No se puede registrar un usuario sin invitacion, favor de validar') {
+                  setInvited(true);
+               } else {
+                  setInvited(false);
+               }
+               if (response.status === 200) {
+                  setEmailUsed(true)
+               } else if (response.status === 201) {
+                  setModalConfirm(true)
+               }
             } catch (error) {
                window.console.log(error)
             }

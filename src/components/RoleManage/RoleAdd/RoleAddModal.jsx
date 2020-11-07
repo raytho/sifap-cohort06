@@ -67,8 +67,9 @@ const RoleAddModal = (props) => {
          <Modal
             isOpen={sent}
             isConfirmation
+            handleModalClose={handleModalCloseConfirm}
          >
-            <button type='button' onClick={handleModalCloseConfirm}>X</button>
+            {/* <button type='button' onClick={handleModalCloseConfirm}>X</button> */}
                {invited && <p>Invitación enviada.</p>}
                {errorInvited && <p>Hubo error al enviar la invitación, intenta de nuevo.</p>}
             <div>

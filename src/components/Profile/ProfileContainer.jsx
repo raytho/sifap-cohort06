@@ -32,7 +32,6 @@ const ProfileContainer = () => {
       phoneNumber: user.phoneNumber,
       twoFactorActive: user.twoFactorActive
    });
-   const regExpDate = (/^(\d{4})-(\d{2})-(\d{2})$/).test(form.dateOfBirth)
    const handleChangeInput = e => {
       if (e.target.name === 'twoFactorActive') {
          setValues({
@@ -48,12 +47,14 @@ const ProfileContainer = () => {
    }
    const handleSubmit = e => {
       e.preventDefault();
+      // debugger
+
       const putData = async () => {
          user.twoFactorActive = form.twoFactorActive;
          setUser(JSON.stringify(user));
          try {
             setLoader(true);
-            await fetch(`${API}user/data/profile`, {
+            const response = await fetch(`${API}user/data/profile`, {
                method: 'PUT',
                headers: {
                   'Accept': 'application/json',
@@ -62,25 +63,23 @@ const ProfileContainer = () => {
                },
                body: JSON.stringify(form)
             })
-            .then(async response => {
-               const { data: { message: { status }  }} = await response.json();
-               if (status === 'Saved') {
-                  setSaved(true);
-                  setLoader(false);
-               } else {
-                  setNotSaved(true);
-                  setLoader(false);
-               }
-            }).catch(error => window.console.log(error));
+            const { data: { message: { status }  } } = await response.json();
+            window.console.log(status);
+            window.console.log(response);
+            if (status === 'Saved') {
+               setSaved(true);
+               setLoader(false);
+            } else {
+               setNotSaved(true);
+               setLoader(false);
+            }
          } catch(error) {
             window.console.log(error);
             setLoader(false);
          }
 
       }
-      if (regExpDate) {
-         putData();
-      }
+      putData();
    }
    const handleInputImg = () => {
       const formData = new FormData();
@@ -98,26 +97,24 @@ const ProfileContainer = () => {
       const postImg = async () => {
          try {
             setLoaderImg(true);
-            await fetch(`${API}user/data/profile-image`, {
+            const response = await fetch(`${API}user/data/profile-image`, {
                method: 'POST',
                headers: {
                   'Authorization': `Bearer ${token}`,
                },
                body: formDataSubmit,
-            })
-            .then(async response => {
-               const { profile_picture_url, uploaded } = await response.json();
-               user.profile_picture_url = profile_picture_url;
-               if (uploaded) {
-                  // setAddImg(false);
-                  setLoaderImg(false);
-               } else {
-                  setLoaderImg(false);
-               }
-               setImage(profile_picture_url);
-               setUserImg(profile_picture_url)
-               setUploadImg(uploaded);
-            })
+            });
+            const { profile_picture_url, uploaded } = await response.json();
+            user.profile_picture_url = profile_picture_url;
+            if (uploaded) {
+               // setAddImg(false);
+               setLoaderImg(false);
+            } else {
+               setLoaderImg(false);
+            }
+            setImage(profile_picture_url);
+            setUserImg(profile_picture_url)
+            setUploadImg(uploaded);
          } catch(error) {
             window.console.log(error);
          }
@@ -148,7 +145,7 @@ const ProfileContainer = () => {
                },
                signal: controller.signal,
             })
-            const {message} = await response.json();
+            const { message } = await response.json();
             setQr(message);
          } catch(error) {
             window.console.log(error);

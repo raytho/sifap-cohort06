@@ -1,7 +1,7 @@
+/* eslint-disable consistent-return */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RoleDetail from './RoleDetail';
-import GetData from '../../../containers/GetData';
 
 const RoleDetailContainer = (props) => {
 
@@ -14,6 +14,10 @@ const RoleDetailContainer = (props) => {
    const idUser = match.params.id;
    const [modal, setModal] = useState(false);
    const [editRole, setEditRole] = useState(false);
+   const [loader, setLoader] = useState(false);
+   const [dataDetail, setDataDetail] = useState({});
+   const [loading, setLoading] = useState(true);
+   const [saved, setSaved] = useState(false);
    const [form, setValues] = useState({});
 
    const handleClickEdit = () => {
@@ -36,25 +40,34 @@ const RoleDetailContainer = (props) => {
          })
       }
    }
+
+   // window.console.log(form.role.length);
    window.console.log(form);
    const handleSubmit = e => {
       e.preventDefault();
       const putData = async () => {
+         setLoader(true);
          try {
             window.console.log(form);
             const response = await fetch(`${API}superAdmin/userEditRol/${idUser}`, {
                method: 'PUT',
-               'Accept': 'application/json',
-               'Content-Type': 'application/json',
-               'Authorization': `Basic ${TFAToken}`,
+               headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': `Basic ${TFAToken}`,
+               },
                body: JSON.stringify(form)
             });
-            window.console.log(response);
+            const { message } = await response.json();
+            if (message === 'User updated') {
+               setLoader(false)
+               setSaved(true);
+            }
          } catch(error) {
             window.console.log(error)
          }
       }
-      putData();
+         putData();
    }
 
    const handleModalOpen = () => {
@@ -66,30 +79,39 @@ const RoleDetailContainer = (props) => {
    const goBack = () => {
       history.goBack()
    }
+   useEffect(() => {
+      const getData = async () => {
+         try {
+            const response = await fetch(`${API}superAdmin/get-user/${idUser}`);
+            const data = await response.json();
+            window.console.log(data[0])
+            setDataDetail(data[0]);
+            form.twoFactorActive = await data[0].twoFactorActive
+
+            setLoading(false);
+         } catch(error) {
+            window.console.log(error)
+         }
+      }
+      getData();
+   }, [])
 
    return (
-      <GetData api={`${API}superAdmin/get-user/${idUser}`}>
-         {
-            ({ loading, error, data}) => {
-               if(error) return <p>¡Error!</p>
-               return(
-                  <RoleDetail
-                  user={data[0]}
-                  loading={loading}
-                  handleChangeInput={handleChangeInput}
-                  handleModalOpen={handleModalOpen}
-                  handleModalClose={handleModalClose}
-                  modalIsOpen={modal}
-                  form={form}
-                  goBack={goBack}
-                  handleClickEdit={handleClickEdit}
-                  editRole={editRole}
-                  handleSubmit={handleSubmit}
-               />
-               )
-            }
-         }
-      </GetData>
+      <RoleDetail
+      user={dataDetail}
+      loading={loading}
+      handleChangeInput={handleChangeInput}
+      handleModalOpen={handleModalOpen}
+      handleModalClose={handleModalClose}
+      modalIsOpen={modal}
+      form={form}
+      saved={saved}
+      goBack={goBack}
+      handleClickEdit={handleClickEdit}
+      editRole={editRole}
+      loader={loader}
+      handleSubmit={handleSubmit}
+   />
    )
 };
 
