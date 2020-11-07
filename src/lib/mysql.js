@@ -527,7 +527,7 @@ function MysqlLib() {
       return new Promise(function (resolve, reject) {
         connection.query(
           "UPDATE users SET role = ?, twoFactorActive = ? WHERE userId = ?",
-          [data.rol, data.twoFactorActive, id],
+          [data.role, data.twoFactorActive, id],
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));
