@@ -1,0 +1,8 @@
+.env
+/database
+/DiagramaE-R
+/node_modules
+*.sql
+*.png
+routes.md
+*.log

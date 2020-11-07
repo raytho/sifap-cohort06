@@ -1,0 +1,47 @@
+{
+  "name": "sifap",
+  "version": "1.0.0",
+  "description": "sifapProject",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "Jorge Carrion <jorge_28cs@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@hapi/boom": "^9.1.0",
+    "@hapi/joi": "^17.1.1",
+    "aws-sdk": "^2.774.0",
+    "axios": "^0.20.0",
+    "bcrypt": "^5.0.0",
+    "chalk": "^4.1.0",
+    "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fetch-base64": "^2.1.2",
+    "helmet": "^4.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.2",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
+    "mysql": "^2.18.1",
+    "nanoid": "^3.1.12",
+    "node-fetch": "^2.6.1",
+    "nodemailer": "^6.4.13",
+    "passport": "^0.4.1",
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^4.0.0",
+    "passport-oauth": "^1.0.0",
+    "pdfkit": "^0.11.0",
+    "qrcode": "^1.4.4",
+    "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "mongodb": "^3.6.2",
+    "nodemon": "^2.0.4"
+  }
+}
