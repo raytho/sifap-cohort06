@@ -469,7 +469,7 @@ class UsersService {
     const fiscalTax = await this.generateFiscalTax(userData.idCountry);
     const totalWithLetter= numberToLetter(amount + tax);
     const emitterData = await this.mysqlLib.get("companyName, fiscalId", TABLE_FISCAL_DATA, "id", userData.fiscalId);
-    const now = new Date();
+    const now = new Date().toLocaleString("en-US", {timeZone: "America/Mexico_City"});
     const satCertNumber = customAlphabet("000001234567589", 20);
     const digitalSingCfdi = "ZCDwrNgcG0bCgvVi8HN5pmPfIk/iyRCKnkwIKLox9uHOf14unlPuKv7OHU6uVpGDI+W0cGfkvAdxh8sBY6b7NmBwfvLq7CbYT088c6phJLm7zuiYJB+ngJ5o0v0Fs8QgBFIxn5quLf4739z3Zbe0J/4v2bAJg2oNp1qECq8w4e1dcIw14SxTGCtJDOfj9QPQOoOFdt6EpjG2544eKn4P1ljx9OGg0kt6w/CDDofvXGr93Zow3mg3yolW8FhlQny8xdX1YaQFDwrKmKEw6UGP6Nempt+mtRVJWQzvGZGD9iTaM6CdCfxfTpnmtCpZCF60KSy1nnYu+VUfGnaNGZMd2Q==";
     const satDigitalSign = "hNl+BdleVrXeAMgtTeKADtcqjaSylq3FUjYUmDDhEnYVDEsBfEO/ZNkP0f7NtEA7o5lY9AIS5OXJU8HaojhKri63djPzoxHGBXDjYzvTIlUgpx0ZI3JhDz+qjbWLaTIOddQZ80ElCTyEToofbB4LPg845X/LMNIN3d2h8amVdxotF0/ZWIGF3x0JeEssest6VvJ5HNSQYD8bxR3/CXQKK2670husLzBXKAYY2Twucd22V4FCIRNaUAq80/+LtQRlvC1Zzv+3o5SPm2GevLVMN67iawr6nk3tRJyoN/pfjtmNLyqyk6bpBvIy+JwMO+upTc3z1DD9OP+PSsWwQbtLOQ==";
