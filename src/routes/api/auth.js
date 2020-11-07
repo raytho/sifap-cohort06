@@ -35,7 +35,7 @@ function authApi(app) {
           if (user.twoFactorActive) {
             generateTempToken(req, res, next, user);
           } else {
-            generateToken(req, res, next, user, usersService);
+            generateToken(req, res, next, user);
           }
         }
       } catch (error) {
@@ -307,31 +307,43 @@ function authApi(app) {
     }
   });
 
-  router.put("/password/:id", async (req, res) => {
-    const id = req.params.id;
-    const newPassword = req.body.password;
-    if (!newPassword) {
-      res.status(400).json({
-        message: "Bad request",
-        error: "Bad request",
-      });
-    } else {
-      try {
-        const updatedUser = await usersService.updatePasswordUserByID(
-          id,
-          newPassword
-        );
-        if (updatedUser) {
-          res.status(200).send({
-            data: updatedUser.message,
-            message: "User updated",
+  router.put("/password", async (req, res, next) => {
+    passport.authenticate(
+      "jwt",
+      { session: false },
+      async (error, userToken) => {
+        if (!userToken || !req.body) {
+          res.status(400).json({
+            message: "Bad request",
+            error: "Bad request",
           });
+        } else {
+          const newPassword = req.body.password;
+          if (!newPassword) {
+            res.status(400).json({
+              message: "Bad request",
+              error: "Bad request",
+            });
+          } else {
+            try {
+              const updatedUser = await usersService.updatePasswordUserByID(
+                userToken.email,
+                newPassword
+              );
+              if (updatedUser) {
+                res.status(200).send({
+                  data: updatedUser.message,
+                  message: "User updated",
+                });
+              }
+            } catch (error) {
+              console.log(error);
+              res.status(500).json({ message: "Error to get user" });
+            }
+          }
         }
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Error to get user" });
       }
-    }
+    )(req, res, next);
   });
 
   router.get("/logout", function (req, res, next) {
@@ -343,15 +355,20 @@ function authApi(app) {
   });
 }
 
-const generateToken = (req, res, next, user, usersService) => {
+const generateToken = (req, res, next, user) => {
   req.login(user, { session: false }, async (error) => {
     if (error) {
       next(error);
     } else {
+      const usersService = new UsersService();
       const permissesService = new PermissesService();
       const permissions = await permissesService.getPermissesByRol(user);
-      const fiscalData = await usersService.checkInitialConfig(user.userId);
-      
+      const isConfigured = await usersService.checkInitialConfig(
+        user.idCountry
+      );
+      const fiscalData = await usersService.getFiscalData(user.fiscalId);
+      const country = await usersService.getCountry(user.idCountry);
+
       const {
         userId,
         email,
@@ -359,8 +376,8 @@ const generateToken = (req, res, next, user, usersService) => {
         state,
         dateOfBirth,
         fiscalAct,
-        country,
         firstName,
+        lastName,
         phoneNumber,
         twoFactorActive,
         role,
@@ -382,18 +399,20 @@ const generateToken = (req, res, next, user, usersService) => {
         user: {
           userId,
           email,
-          country,
+          country: country,
           city,
           state,
           dateOfBirth: formatDate,
           fiscalAct,
           firstName,
+          lastName,
           phoneNumber,
           twoFactorActive: twoFactorToNumber,
           role,
           profile_picture_url,
-          hasConfigured: fiscalData ? true: false,
+          hasConfigured: isConfigured ? true : false,
           ...fiscalData,
+          fiscalIdentifierName: isConfigured,
           permissions,
         },
       });

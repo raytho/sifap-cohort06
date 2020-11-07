@@ -507,32 +507,6 @@ function MysqlLib() {
       });
     },
 
-    updateUserProfile(data, id) {
-      return new Promise(function (resolve, reject) {
-        connection.query(
-          "UPDATE users SET phoneNumber=?, firstName=?, dateOfBirth=?, city=?, state=?, country=?, fiscalId=?, twoFactorActive=? WHERE userId = ?",
-          [
-            data.phoneNumber,
-            data.firstName,
-            data.dateOfBirth,
-            data.city,
-            data.state,
-            data.country,
-            data.fiscalId,
-            data.twoFactorActive,
-            id,
-          ],
-          function (err, rows) {
-            if (rows === undefined) {
-              reject(new Error("Error rows is undefined"));
-            } else {
-              resolve(rows);
-            }
-          }
-        );
-      });
-    },
-
     updateProfileImage(imgUrl, id) {
       return new Promise(function (resolve, reject) {
         connection.query(
@@ -553,7 +527,7 @@ function MysqlLib() {
       return new Promise(function (resolve, reject) {
         connection.query(
           "UPDATE users SET role = ?, twoFactorActive = ? WHERE userId = ?",
-          [data.rol, data.twoFactorActive, id],
+          [data.role, data.twoFactorActive, id],
           function (err, rows) {
             if (rows === undefined) {
               reject(new Error("Error rows is undefined"));
@@ -567,7 +541,7 @@ function MysqlLib() {
 
     upsertUserFiscalData(data) {
       return new Promise(function (resolve, reject) {
-        connection.query("INSERT INTO fiscal_data SET ?", data, function (
+        connection.query("INSERT INTO country_config SET ?", data, function (
           err,
           rows
         ) {
@@ -626,18 +600,133 @@ function MysqlLib() {
       });
     },
 
-    verifyInitialConfig(id) {
-      return new Promise(function (resolve, reject) {
+    verifyInitialConfig(country) {
+      return new Promise((resolve, reject) => {
         connection.query(
-          `SELECT companyName, fiscalId, fiscalIdentifierName FROM fiscal_data WHERE id = '${id}' LIMIT 1`,
+          "SELECT * FROM country_config WHERE id = ?",
+          country,
           function (err, rows) {
             if (err) {
-              reject(new Error(err.message));
-            }
-            if (rows.length) {
-              resolve(rows[0]);
-            } else {
+              reject(err);
+            } else if (rows === [] || rows === undefined) {
               resolve(false);
+            } else {
+              resolve(rows[0]);
+            }
+          }
+        );
+      });
+    },
+
+    upsert(table, columns, data) {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          `INSERT INTO ${table} (${columns}) VALUES ?`,
+          [data],
+          function (err, rows) {
+            if (err) {
+              console.log(err);
+              reject(new Error("Error:", err));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    singleUpsert(table, data) {
+      return new Promise((resolve, reject) => {
+        connection.query(`INSERT INTO ${table} SET ?`, [data], function (
+          err,
+          rows
+        ) {
+          if (err) {
+            console.log(err);
+            reject(new Error("Error:", err));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    },
+
+    update(table, data, condition, conditionValue) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `UPDATE ${table} SET ? WHERE ${condition} = ?`,
+          [data, conditionValue],
+          function (err, rows) {
+            if (err) {
+              console.log(err);
+              reject(new Error("Error:", err));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    get(columns, table, condition, conditionValue) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `SELECT ${columns} FROM ${table} WHERE ${condition} = ?`,
+          conditionValue,
+          function (err, rows) {
+            if (err) {
+              reject(new Error(err));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    getAll(columns, table) {
+      return new Promise(function (resolve, reject) {
+        connection.query(`SELECT ${columns} FROM ${table}`, function (
+          err,
+          rows
+        ) {
+          if (err) {
+            reject(new Error(err));
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    },
+
+    delete(table, condition, conditionValue) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `DELETE FROM ${table} WHERE ${condition} = ?`,
+          conditionValue,
+          function (err, rows) {
+            if (err) {
+              reject(new Error(err));
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+    },
+
+    getInvoiceHistory(userId) {
+      return new Promise(function (resolve, reject) {
+        connection.query(
+          `SELECT a.createdAt, b.fullName, b.fiscalId, a.url FROM taxReceipt AS a
+          JOIN clients AS b
+          ON a.clientId = b.clientId WHERE a.emmiterId = ?`,
+          [userId],
+          function (err, rows) {
+            if (err) {
+              reject(new Error(err));
+            } else {
+              resolve(rows);
             }
           }
         );

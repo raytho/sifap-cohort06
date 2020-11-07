@@ -16,6 +16,11 @@ class StadisticsService {
       return countryAdded;
     } catch (error) {}
   }
+
+  async getAllProducts() {
+    const products = await this.mysqlLib.getAll("*", "product");
+    return products;
+  }
 }
 
 module.exports = StadisticsService;

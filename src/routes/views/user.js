@@ -20,26 +20,6 @@ function userView(app) {
 
   const usersService = new UsersService();
 
-  router.get("/settings/send-qr", async (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, async (error, user) => {
-      try {
-        if (error || !user) {
-          res.status(500).json({
-            message: "No autorizado",
-          });
-        } else {
-          twoFactorAuth.generateQr().then((qrCode) => {
-            res.status(200).json({
-              message: qrCode,
-            });
-          });
-        }
-      } catch (error) {
-        next(error);
-      }
-    })(req, res, next);
-  });
-
   router.get("/data/user-info", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
       try {
@@ -71,6 +51,26 @@ function userView(app) {
     })(req, res, next);
   });
 
+  router.get("/settings/send-qr", async (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      try {
+        if (error || !user) {
+          res.status(500).json({
+            message: "No autorizado",
+          });
+        } else {
+          twoFactorAuth.generateQr().then((qrCode) => {
+            res.status(200).json({
+              message: qrCode,
+            });
+          });
+        }
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+  });
+
   router.post("/tax-receipt", async (req, res, next) => {
     validationHandler(fiscalDataSchema),
     passport.authenticate("jwt", { session: false }, async (error, user) => {
@@ -85,20 +85,13 @@ function userView(app) {
           const cf = userData.cf;
           const cfName = userData.cfName;
           const increment = userData.increment;
-          const updatedUserData = await usersService.updateUserData(
-            userData,
-            userId
-          );
           const fiscalData = await usersService.upsertFiscalData(
             userData,
             userId
           );
-          if (fiscalData && updatedUserData) {
+          if (fiscalData) {
             res.status(200).json({
               message: {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                dateOfBirth: formatUTCTime(user.dateOfBirth),
                 country: user.country,
                 ...userData,
                 cf,
@@ -164,7 +157,7 @@ function userView(app) {
 
   router.put("/data/profile", async (req, res, next) => {
     passport.authenticate("jwt", { session: false }, async (error, user) => {
-      const userData = req.body;
+      const userProfileData = req.body;
       try {
         if (error || !user) {
           res.status(500).json({
@@ -172,7 +165,7 @@ function userView(app) {
           });
         } else {
           const updateUser = await usersService.updateUserProfile(
-            userData,
+            userProfileData,
             user.userId
           );
 
@@ -189,8 +182,9 @@ function userView(app) {
                   firstName: userData.firstName,
                   city: userData.city,
                   state: userData.state,
-                  country: userData.country,
-                  fiscalId: userData.fiscalId,
+                  country: userProfileData.country,
+                  fiscalId: userProfileData.fiscalId,
+                  companyName: userProfileData.companyName,
                   dateOfBirth: formatTime,
                   FiscalAct: userData.fiscalAct,
                   twoFactorActive: twoFactorToNumber,
@@ -278,8 +272,138 @@ function userView(app) {
     })(req, res, next);
   });
 
+  router.get("/clients", (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          await usersService.getUserClients(user.userId, res);
+        } catch (error) {
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
+  router.get("/clients/:id", (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const { id } = req.params;
+          if (!id) {
+            res.status(400).json({
+              message: "Error interno",
+            });
+          }else {
+            const client = await usersService.getClient(id, res);
+            if (client.length) {
+              res.status(200).json({
+                clients: client,
+              });
+            } else {
+              res.status(500).json({
+                message: "Cliente no encontrado",
+              });
+            }
+          }
+        } catch (error) {
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
+  router.post("/clients", (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const clientData = req.body;
+          if (!user.userId || !clientData) {
+            res.status(400).json({
+              message: "Error interno",
+            });
+          } else {
+            const upsertedClient = await usersService.upsertClients(user.userId, clientData, res);
+            if (upsertedClient) {
+              res.status(200).json({
+                message: "Cliente agregado correctamente",
+              });
+            } else {
+              res.status(500).json({
+                message: "Error al crear cliente",
+              });
+            }
+          }
+        } catch (error) {
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
+  router.put("/clients/:id", (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const { id } = req.params;
+          const clientData = req.body;
+          if (!id || !clientData) {
+            res.status(400).json({
+              message: "Error interno",
+            });
+          } else {
+            const updatedClient = await usersService.updateClient(id, clientData, res);
+            if (updatedClient) {
+              res.status(200).json({
+                message: "Cliente actualizado correctamente",
+              });
+            } else {
+              res.status(500).json({
+                message: "Error al actualizar cliente",
+              });
+            }
+          }
+        } catch (error) {
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
+  router.delete("/clients/:id", (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const { id } = req.params;
+          await usersService.deleteClient(id, res);
+        } catch (error) {
+          res.status(500).json({ message: "Internal Error" });
+        }
+      }
+    })(req, res, next);
+  });
+
   router.post("/invoices", async (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, (error, user) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
       try {
         if (error || !user) {
           res.status(500).json({
@@ -289,22 +413,55 @@ function userView(app) {
           const invoiceInputData = req.body;
           const userData = user;
           switch (user.country) {
-          case "México":
-            console.log("Mexico");
-            usersService.generateInvoceMx(invoiceInputData, userData);
+          case "MEX":
+            generateInvoceMX(invoiceInputData, userData, res);
             break;
-          case "Colombia":
-            console.log("Colombia");
-            usersService.generateInvoceCol(invoiceInputData, userData);
-            break;
-          case "República Dominicana":
-            console.log("Republica Dominicana");
-            usersService.generateInvoceRd(invoiceInputData, userData);
-            break;
+          case "COL":
+            return usersService.generateInvoceCol(
+              invoiceInputData,
+              userData,
+              res
+            );
+          case "DOM":
+            return usersService.generateInvoceRd(
+              invoiceInputData,
+              userData,
+              res
+            );
+          default:
+            usersService.sendInvalidResponse(res);
           }
         }
       } catch (err) {
+        console.log(err);
         next(error);
+      }
+    })(req, res, next);
+  });
+
+  router.get("/invoice-history", (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, async (error, user) => {
+      if (error || !user) {
+        res.status(500).json({
+          message: "Unauthorized",
+        });
+      } else {
+        try {
+          const { userId } = user;
+          const invoiceList = await usersService.getInvoiceHistory(userId);
+          if (invoiceList.length) {
+            res.status(200).json({
+              invoices: invoiceList,
+              message: "Ok"
+            });
+          } else {
+            res.status(200).json({
+              message: "El usuario no ha emitido facturas",
+            });
+          }
+        } catch (error) {
+          res.status(500).json({ message: "Internal Error" });
+        }
       }
     })(req, res, next);
   });
@@ -319,6 +476,22 @@ const formatUTCTime = (date) => {
   return newDate;
 };
 
-
+const generateInvoceMX = async (invoiceInputData, userData, res) => {
+  const usersService = new UsersService();
+  const generatedInvoce = await usersService.generateInvoceMx(
+    invoiceInputData,
+    userData
+  );
+  if (generatedInvoce){
+    res.status(200).json({
+      message: "Factura generada correctamente",
+      invoiceUrl: generatedInvoce
+    });
+  } else{
+    res.status(500).json({
+      message: "Ocurrió un error",
+    });
+  }
+};
 
 module.exports = userView;

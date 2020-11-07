@@ -60,6 +60,25 @@ const uploadStadistics = (csv, name) => {
   });
 };
 
+const uploadPdf = (file) => {
+  return new Promise((resolve, reject) => {
+    const params = {
+      Bucket: "sifap-invoices", 
+      Key: `${new Date().getTime()}.pdf`, // file will be saved as testBucket/contacts.csv
+      ACL: "public-read",
+      Body: file,
+      ContentType: "application/pdf",
+    };
+    s3.upload(params, function (error, data) {
+      if (error) {
+        reject(new Error("S3 Error", error.message));
+      } else {
+        resolve(data.Location);
+      }
+    });
+  });
+};
+
 const deleteLastCsv = function (filename, callback) {
   var s3 = new aws.S3();
   var params = {
@@ -75,6 +94,7 @@ const deleteLastCsv = function (filename, callback) {
     }
   });
 };
+
 const deleteLastImg = function (filename, callback) {
   var s3 = new aws.S3();
   var params = {
@@ -91,4 +111,4 @@ const deleteLastImg = function (filename, callback) {
   });
 };
 
-module.exports = { upload, uploadStadistics, deleteLastImg };
+module.exports = { upload, uploadStadistics, deleteLastImg, uploadPdf };
