@@ -1,0 +1,96 @@
+@import '../../utils/Placeholder.scss';
+@import '../../utils/Mixin.scss';
+
+.Chatbot__container,
+.Chatbot__chat {
+   position: fixed;
+   top: 20%;
+   left: 71%;
+   border-radius: 10px 90px 10px 10px;
+   z-index: 1500;
+   @include size(350px, 500px);
+}
+
+.Chatbot__container {
+   background-color: var(--white-color);
+   box-shadow: 0 0 15px 1px rgba(3, 36, 35, 0.5);
+}
+.Chatbot__chat {
+   z-index: 1500;
+}
+
+.Chatbot__message {
+   position: absolute;
+   top: 82.5%;
+   left: 73.5%;
+   margin: 0 12px 0 0;
+   padding: 10px;
+   font-family: var(--font-text);
+   background-color: var(--white-color);
+   border-radius: 5px 20px 5px 5px;
+   box-shadow: 0 0 15px 1px rgba(3, 36, 35, 0.5);
+   z-index: 2000;
+   @include size(250px, 90px);
+   button  {
+      padding: 2px;
+      position: relative;
+      top: -3px;
+      left: 215px;
+      color: var(--white-color);
+      font-size: var(--font-smallest);
+      font-weight: 600;
+      background-color: var(--secundary-color);
+      border-radius: 2px 8px 2px 2px;
+      border: none;
+      line-height: 1;
+      @extend %reset-btn;
+   }
+   p {
+      width: 200px;
+      margin: 0 auto;
+      text-align: center;
+   }
+   &::before {
+      @include  icon-arrow(absolute, 23px, -20px, 10px, var(--white-color), 90deg);
+   }
+}
+.bot {
+   width: 200px;
+   height: 200px;
+   background-color: red;
+   // top: 0;
+}
+// .Chatbot__open {
+//    position: fixed;
+//    top: 80%;
+//    left: 90%;
+//    font-family: var(--font-title);
+//    background-color: var(--detail-color);
+//    border: 1px solid var(--secundary-color);
+//    border-radius: 50%;
+//    z-index: 1200;
+//    @include size(80px, 80px);
+//    @extend %reset-btn;
+//    img {
+//       width: 45%;
+//       height: 45%;
+//    }
+//    p {
+//       color: var(--secundary-color);
+//    }
+// }
+// .Chatbot__close {
+//    position: absolute;
+//    top: 20px;
+//    left: 282px;
+//    color: var(--white-color);
+//    font-family: var(--font-title);
+//    font-size: var(--font-small);
+//    font-weight: 600;
+//    background-color: transparent;
+//    border: none;
+//    border-radius: 5px 20px 5px 5px;
+//    z-index: 1600;
+//    @include size(30px, 30px);
+//    @extend %reset-btn;
+// }

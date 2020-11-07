@@ -1,0 +1,17 @@
+language: node_js
+os:
+  - linux
+cache:
+  directories:
+    - node_modules
+    - ~/.npm
+node_js:
+  - '12'
+git:
+  depth: 3
+
+script:
+  - npm install netlify-cli -g
+  - npm run build:dll
+  - npm run build
+  - netlify deploy --prod --dir=dist

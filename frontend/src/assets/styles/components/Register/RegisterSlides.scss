@@ -1,0 +1,108 @@
+.SignUp__slide {
+   width: 90%;
+   height: 1000px;
+   margin: 0 auto 0;
+   overflow: hidden;
+   grid-area: Slide;
+   h2 {
+      margin: 30px 0 50px 0;
+      font-family: var(--font-title);
+      font-size: var(--font-big);
+      span {
+         font-size: var(--font-small);
+      }
+   }
+   ul {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      animation: slide 15s infinite alternate ease-out;
+      position: relative;
+      li {
+         width: 100%;
+         height: 100%;
+
+         img {
+            width: 850px;
+            height: 100%;
+         }
+      }
+   }
+   div {
+      width: 40%;
+      position: absolute;
+      top: 930px;
+      left: 580px;
+      overflow: hidden;
+      span {
+         width: 20px;
+         height: 20px;
+         margin: 0 20px 0 0;
+         display: inline-block;
+         border: 1px solid var(--main-color);
+         border-radius: 50%;
+      }
+   }
+   .fill {
+      background-color: var(--main-color);
+      animation: ball 15s infinite alternate ease-out;
+   }
+}
+.LogIn {
+   height: 800px;
+   div {
+      top: 730px;
+   }
+}
+
+@keyframes slide {
+   0% {
+      transform: translateX(-200%);
+   }
+
+   30% {
+      transform: translateX(-200%);
+   }
+
+   35% {
+      transform: translateX(-100%);
+   }
+
+   65% {
+      transform: translateX(-100%);
+   }
+
+   70% {
+      transform: translateX(0);
+   }
+
+   100% {
+      transform: translateX(0);
+   }
+
+}
+@keyframes ball {
+   0% {
+      transform: translateX(0);
+   }
+
+   30% {
+      transform: translateX(0);
+   }
+
+   35% {
+      transform: translateX(200%);
+   }
+
+   65% {
+      transform: translateX(200%);
+   }
+
+   70% {
+      transform: translateX(400%);
+   }
+
+   100% {
+      transform: translateX(400%);
+   }
+}
