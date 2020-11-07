@@ -349,16 +349,10 @@ class UsersService {
       const userFiscalId = { fiscalId: fiscalId[0].id };
       await this.mysqlLib.update(TABLE_USER, userFiscalId, "userId", id);
     } else {
-      const cols = [];
-      const values = [];
-      const arrayValues = [];
-
-      for (let itemValues in data) {
-        cols.push(itemValues);
-        values.push(data[itemValues]);
-      }
-      arrayValues.push(values);
-      await this.mysqlLib.upsert(TABLE_FISCAL_DATA, cols, arrayValues);
+      await this.mysqlLib.singleUpsert(TABLE_FISCAL_DATA, data);
+      let userFiscalId = await this.mysqlLib.get("id", TABLE_FISCAL_DATA, "fiscalId", data.fiscalId);
+      userFiscalId = {fiscalId: userFiscalId[0].id };
+      await this.mysqlLib.update(TABLE_USER, userFiscalId, "userId", id);
     }
 
     const idCountry =
