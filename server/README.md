@@ -72,7 +72,7 @@ Authorization:
 ```
 
 If the request are success you get the next JSON:
-```json
+```bash
 {
 "token": "String", // JSON Web Token
 	"user":  {
