@@ -43,17 +43,17 @@ POST /sign-up
 ```javascript
 Body:
 { 
-	"email": String, // eg "mail@user.com"
-	"firstName": String, // eg "user1"
-	"password": String, // eg "password"
-	"country": String // eg "Mexico" 
+ "email": String, // eg "mail@user.com"
+ "firstName": String, // eg "user1"
+ "password": String, // eg "password"
+ "country": String // eg "Mexico" 
 }
 ```
 
 If the request are success you get the next JSON:
 ```json
 {
-	"message":  "User created"
+ "message":  "User created"
 }
 ```
 
@@ -74,49 +74,50 @@ Authorization:
 If the request are success you get the next JSON:
 ```javascript
 {
-	"token": "String", // JSON Web Token
-	"user":  {
-		"userId":  "String",
-		"email":  "String",
-		"country":  "String",
-		"city":  "String",
-		"state":  "String",
-		"dateOfBirth": "String", // format "YYYY-MM-DD"
-		"fiscalAct":  "String",
-		"firstName":  "String",
-		"lastName":  "String",
-		"phoneNumber":  "String",
-		"twoFactorActive":  false, // Boolean
-		"role":  "String",
-		"profile_picture_url":  "String", // url
-		"hasConfigured":  false, // Boolean
-		"permissions":  [
-			{
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-			},
-			{
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-			},
-			{
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-			},
-			{
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-			},
-			{
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-			}
-			]
+ "token": "String", // JSON Web Token
+ "user":  
+ 	{
+	 "userId":  "String",
+	 "email":  "String",
+	 "country":  "String",
+	 "city":  "String",
+	 "state":  "String",
+	 "dateOfBirth": "String", // format "YYYY-MM-DD"
+	 "fiscalAct":  "String",
+	 "firstName":  "String",
+	 "lastName":  "String",
+	 "phoneNumber":  "String",
+	"twoFactorActive":  false, // Boolean
+	"role":  "String",
+	"profile_picture_url":  "String", // url
+	"hasConfigured":  false, // Boolean
+	"permissions":  [
+		{
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
+		},
+		{
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
+		},
+		{
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
+		},
+		{
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
+		},
+		{
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
+		}
+		]
 	}
 }
 ```
@@ -178,7 +179,7 @@ Authorization:
 Response:
 ```json
 {
-"message": "data:image/png;base64"
+ "message": "data:image/png;base64"
 }
 ```
 ## Tax Receipt Number Configuration 
@@ -197,24 +198,24 @@ Authorization:
 Body: 
 
 {
-	"country": String, // MEX || COL || DOM
-	"fiscalIdentifierName": String, // eg "RFC"
-	"separator": String (Simblol), // eg "-"
-	"cfName":
-		{
-		"nameCf0": String,
-		"nameCf1": String
-		},
-	"cf":
-		{
-		"cf0":String,
-		"cf1":String,
-		},
-	"increment":
-		{
-		"increment0":false, // Boolean
-		"increment1":true // Boolean
-		}
+ "country": String, // MEX || COL || DOM
+"fiscalIdentifierName": String, // eg "RFC"
+"separator": String (Simblol), // eg "-"
+"cfName":
+ {
+	"nameCf0": String,
+	"nameCf1": String
+ },
+"cf":
+ {
+	"cf0":String,
+	"cf1":String,
+ },
+"increment":
+ {
+	"increment0":false, // Boolean
+	"increment1":true // Boolean
+ }
 }
 ```
 ## Set user profile 
@@ -273,16 +274,16 @@ Authorization:
 Response:
 ```javascript
 {
-	"clients": Array 
-		[{
-			"clientId": String,
-			"userId": String,
-			"fiscalId": String,
-			"fiscalAddress": String,
-			"email": String,
-			"phoneNumber": String,
-			"fullName": String
-		}],
+ "clients": Array 
+  [{
+	 "clientId": String,
+		"userId": String,
+		"fiscalId": String,
+		"fiscalAddress": String,
+		"email": String,
+		"phoneNumber": String,
+		"fullName": String
+	}],
 }
 ```
 
@@ -298,16 +299,16 @@ Authorization:
 Response:
 ```javascript
 {
-	"client": 
-		{
-			"clientId": String,
-			"userId": String,
-			"fiscalId": String,
-			"fiscalAddress": String,
-			"email": String,
-			"phoneNumber": String,
-			"fullName": String
-		},
+ "client": 
+	{
+	 "clientId": String,
+	 "userId": String,
+	 "fiscalId": String,
+	 "fiscalAddress": String,
+	 "email": String,
+	 "phoneNumber": String,
+	 "fullName": String
+	},
 }
 ```
 
@@ -321,11 +322,11 @@ Authorization:
 	Type: Bearer Token
 Body:
 {
-	"fiscalId": String,
-	"fiscalAddress": String,
-	"email": String,
-	"phoneNumber": String,
-	"fullName": String
+ "fiscalId": String,
+ "fiscalAddress": String,
+ "email": String,
+ "phoneNumber": String,
+ "fullName": String
 }
 ```
 
@@ -340,11 +341,11 @@ Authorization:
 	Type: Bearer Token
 Body: 
 {
-	"fiscalId": String, // Optional
-	"fiscalAddress": String, // Optional
-	"email": String, // Optional
-	"phoneNumber": String, // Optional
-	"fullName": String // Optional
+ "fiscalId": String, // Optional
+ "fiscalAddress": String, // Optional
+ "email": String, // Optional
+ "phoneNumber": String, // Optional
+ "fullName": String // Optional
 }
 ```
 
@@ -369,36 +370,36 @@ Authorization:
 	Type: Bearer Token
 Body:
 {
-	"client": {
-			"fullName": String,
-			"fiscalId": String,
-			"phoneNumber": String,
-			"email": String,
-			"fiscalAddress": String
-	}, 
-	"currency": String,
-	"cfdiUse": String,
-	"ivaPorcent": String,
-	"products": Array 
-		[
-			{
-					"description": String,
-					"id": String,
-					"price": String,
-					"product": String,
-					"quantity": String,
-					"total": String,
-					"unit": String
-			},
-		]
+ "client": {
+	 "fullName": String,
+	 "fiscalId": String,
+	 "phoneNumber": String,
+ 	 "email": String,
+	 "fiscalAddress": String
+ }, 
+ "currency": String,
+ "cfdiUse": String,
+ "ivaPorcent": String,
+ "products": Array 
+  [
+	 {
+	  "description": String,
+		"id": String,
+		"price": String,
+		"product": String,
+		"quantity": String,
+		"total": String,
+		"unit": String
+	 },
+  ]
 }
 ```
 
 Response:
 ```javascript
 {
-	"message": "Factura generada correctamente",
-	"invoiceUrl": String // url
+ "message": "Factura generada correctamente",
+ "invoiceUrl": String // url
 }
 ```
 ## Get invoice history
@@ -413,14 +414,14 @@ Authorization:
 Response:
 ```javascript
 {
-	"invoices": Array
-		[
-			{
-					"createdAt": Date,
-					"fullName": String,
-					"fiscalId": String,
-					"url": String
-			}
-		]
+ "invoices": Array
+	[
+	 {
+		"createdAt": Date,
+		"fullName": String,
+		"fiscalId": String,
+		"url": String
+	 }
+	]
 }
 ```
