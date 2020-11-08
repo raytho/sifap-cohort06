@@ -83,41 +83,41 @@ If the request are success you get the next JSON:
     "city":  String,
     "state":  String,
     "dateOfBirth": String, // format "YYYY-MM-DD"
-	  "fiscalAct":  String,
-	  "firstName":  String,
-	  "lastName":  String,
-	  "phoneNumber":  String,
-	  "twoFactorActive":  Boolean, 
-	  "role":  "String",
-	  "profile_picture_url":  "String", // url
-		"hasConfigured":  Boolean, 
-		"permissions": Array 
-		 [
+		"fiscalAct":  String,
+		"firstName":  String,
+		"lastName":  String,
+		"phoneNumber":  String,
+		"twoFactorActive":  Boolean, 
+		"role":  "String",
+		"profile_picture_url":  "String", // url
+    "hasConfigured":  Boolean, 
+    "permissions": Array 
+     [
+      {
+       "idPermission":  "Number",
+       "name":  "String",
+       "urlIcon":  "String" // url
+			},
 			{
-			 "idPermission":  "Number",
-			 "name":  "String",
-			 "urlIcon":  "String" // url
-		  },
-		  {
-			 "idPermission":  "Number",
-			 "name":  "String",
-			 "urlIcon":  "String" // url
-		  },
-		  {
-			 "idPermission":  "Number",
-			 "name":  "String",
-			 "urlIcon":  "String" // url
-		  },
-		  {
-			 "idPermission":  "Number",
-			 "name":  "String",
-			 "urlIcon":  "String" // url
-		  },
-		  {
-			 "idPermission":  "Number",
-			 "name":  "String",
-			 "urlIcon":  "String" // url
-		  }
+       "idPermission":  "Number",
+       "name":  "String",
+       "urlIcon":  "String" // url
+			},
+			{
+       "idPermission":  "Number",
+       "name":  "String",
+       "urlIcon":  "String" // url
+			},
+      {
+       "idPermission":  "Number",
+       "name":  "String",
+       "urlIcon":  "String" // url
+			},
+      {
+       "idPermission":  "Number",
+       "name":  "String",
+       "urlIcon":  "String" // url
+      }
 		 ]
 	}
 }
