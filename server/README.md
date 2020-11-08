@@ -223,7 +223,7 @@ In this endpoint you can set or update the user's profile data.
 POST /data/profile
 ```
 
-```bash 
+```javascript 
 Authorization:
  Type: Bearer Token
 
