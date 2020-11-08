@@ -298,13 +298,13 @@ Response:
 {
  "client": 
   {
-	 "clientId": String,
-	 "userId": String,
-	 "fiscalId": String,
-	 "fiscalAddress": String,
-	 "email": String,
-	 "phoneNumber": String,
-	 "fullName": String
+   "clientId": String,
+   "userId": String,
+   "fiscalId": String,
+   "fiscalAddress": String,
+   "email": String,
+   "phoneNumber": String,
+   "fullName": String
   },
 }
 ```
@@ -368,11 +368,11 @@ Authorization:
 Body:
 {
  "client": {
-	 "fullName": String,
-	 "fiscalId": String,
-	 "phoneNumber": String,
- 	 "email": String,
-	 "fiscalAddress": String
+   "fullName": String,
+   "fiscalId": String,
+   "phoneNumber": String,
+   "email": String,
+   "fiscalAddress": String
  }, 
  "currency": String,
  "cfdiUse": String,
@@ -380,13 +380,13 @@ Body:
  "products": Array 
   [
 	 {
-	  "description": String,
-		"id": String,
-		"price": String,
-		"product": String,
-		"quantity": String,
-		"total": String,
-		"unit": String
+    "description": String,
+    "id": String,
+    "price": String,
+    "product": String,
+    "quantity": String,
+    "total": String,
+    "unit": String
 	 },
   ]
 }
@@ -413,11 +413,11 @@ Response:
 {
  "invoices": Array
 	[
-	 {
-		"createdAt": Date,
-		"fullName": String,
-		"fiscalId": String,
-		"url": String
+   {
+  	"createdAt": Date,
+  	"fullName": String,
+  	"fiscalId": String,
+  	"url": String
 	 }
 	]
 }
