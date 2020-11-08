@@ -123,18 +123,46 @@ If the request are success you get the next JSON:
 }
 ```
 
-## Login with Two Factor Authentication
+## Login with Two Factor Authentication (Google Authenticator)
 
-When you enable two-factor authentication, (after authenticating with username and password) you need to send the verification code, (this token is obtained by email or using Google Authenticator).
+When you enable two-factor authentication, (after authenticating with username and password) you need to send the verification code. You can get the verification code by email or by using Google Authenticator. If you choose Google Authenticator, you must use this endpoint.
 
 ```bash
 POST /two-factor
 ```
 ```bash
 Body
-token: String // Your verification code
+	token: String // Your verification code
 ```
+```bash 
+Authorization:
+	Type: Bearer Token // Your temporary basic login token
+```
+
+## Login with Two Factor Authentication (Mail Code)
+
+```bash
+POST /two-factor-mail
+```
+```bash
+Body
+	token: String // Your verification code
+```
+```bash 
+Authorization:
+	Type: Bearer Token // Your temporary basic login token
+```
+
+## LogOut
+
+```bash
+POST /logout
+```
+
 ```bash 
 Authorization:
 	Type: Bearer Token
 ```
+# User Management
+
+
