@@ -67,8 +67,8 @@ Body
 ```
 ```bash 
 Authorization:
-	username: example@domain.com
-	password: userpassword
+ username: example@domain.com
+ password: userpassword
 ```
 
 If the request are success you get the next JSON:
@@ -131,12 +131,10 @@ When you enable two-factor authentication, (after authenticating with username a
 POST /two-factor
 ```
 ```bash
-Body
-	token: String // Your verification code
-```
-```bash 
 Authorization:
-	Type: Bearer Token // Your temporary basic login token
+ Type: Bearer Token // Your temporary basic login token
+Body
+ token: String // Your verification code
 ```
 
 ## Login with Two Factor Authentication (Mail Code)
@@ -145,12 +143,10 @@ Authorization:
 POST /two-factor-mail
 ```
 ```bash
-Body
-	token: String // Your verification code
-```
-```bash 
 Authorization:
-	Type: Bearer Token // Your temporary basic login token
+ Type: Bearer Token // Your temporary basic login token
+Body
+ token: String // Your verification code
 ```
 
 ## LogOut
@@ -161,7 +157,7 @@ POST /logout
 
 ```bash 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 ```
 # User Management
 
@@ -175,7 +171,7 @@ GET /settings/send-qr
 
 ```bash 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 ```
 Response:
 ```json
@@ -194,7 +190,7 @@ POST /tax-receipt
 
 ```javascript 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 
 Body: 
 
@@ -204,18 +200,18 @@ Body:
 "separator": String (Simblol), // eg "-"
 "cfName":
  {
-	"nameCf0": String,
-	"nameCf1": String
+  "nameCf0": String,
+  "nameCf1": String
  },
 "cf":
  {
-	"cf0":String,
-	"cf1":String,
+  "cf0":String,
+  "cf1":String,
  },
 "increment":
  {
-	"increment0":false, // Boolean
-	"increment1":true // Boolean
+  "increment0":false, // Boolean
+  "increment1":true // Boolean
  }
 }
 ```
@@ -229,7 +225,7 @@ POST /data/profile
 
 ```bash 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 
 Body: 
 
@@ -256,12 +252,12 @@ POST /data/profile-image
 
 ```bash 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 
 Body: 
-	form-data
-		key: image,
-		value: jpg/png image
+ form-data
+  key: image,
+  value: jpg/png image
 ```
 ## Get user clients list
 
@@ -295,7 +291,7 @@ GET /clients/:id
 ```
 ```bash 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 ```
 Response:
 ```javascript
@@ -320,7 +316,7 @@ POST /clients
 ```
 ```javascript 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 Body:
 {
  "fiscalId": String,
@@ -339,7 +335,7 @@ PUT /clients/:id
 ```
 ```javascript 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 Body: 
 {
  "fiscalId": String, // Optional
@@ -358,7 +354,7 @@ PUT /clients/:id
 ```
 ```bash 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 ```
 
 ## Create Invoice
@@ -368,7 +364,7 @@ POST /invoices
 ```
 ```javascript 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 Body:
 {
  "client": {
@@ -410,7 +406,7 @@ GET /invoice-history
 ```
 ```bash 
 Authorization:
-	Type: Bearer Token
+ Type: Bearer Token
 ```
 Response:
 ```javascript
