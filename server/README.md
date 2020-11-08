@@ -182,7 +182,7 @@ Response:
 {
 "message": "data:image/png;base64"
 }
-
+```
 ## Tax Receipt Number Configuration 
 
 Sets the configuration of the tax receipt number for sifap users according to the country of the SuperAdmin user.
