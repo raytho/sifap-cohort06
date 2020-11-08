@@ -87,36 +87,37 @@ If the request are success you get the next JSON:
 	 "firstName":  "String",
 	 "lastName":  "String",
 	 "phoneNumber":  "String",
-	"twoFactorActive":  false, // Boolean
-	"role":  "String",
-	"profile_picture_url":  "String", // url
-	"hasConfigured":  false, // Boolean
-	"permissions":  [
-		{
-		"idPermission":  "Number",
-		"name":  "String",
-		"urlIcon":  "String" // url
-		},
-		{
-		"idPermission":  "Number",
-		"name":  "String",
-		"urlIcon":  "String" // url
-		},
-		{
-		"idPermission":  "Number",
-		"name":  "String",
-		"urlIcon":  "String" // url
-		},
-		{
-		"idPermission":  "Number",
-		"name":  "String",
-		"urlIcon":  "String" // url
-		},
-		{
-		"idPermission":  "Number",
-		"name":  "String",
-		"urlIcon":  "String" // url
-		}
+	 "twoFactorActive":  false, // Boolean
+	 "role":  "String",
+	 "profile_picture_url":  "String", // url
+	 "hasConfigured":  false, // Boolean
+	 "permissions": Array 
+		[
+		 {
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+		 },
+		 {
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+		 },
+		 {
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+		 },
+		 {
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+		 },
+		 {
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+		 }
 		]
 	}
 }
