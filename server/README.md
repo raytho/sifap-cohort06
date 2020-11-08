@@ -16,7 +16,7 @@ Versión 1.0
 3. To SuperAdmin functions
 **[https://ancient-fortress-28096.herokuapp.com/api/superAdmin](https://ancient-fortress-28096.herokuapp.com/api/superAdmin)**
 
-## Interact with the API
+## Interact with the API 
 
 Our recommendation to easy use of the API is with  **[Postman](https://www.postman.com/downloads/)** software.
 
@@ -33,7 +33,9 @@ Our responses codes are based in HTTP Responses Codes
 Always that you send a request you get a response in JSON format with the attribute **data** and code response 200.
 If you have error in your request you get a JSON format with the attribute **error**.
 
-# Signup
+# Authentication
+
+## Signup
 Signup method using Authorization base URL
 ```bash
 POST /sign-up
@@ -57,7 +59,7 @@ If the request are success you get the next JSON:
 }
 ```
 
-# Login
+## Login
 Signup method using Authorization base URL
 ```bash
 POST /sign-in
@@ -121,15 +123,16 @@ If the request are success you get the next JSON:
 }
 ```
 
-# Login with Two Factor Authentication
+## Login with Two Factor Authentication
 
-When you enabled two-factor authentication 
+When you enable two-factor authentication, (after authenticating with username and password) you need to send the verification code, (this token is obtained by email or using Google Authenticator).
 
 ```bash
 POST /two-factor
 ```
 ```bash
 Body
+token: String // Your verification code
 ```
 ```bash 
 Authorization:
