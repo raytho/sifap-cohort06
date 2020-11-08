@@ -165,4 +165,266 @@ Authorization:
 ```
 # User Management
 
+## Get QR Code 
 
+Gets the QR code to be used with Google Authenticator when two-factor authentication is enabled
+
+```bash
+GET /settings/send-qr
+```
+
+```bash 
+Authorization:
+	Type: Bearer Token
+```
+Response:
+```json
+{
+"message": "data:image/png;base64"
+}
+
+## Tax Receipt Number Configuration 
+
+Sets the configuration of the tax receipt number for sifap users according to the country of the SuperAdmin user.
+You can set the value of cf (cfName, cf and increment) up to 10 places (starting at cf0).
+
+```bash
+POST /tax-receipt
+```
+
+```bash 
+Authorization:
+	Type: Bearer Token
+
+Body: 
+
+	{
+		"country": String, // MEX || COL || DOM
+		"fiscalIdentifierName": String, // eg "RFC"
+		"separator": String (Simblol), // eg "-"
+		"cfName":
+				{
+						"nameCf0": String,
+						"nameCf1": String
+				},
+		"cf":
+				{
+						"cf0":String,
+						"cf1":String,
+				},
+		"increment":
+				{
+						"increment0":false, // Boolean
+						"increment1":true // Boolean
+				}
+	}
+```
+## Set user profile 
+
+In this endpoint you can set or update the user's profile data.
+
+```bash
+POST /data/profile
+```
+
+```bash 
+Authorization:
+	Type: Bearer Token
+
+Body: 
+
+	{
+		"fiscalId": String,
+		"companyName": String,
+		"phoneNumber": String,
+		"firstName": String,
+		"lastName": String,
+		"dateOfBirth": String, // "YYYY-MM-DD"
+		"city": String,
+		"state": String,
+		"country": String,
+		"twoFactorActive": Boolean
+	}
+```
+## Set user profile image
+
+In this endpoint you can set or update the user's profile image.
+
+```bash
+POST /data/profile-image
+```
+
+```bash 
+Authorization:
+	Type: Bearer Token
+
+Body: 
+	form-data
+		key: image,
+		value: jpg/png image
+```
+## Get user clients list
+
+```bash
+GET /clients
+```
+```bash 
+Authorization:
+	Type: Bearer Token
+```
+Response:
+```bash
+	{
+		"clients": Array 
+			[{
+				"clientId": String,
+				"userId": String,
+				"fiscalId": String,
+				"fiscalAddress": String,
+				"email": String,
+				"phoneNumber": String,
+				"fullName": String
+			}],
+	}
+```
+
+## Get user client detail
+
+```bash
+GET /clients/:id
+```
+```bash 
+Authorization:
+	Type: Bearer Token
+```
+Response:
+```bash
+	{
+		"client": 
+			{
+				"clientId": String,
+				"userId": String,
+				"fiscalId": String,
+				"fiscalAddress": String,
+				"email": String,
+				"phoneNumber": String,
+				"fullName": String
+			},
+	}
+```
+
+## Create client
+
+```bash
+POST /clients
+```
+```bash 
+Authorization:
+	Type: Bearer Token
+Body:
+	"client": 
+		{
+			"fiscalId": String,
+			"fiscalAddress": String,
+			"email": String,
+			"phoneNumber": String,
+			"fullName": String
+		}
+```
+
+
+## Update client
+
+```bash
+PUT /clients/:id
+```
+```bash 
+Authorization:
+	Type: Bearer Token
+Body: 
+	"client": 
+		{
+			"fiscalId": String, // Optional
+			"fiscalAddress": String, // Optional
+			"email": String, // Optional
+			"phoneNumber": String, // Optional
+			"fullName": String // Optional
+		}
+```
+
+
+## Delete client
+
+```bash
+PUT /clients/:id
+```
+```bash 
+Authorization:
+	Type: Bearer Token
+```
+
+## Create Invoice
+
+```bash
+POST /invoices
+```
+```bash 
+Authorization:
+	Type: Bearer Token
+Body:
+	{
+    "client": {
+        "fullName": String,
+        "fiscalId": String,
+        "phoneNumber": String,
+        "email": String,
+        "fiscalAddress": String
+    }, 
+    "currency": String,
+    "cfdiUse": String,
+    "ivaPorcent": String,
+    "products": Array 
+			[
+        {
+           "description": String,
+           "id": String,
+            "price": String,
+            "product": String,
+            "quantity": String,
+            "total": String,
+            "unit": String
+        },
+    	]
+	}
+```
+
+Response:
+```bash
+	{
+		"message": "Factura generada correctamente",
+    "invoiceUrl": String // url
+	}
+```
+## Get invoice history
+
+```bash
+GET /invoice-history
+```
+```bash 
+Authorization:
+	Type: Bearer Token
+```
+Response:
+```bash
+{
+	"invoices": Array
+		[
+			{
+					"createdAt": Date,
+					"fullName": String,
+					"fiscalId": String,
+					"url": String
+			}
+		]
+}
+```

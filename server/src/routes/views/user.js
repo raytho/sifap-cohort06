@@ -280,7 +280,16 @@ function userView(app) {
         });
       } else {
         try {
-          await usersService.getUserClients(user.userId, res);
+          const clients = await usersService.getUserClients(user.userId);
+          if (clients){
+            res.status(200).json({
+              clients: clients,
+            });
+          }else{
+            res.status(500).json({
+              message: "No existen clientes para este usuario",
+            });
+          }
         } catch (error) {
           res.status(500).json({ message: "Internal Error" });
         }
@@ -394,7 +403,16 @@ function userView(app) {
       } else {
         try {
           const { id } = req.params;
-          await usersService.deleteClient(id, res);
+          const deletedClient = await usersService.deleteClient(id, res);
+          if (deletedClient ){
+            res.status(200).json({
+              message: "Cliente eliminado",
+            });
+          } else {
+            res.status(200).json({
+              message: "Error interno",
+            });
+          }
         } catch (error) {
           res.status(500).json({ message: "Internal Error" });
         }
@@ -407,7 +425,7 @@ function userView(app) {
       try {
         if (error || !user) {
           res.status(500).json({
-            message: "No autorizado",
+            message: "Cliente inexistente",
           });
         } else {
           const invoiceInputData = req.body;

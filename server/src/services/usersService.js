@@ -651,11 +651,9 @@ class UsersService {
     });
   }
 
-  async getUserClients(userId, res) {
+  async getUserClients(userId) {
     if (!userId) {
-      res.status(400).json({
-        message: "Error interno",
-      });
+      return false;
     } else {
       const clientData = await this.mysqlLib.get(
         "*",
@@ -664,19 +662,14 @@ class UsersService {
         userId
       );
       if (clientData.length) {
-        res.status(200).json({
-          clients: clientData,
-        });
+        return clientData;
       } else {
-        res.status(500).json({
-          message: "No existen clientes para este usuario",
-          clients: clientData,
-        });
+        return false;
       }
     }
   }
 
-  async getClient(clientId, res) {
+  async getClient(clientId) {
     const clientData = await this.mysqlLib.get(
       "*",
       TABLE_CLIENTS,
@@ -706,7 +699,7 @@ class UsersService {
     return upsertedClient;
   }
 
-  async updateClient(clientId, clientData, res) {
+  async updateClient(clientId, clientData) {
     const upsertedClient = await this.mysqlLib.update(
       TABLE_CLIENTS,
       clientData,
@@ -716,11 +709,9 @@ class UsersService {
     return upsertedClient;
   }
 
-  async deleteClient(clientId, res) {
+  async deleteClient(clientId) {
     if (!clientId) {
-      res.status(400).json({
-        message: "Error interno",
-      });
+      return false;
     } else {
       const deletedClient = await this.mysqlLib.delete(
         TABLE_CLIENTS,
@@ -728,13 +719,9 @@ class UsersService {
         clientId
       );
       if (deletedClient.affectedRows) {
-        res.status(200).json({
-          message: "Cliente eliminado",
-        });
+        return true;
       } else {
-        res.status(500).json({
-          message: "Cliente no existente",
-        });
+        return false;
       }
     }
   }
