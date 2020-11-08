@@ -422,3 +422,17 @@ Response:
   ]
 }
 ```
+
+## Built With
+
+* [NodeJS](https://nodejs.org/en/) - The Engine
+* [javascript - ES2017](https://maven.apache.org/) - The Language
+
+## Contributers
+
+* **Raymundo Solis** - *Collaborator* - [GitHub Profile](https://github.com/raytho)
+* **Jorge Carrión** - *Collaborator* - [GitHub Profile](https://github.com/george28cs)
+
+## License
+
+This project is licensed under the MIT License
