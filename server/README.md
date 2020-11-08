@@ -43,17 +43,16 @@ Body
 ```
 ```bash 
 { 
-"email": "jorge_28cs@hotmail.com", 
-"firstName": "user1", 
-"password": "password", 
-"country": "Mexico" 
+"email": String, // eg "mail@user.com"
+"firstName": String, // eg "user1"
+"password": String, eg "password"
+"country": String // eg "Mexico" 
 }
 ```
 
 If the request are success you get the next JSON:
 ```json
 {
-"data":  "5f6d0d4c88305b0017a18992",
 "message":  "User created"
 }
 ```
@@ -75,47 +74,47 @@ Authorization:
 If the request are success you get the next JSON:
 ```json
 {
-"token":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEMEZXIiwiZW1haWwiOiJsdWlzc29sQGhvdG1haWwuY29tIiwicm9sZSI6IlN1cGVyQWRtaW5pc3RyYWRvciIsImlhdCI6MTYwNDc3ODI0NCwiZXhwIjoxNjA0ODY0NjQ0fQ.lkgBtnO_cG7mxYg9jcxdthIkzyrF7nzxuyyQmxN0V0I",
+"token": "String", // JSON Web Token
 	"user":  {
-	"userId":  "D0FW",
-	"email":  "luissol@hotmail.com",
-	"country":  "DOM",
-	"city":  "Santo Domingoo",
-	"state":  "Rep. Dom.",
-	"dateOfBirth":  "1990-10-28",
-	"fiscalAct":  "PM",
-	"firstName":  "Jorge Manuel",
-	"lastName":  "Carrión Soto",
-	"phoneNumber":  "809222222232222964",
-	"twoFactorActive":  false,
-	"role":  "SuperAdministrador",
-	"profile_picture_url":  "https://sifap-profile-pictures.s3.us-east-2.amazonaws.com/1603335901083.jpeg",
-	"hasConfigured":  false,
+	"userId":  "String",
+	"email":  "String",
+	"country":  "String",
+	"city":  "String",
+	"state":  "String",
+	"dateOfBirth": "String", // format "YYYY-MM-DD"
+	"fiscalAct":  "String",
+	"firstName":  "String",
+	"lastName":  "String",
+	"phoneNumber":  "String",
+	"twoFactorActive":  false, // Boolean
+	"role":  "String",
+	"profile_picture_url":  "String", // url
+	"hasConfigured":  false, // Boolean
 	"permissions":  [
 		{
-		"idPermission":  1,
-		"name":  "C. Países",
-		"urlIcon":  "https://i.imgur.com/scXlLPP.png"
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
 		},
 		{
-		"idPermission":  2,
-		"name":  "Emitir Facturas",
-		"urlIcon":  "https://i.imgur.com/8vHGhJC.png"
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
 		},
 		{
-		"idPermission":  3,
-		"name":  "Historial",
-		"urlIcon":  "https://i.imgur.com/1Q7pyNx.png"
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
 		},
 		{
-		"idPermission":  4,
-		"name":  "Estadísticas",
-		"urlIcon":  "https://i.imgur.com/gR5N7zW.png"
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
 		},
 		{
-		"idPermission":  5,
-		"name":  "Roles",
-		"urlIcon":  "https://i.imgur.com/hGyPKaE.png"
+		"idPermission":  "Number",
+		"name":  "String",
+		"urlIcon":  "String" // url
 		}
 		]
 	}
