@@ -74,51 +74,51 @@ Authorization:
 If the request are success you get the next JSON:
 ```javascript
 {
- "token": "String", // JSON Web Token
+ "token": String, // JSON Web Token
  "user":  
   {
-   "userId":  "String",
-   "email":  "String",
-   "country":  "String",
-   "city":  "String",
-   "state":  "String",
-   "dateOfBirth": "String", // format "YYYY-MM-DD"
-	 "fiscalAct":  "String",
-	 "firstName":  "String",
-	 "lastName":  "String",
-	 "phoneNumber":  "String",
-	 "twoFactorActive":  false, // Boolean
-	 "role":  "String",
-	 "profile_picture_url":  "String", // url
-	 "hasConfigured":  false, // Boolean
-	 "permissions": Array 
-		[
-		 {
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-		 },
-		 {
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-		 },
-		 {
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-		 },
-		 {
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-		 },
-		 {
-			"idPermission":  "Number",
-			"name":  "String",
-			"urlIcon":  "String" // url
-		 }
-		]
+    "userId":  String,
+    "email":  String,
+    "country":  String,
+    "city":  String,
+    "state":  String,
+    "dateOfBirth": String, // format "YYYY-MM-DD"
+	  "fiscalAct":  String,
+	  "firstName":  String,
+	  "lastName":  String,
+	  "phoneNumber":  String,
+	  "twoFactorActive":  Boolean, 
+	  "role":  "String",
+	  "profile_picture_url":  "String", // url
+		"hasConfigured":  Boolean, 
+		"permissions": Array 
+		 [
+			{
+			 "idPermission":  "Number",
+			 "name":  "String",
+			 "urlIcon":  "String" // url
+		  },
+		  {
+			 "idPermission":  "Number",
+			 "name":  "String",
+			 "urlIcon":  "String" // url
+		  },
+		  {
+			 "idPermission":  "Number",
+			 "name":  "String",
+			 "urlIcon":  "String" // url
+		  },
+		  {
+			 "idPermission":  "Number",
+			 "name":  "String",
+			 "urlIcon":  "String" // url
+		  },
+		  {
+			 "idPermission":  "Number",
+			 "name":  "String",
+			 "urlIcon":  "String" // url
+		  }
+		 ]
 	}
 }
 ```
