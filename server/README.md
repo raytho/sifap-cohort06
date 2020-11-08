@@ -273,14 +273,14 @@ Response:
 {
  "clients": Array 
   [{
-	 "clientId": String,
-		"userId": String,
-		"fiscalId": String,
-		"fiscalAddress": String,
-		"email": String,
-		"phoneNumber": String,
-		"fullName": String
-	}],
+    "clientId": String,
+    "userId": String,
+    "fiscalId": String,
+    "fiscalAddress": String,
+    "email": String,
+    "phoneNumber": String,
+    "fullName": String
+  }],
 }
 ```
 
@@ -297,7 +297,7 @@ Response:
 ```javascript
 {
  "client": 
-	{
+  {
 	 "clientId": String,
 	 "userId": String,
 	 "fiscalId": String,
@@ -305,7 +305,7 @@ Response:
 	 "email": String,
 	 "phoneNumber": String,
 	 "fullName": String
-	},
+  },
 }
 ```
 
