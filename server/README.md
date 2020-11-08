@@ -40,22 +40,20 @@ Signup method using Authorization base URL
 ```bash
 POST /sign-up
 ```
-```bash
-Body
-```
-```javascript 
+```javascript
+Body:
 { 
-"email": String, // eg "mail@user.com"
-"firstName": String, // eg "user1"
-"password": String, // eg "password"
-"country": String // eg "Mexico" 
+	"email": String, // eg "mail@user.com"
+	"firstName": String, // eg "user1"
+	"password": String, // eg "password"
+	"country": String // eg "Mexico" 
 }
 ```
 
 If the request are success you get the next JSON:
 ```json
 {
-"message":  "User created"
+	"message":  "User created"
 }
 ```
 
@@ -76,50 +74,50 @@ Authorization:
 If the request are success you get the next JSON:
 ```javascript
 {
-"token": "String", // JSON Web Token
-"user":  {
-"userId":  "String",
-"email":  "String",
-"country":  "String",
-"city":  "String",
-"state":  "String",
-"dateOfBirth": "String", // format "YYYY-MM-DD"
-"fiscalAct":  "String",
-"firstName":  "String",
-"lastName":  "String",
-"phoneNumber":  "String",
-"twoFactorActive":  false, // Boolean
-"role":  "String",
-"profile_picture_url":  "String", // url
-"hasConfigured":  false, // Boolean
-"permissions":  [
-	{
-	"idPermission":  "Number",
-	"name":  "String",
-	"urlIcon":  "String" // url
-	},
-	{
-	"idPermission":  "Number",
-	"name":  "String",
-	"urlIcon":  "String" // url
-	},
-	{
-	"idPermission":  "Number",
-	"name":  "String",
-	"urlIcon":  "String" // url
-	},
-	{
-	"idPermission":  "Number",
-	"name":  "String",
-	"urlIcon":  "String" // url
-	},
-	{
-	"idPermission":  "Number",
-	"name":  "String",
-	"urlIcon":  "String" // url
+	"token": "String", // JSON Web Token
+	"user":  {
+		"userId":  "String",
+		"email":  "String",
+		"country":  "String",
+		"city":  "String",
+		"state":  "String",
+		"dateOfBirth": "String", // format "YYYY-MM-DD"
+		"fiscalAct":  "String",
+		"firstName":  "String",
+		"lastName":  "String",
+		"phoneNumber":  "String",
+		"twoFactorActive":  false, // Boolean
+		"role":  "String",
+		"profile_picture_url":  "String", // url
+		"hasConfigured":  false, // Boolean
+		"permissions":  [
+			{
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+			},
+			{
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+			},
+			{
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+			},
+			{
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+			},
+			{
+			"idPermission":  "Number",
+			"name":  "String",
+			"urlIcon":  "String" // url
+			}
+			]
 	}
-	]
-}
 }
 ```
 
@@ -204,18 +202,18 @@ Body:
 	"separator": String (Simblol), // eg "-"
 	"cfName":
 		{
-			"nameCf0": String,
-			"nameCf1": String
+		"nameCf0": String,
+		"nameCf1": String
 		},
 	"cf":
 		{
-			"cf0":String,
-			"cf1":String,
+		"cf0":String,
+		"cf1":String,
 		},
 	"increment":
 		{
-			"increment0":false, // Boolean
-			"increment1":true // Boolean
+		"increment0":false, // Boolean
+		"increment1":true // Boolean
 		}
 }
 ```
@@ -234,16 +232,16 @@ Authorization:
 Body: 
 
 {
-	"fiscalId": String,
-	"companyName": String,
-	"phoneNumber": String,
-	"firstName": String,
-	"lastName": String,
-	"dateOfBirth": String, // "YYYY-MM-DD"
-	"city": String,
-	"state": String,
-	"country": String,
-	"twoFactorActive": Boolean
+ "fiscalId": String,
+ "companyName": String,
+ "phoneNumber": String,
+ "firstName": String,
+ "lastName": String,
+ "dateOfBirth": String, // "YYYY-MM-DD"
+ "city": String,
+ "state": String,
+ "country": String,
+ "twoFactorActive": Boolean
 }
 ```
 ## Set user profile image
