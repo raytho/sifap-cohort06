@@ -74,7 +74,7 @@ Authorization:
 If the request are success you get the next JSON:
 ```bash
 {
-"token": "String", // JSON Web Token
+	"token": "String", // JSON Web Token
 	"user":  {
 	"userId":  "String",
 	"email":  "String",
@@ -119,4 +119,19 @@ If the request are success you get the next JSON:
 		]
 	}
 }
+```
+
+# Login with Two Factor Authentication
+
+When you enabled two-factor authentication 
+
+```bash
+POST /two-factor
+```
+```bash
+Body
+```
+```bash 
+Authorization:
+	Type: Bearer Token
 ```
