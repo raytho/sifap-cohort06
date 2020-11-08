@@ -414,10 +414,10 @@ Response:
  "invoices": Array
   [
    {
-  	"createdAt": Date,
-  	"fullName": String,
-  	"fiscalId": String,
-  	"url": String
+    "createdAt": Date,
+    "fullName": String,
+    "fiscalId": String,
+    "url": String
    }
   ]
 }
