@@ -76,13 +76,13 @@ If the request are success you get the next JSON:
 {
  "token": "String", // JSON Web Token
  "user":  
- 	{
-	 "userId":  "String",
-	 "email":  "String",
-	 "country":  "String",
-	 "city":  "String",
-	 "state":  "String",
-	 "dateOfBirth": "String", // format "YYYY-MM-DD"
+  {
+   "userId":  "String",
+   "email":  "String",
+   "country":  "String",
+   "city":  "String",
+   "state":  "String",
+   "dateOfBirth": "String", // format "YYYY-MM-DD"
 	 "fiscalAct":  "String",
 	 "firstName":  "String",
 	 "lastName":  "String",
