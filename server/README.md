@@ -43,11 +43,11 @@ POST /sign-up
 ```bash
 Body
 ```
-```bash 
+```javascript 
 { 
 "email": String, // eg "mail@user.com"
 "firstName": String, // eg "user1"
-"password": String, eg "password"
+"password": String, // eg "password"
 "country": String // eg "Mexico" 
 }
 ```
@@ -74,7 +74,7 @@ Authorization:
 ```
 
 If the request are success you get the next JSON:
-```bash
+```javascript
 {
 "token": "String", // JSON Web Token
 "user":  {
@@ -192,7 +192,7 @@ You can set the value of cf (cfName, cf and increment) up to 10 places (starting
 POST /tax-receipt
 ```
 
-```bash 
+```javascript 
 Authorization:
 	Type: Bearer Token
 
@@ -223,7 +223,7 @@ Body:
 
 In this endpoint you can set or update the user's profile data.
 
-```bash
+```javascript
 POST /data/profile
 ```
 
@@ -273,7 +273,7 @@ Authorization:
 	Type: Bearer Token
 ```
 Response:
-```bash
+```javascript
 {
 	"clients": Array 
 		[{
@@ -298,7 +298,7 @@ Authorization:
 	Type: Bearer Token
 ```
 Response:
-```bash
+```javascript
 {
 	"client": 
 		{
@@ -318,7 +318,7 @@ Response:
 ```bash
 POST /clients
 ```
-```bash 
+```javascript 
 Authorization:
 	Type: Bearer Token
 Body:
@@ -337,7 +337,7 @@ Body:
 ```bash
 PUT /clients/:id
 ```
-```bash 
+```javascript 
 Authorization:
 	Type: Bearer Token
 Body: 
@@ -366,7 +366,7 @@ Authorization:
 ```bash
 POST /invoices
 ```
-```bash 
+```javascript 
 Authorization:
 	Type: Bearer Token
 Body:
@@ -397,7 +397,7 @@ Body:
 ```
 
 Response:
-```bash
+```javascript
 {
 	"message": "Factura generada correctamente",
 	"invoiceUrl": String // url
@@ -413,7 +413,7 @@ Authorization:
 	Type: Bearer Token
 ```
 Response:
-```bash
+```javascript
 {
 	"invoices": Array
 		[
