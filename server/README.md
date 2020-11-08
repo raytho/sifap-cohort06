@@ -379,7 +379,7 @@ Body:
  "ivaPorcent": String,
  "products": Array 
   [
-	 {
+   {
     "description": String,
     "id": String,
     "price": String,
@@ -387,7 +387,7 @@ Body:
     "quantity": String,
     "total": String,
     "unit": String
-	 },
+   },
   ]
 }
 ```
@@ -412,13 +412,13 @@ Response:
 ```javascript
 {
  "invoices": Array
-	[
+  [
    {
   	"createdAt": Date,
   	"fullName": String,
   	"fiscalId": String,
   	"url": String
-	 }
-	]
+   }
+  ]
 }
 ```
