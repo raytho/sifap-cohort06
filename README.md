@@ -8,12 +8,12 @@ Sifap is an application to simulate the generation of invoices for Mexico.
 
 ## Frontend
 
-You can get information about the project's source code in the /frontend folder
+You can get information about the project's source code in the /frontend folder.  
 The application is available to view at **[netlify](https://sifap.netlify.app/)**
 
 ## Backend
 
-You can get information about the project's API in the /server folder.
+You can get information about the project's API in the /server folder.  
 The application is available to view at **[heroku](https://ancient-fortress-28096.herokuapp.com/)**
 
 ## Contributers
