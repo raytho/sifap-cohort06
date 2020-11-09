@@ -350,7 +350,7 @@ Body:
 ## Delete client
 
 ```bash
-PUT /clients/:id
+DELETE /clients/:id
 ```
 ```bash 
 Authorization:
